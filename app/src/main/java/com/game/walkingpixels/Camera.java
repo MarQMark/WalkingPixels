@@ -36,7 +36,7 @@ public class Camera {
         return mvp;
     }
 
-    private static  Matrix4f lookAt(Vector3 eye, Vector3 center, Vector3 up){
+    public static Matrix4f lookAt(Vector3 eye, Vector3 center, Vector3 up){
         Matrix4f M = new Matrix4f();
 
         Vector3 f = center.sub(eye);

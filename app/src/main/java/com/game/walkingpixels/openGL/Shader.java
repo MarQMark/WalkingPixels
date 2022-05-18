@@ -15,9 +15,9 @@ public class Shader {
     private final int id;
     private final HashMap<String, Integer> uniformLocations = new HashMap<String, Integer>();
 
-    public Shader(Context context){
-        int vs = compileShader(GL_VERTEX_SHADER, getShaderSource(context, "vertex", "Shaders/Basic.shaders"));
-        int fs = compileShader(GL_FRAGMENT_SHADER, getShaderSource(context, "fragment", "Shaders/Basic.shaders"));
+    public Shader(Context context, String path){
+        int vs = compileShader(GL_VERTEX_SHADER, getShaderSource(context, "vertex", path));
+        int fs = compileShader(GL_FRAGMENT_SHADER, getShaderSource(context, "fragment", path));
 
         id = glCreateProgram();
         glAttachShader(id, vs);

@@ -1,0 +1,19 @@
+#shader vertex
+
+attribute vec4 a_Position;
+
+uniform mat4 lightProjection;
+
+void main()
+{
+    gl_Position = lightProjection  * vec4(a_Position.x, a_Position.y, a_Position.z, 1.0);
+}
+
+
+#shader fragment
+
+precision mediump float;
+
+void main()
+{
+}

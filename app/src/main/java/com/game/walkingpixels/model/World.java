@@ -56,6 +56,9 @@ public class World {
 
             }
         }
+
+        renderedWorld[renderedWorldSize / 2][renderedWorldSize / 2][worldMaxHeight - 1] = Block.DIRT;
+        renderedWorld[renderedWorldSize / 2 + 4][renderedWorldSize / 2][worldMaxHeight - 1] = Block.DIRT;
     }
 
     private Block heightToBlock(int height){
