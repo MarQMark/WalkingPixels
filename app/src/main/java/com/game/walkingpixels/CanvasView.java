@@ -8,7 +8,7 @@ public class CanvasView extends GLSurfaceView {
     public CanvasView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-        setEGLContextClientVersion(2);
+        setEGLContextClientVersion(3);
 
         GLRenderer renderer = new GLRenderer(context);
         setRenderer(renderer);

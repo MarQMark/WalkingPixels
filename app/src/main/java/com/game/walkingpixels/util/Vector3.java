@@ -1,7 +1,5 @@
 package com.game.walkingpixels.util;
 
-import java.util.Vector;
-
 public class Vector3 {
 
     public float x = 0;

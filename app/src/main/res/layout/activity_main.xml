@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:foregroundTint="#00FF0000"
     tools:context=".MainActivity">
 
     <com.game.walkingpixels.CanvasView
@@ -19,7 +20,7 @@
         android:id="@+id/seekBar"
         android:layout_width="0dp"
         android:layout_height="20dp"
-        android:max="100000"
+        android:max="10000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -29,6 +30,8 @@
         android:layout_width="0dp"
         android:layout_height="20dp"
         android:layout_marginTop="16dp"
+        android:foreground="@android:drawable/presence_busy"
+        android:foregroundTint="#25FF0000"
         android:max="128"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -61,5 +64,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/seekRotXBar" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

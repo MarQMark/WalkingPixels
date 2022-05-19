@@ -6,7 +6,7 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 
-import static android.opengl.GLES20.*;
+import static android.opengl.GLES31.*;
 
 public class VertexBuffer {
 

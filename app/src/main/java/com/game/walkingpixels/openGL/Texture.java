@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.IntBuffer;
 
-import static android.opengl.GLES20.*;
+import static android.opengl.GLES31.*;
 
 public class Texture {
 

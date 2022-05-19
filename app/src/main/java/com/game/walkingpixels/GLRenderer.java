@@ -1,27 +1,25 @@
 package com.game.walkingpixels;
 
 import android.content.Context;
-import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
+import android.os.Build;
 import android.renderscript.Matrix4f;
+
+import androidx.annotation.RequiresApi;
 
 import com.game.walkingpixels.model.World;
 import com.game.walkingpixels.openGL.Batch;
 import com.game.walkingpixels.openGL.Shader;
 import com.game.walkingpixels.openGL.Texture;
-import com.game.walkingpixels.openGL.Vertex;
 import com.game.walkingpixels.util.MeshBuilder;
 import com.game.walkingpixels.util.Vector3;
 import com.game.walkingpixels.util.Vector4;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
-import static android.opengl.GLES20.*;
+import static android.opengl.GLES31.*;
 
 
 public class GLRenderer implements GLSurfaceView.Renderer {
@@ -34,15 +32,16 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 
     static World world = new World(54216.709022936559375);
 
+    private final float lightMaxHeight = 50.0f;
+    private float lightRotation = 0;
+    private final Vector3 lightPosition = new Vector3(0.0f, lightMaxHeight, 0.0f);
+    private final Vector4 lightColor = new Vector4(1f, 1f, 1f, 1.0f);
 
-    Shader shadowDebugShader;
-
-    Shader shadowShader;
-    int ShadowFrameBuffer;
-    int shadowVertexBuffer;
-    int shadowTexture;
-    int shadowMapWidth = 2048; int shadowMapHeight = 2048;
-
+    private Shader shadowShader;
+    private int ShadowFrameBuffer;
+    private int shadowCubeMap;
+    private final int shadowMapWidth = 2048; private final int shadowMapHeight = 2048;
+    private Matrix4f[] shadowTransforms;
 
     int width; int height;
 
@@ -51,6 +50,7 @@ public class GLRenderer implements GLSurfaceView.Renderer {
         this.context = context;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 
@@ -66,9 +66,6 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 
         //-------------------------------------------------------------------------------------------
 
-        Vector3 lightPosition = new Vector3(0f, 20.0f, 1f);
-        Vector4 lightColor = new Vector4(1f, 1f, 1f, 1.0f);
-
         shadowShader = new Shader(context, "Shaders/Shadow.shaders");
         shadowShader.bind();
 
@@ -79,65 +76,34 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 
         IntBuffer genTexture = IntBuffer.allocate(Integer.BYTES);
         glGenTextures(1, genTexture);
-        shadowTexture = genTexture.get();
-        glBindTexture(GL_TEXTURE_2D, shadowTexture);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, shadowMapWidth, shadowMapHeight, 0, GL_DEPTH_COMPONENT, GL_FLOAT, null);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, shadowTexture, 0);
-
+        shadowCubeMap = genTexture.get();
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_CUBE_MAP, shadowCubeMap);
+        for (int i = 0; i < 6; ++i)
+            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_DEPTH_COMPONENT, shadowMapWidth, shadowMapHeight, 0, GL_DEPTH_COMPONENT, GL_FLOAT, null);
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 
-        Matrix4f projection = new Matrix4f();
-        projection.loadOrtho(-35.0f, 35.0f, -35.0f, 35.0f, 0.1f, 1000f);
-        //projection.loadPerspective(90, 1080f/2200f, 0.1f, 1000f);
-        Vector3 up = new Vector3(lightPosition.x, -lightPosition.z, lightPosition.y);
-        up.normalize();
-        Matrix4f lightView = Camera.lookAt(lightPosition, new Vector3(0.0f, 0.0f, 0.0f), up);
-        projection.multiply(lightView);
+        shadowTransforms = new Matrix4f[6];
+        for (int i = 0; i < shadowTransforms.length; i++){
+            shadowTransforms[i] = new Matrix4f();
+            shadowTransforms[i].loadPerspective(90, 1.0f, 0.1f, 1000f);
+        }
+        shadowTransforms[0].multiply(Camera.lookAt(lightPosition, lightPosition.add(new Vector3(1.0f, 0.0f, 0.0f)), new Vector3(0.0f, -1.0f, 0.0f)));
+        shadowTransforms[1].multiply(Camera.lookAt(lightPosition, lightPosition.add(new Vector3(-1.0f, 0.0f, 0.0f)), new Vector3(0.0f, -1.0f, 0.0f)));
+        shadowTransforms[2].multiply(Camera.lookAt(lightPosition, lightPosition.add(new Vector3(0.0f, 1.0f, 0.0f)), new Vector3(0.0f, 0.0f, -1.0f)));
+        shadowTransforms[3].multiply(Camera.lookAt(lightPosition, lightPosition.add(new Vector3(0.0f, -1.0f, 0.0f)), new Vector3(0.0f, 0.0f, -1.0f)));
+        shadowTransforms[4].multiply(Camera.lookAt(lightPosition, lightPosition.add(new Vector3(0.0f, 0.0f, 1.0f)), new Vector3(0.0f, -1.0f, 0.0f)));
+        shadowTransforms[5].multiply(Camera.lookAt(lightPosition, lightPosition.add(new Vector3(0.0f, 0.0f, -1.0f)), new Vector3(0.0f, -1.0f, 0.0f)));
 
-        shadowShader.setUniformMatrix4fv("lightProjection", projection);
-
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, shadowTexture);
-
-        //-------------------------------------------------------------------------------------------
-
-        float[] rectangleVertices = new float[]{
-                //  Coords   // texCoords
-                1.0f, -1.0f,  1.0f, 0.0f,
-                -1.0f, -1.0f,  0.0f, 0.0f,
-                -1.0f,  1.0f,  0.0f, 1.0f,
-
-                1.0f,  1.0f,  1.0f, 1.0f,
-                1.0f, -1.0f,  1.0f, 0.0f,
-                -1.0f,  1.0f,  0.0f, 1.0f
-        };
-
-        shadowDebugShader = new Shader(context, "Shaders/DebugDepth.shaders");
-        shadowDebugShader.bind();
-        shadowDebugShader.setUniform1i("depthMap", 1);
-
-        glEnableVertexAttribArray(0);
-        glEnableVertexAttribArray(1);
-        glVertexAttribPointer(0, 2, GL_FLOAT, false, 4 * Float.BYTES, 0);
-        glVertexAttribPointer(1, 2, GL_FLOAT, false, 4 * Float.BYTES, 2 * Float.BYTES);
-
-        IntBuffer genVertexBuffer = IntBuffer.allocate(Integer.BYTES);
-        glGenBuffers(1, genVertexBuffer);
-        shadowVertexBuffer = genVertexBuffer.get();
-        ByteBuffer vbb = ByteBuffer.allocateDirect(6 * 4 * Float.BYTES);
-        vbb.order(ByteOrder.nativeOrder());
-        FloatBuffer fb = vbb.asFloatBuffer();
-        fb.put(rectangleVertices);
-        fb.position(0);
-        glBindBuffer(GL_ARRAY_BUFFER, shadowVertexBuffer);
-        glBufferData(GL_ARRAY_BUFFER, fb.capacity() * Float.BYTES, fb, GL_STATIC_DRAW);
+        shadowShader.setUniform3f("u_LightPosition", lightPosition.x, lightPosition.y, lightPosition.z);
+        shadowShader.setUniform1f("u_FarPlane", 1000.0f);
 
         //-------------------------------------------------------------------------------------------
 
@@ -156,28 +122,48 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 
         shader.setUniform3f("u_LightPosition", lightPosition.x, lightPosition.y, lightPosition.z);
         shader.setUniform4f("u_LightColor", lightColor.x, lightColor.y, lightColor.z, lightColor.w);
-
-        shader.setUniformMatrix4fv("lightProjection", projection);
-
-        shader.setUniformMatrix4fv("mvpmatrix", projection);
+        shader.setUniform1i("u_ShadowCubeMap", shadowCubeMap);
     }
 
     @Override
     public void onDrawFrame(GL10 gl) {
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, shadowTexture);
 
+        //update light
+        lightRotation++;
+
+        lightPosition.z = (float) (Math.cos(Math.toRadians(lightRotation)) * lightMaxHeight);
+        lightPosition.y = (float) (Math.sin(Math.toRadians(lightRotation)) * lightMaxHeight);
+
+        for (int i = 0; i < shadowTransforms.length; i++){
+            shadowTransforms[i] = new Matrix4f();
+            shadowTransforms[i].loadPerspective(90, 1.0f, 0.1f, 1000f);
+        }
+        shadowTransforms[0].multiply(Camera.lookAt(lightPosition, lightPosition.add(new Vector3(1.0f, 0.0f, 0.0f)), new Vector3(0.0f, -1.0f, 0.0f)));
+        shadowTransforms[1].multiply(Camera.lookAt(lightPosition, lightPosition.add(new Vector3(-1.0f, 0.0f, 0.0f)), new Vector3(0.0f, -1.0f, 0.0f)));
+        shadowTransforms[2].multiply(Camera.lookAt(lightPosition, lightPosition.add(new Vector3(0.0f, 1.0f, 0.0f)), new Vector3(0.0f, 0.0f, -1.0f)));
+        shadowTransforms[3].multiply(Camera.lookAt(lightPosition, lightPosition.add(new Vector3(0.0f, -1.0f, 0.0f)), new Vector3(0.0f, 0.0f, -1.0f)));
+        shadowTransforms[4].multiply(Camera.lookAt(lightPosition, lightPosition.add(new Vector3(0.0f, 0.0f, 1.0f)), new Vector3(0.0f, -1.0f, 0.0f)));
+        shadowTransforms[5].multiply(Camera.lookAt(lightPosition, lightPosition.add(new Vector3(0.0f, 0.0f, -1.0f)), new Vector3(0.0f, -1.0f, 0.0f)));
+
+
+        //do other stuff
         batch.bind();
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_CUBE_MAP, shadowCubeMap);
 
-        // Preparations for the Shadow Map
         shadowShader.bind();
         glViewport(0, 0, shadowMapWidth, shadowMapHeight);
         glBindFramebuffer(GL_FRAMEBUFFER, ShadowFrameBuffer);
-        glColorMask(false, false, false, false);
+        shadowShader.setUniform3f("u_LightPosition", lightPosition.x, lightPosition.y, lightPosition.z);
+
         glClear(GL_DEPTH_BUFFER_BIT);
+        for(int i = 0; i < 6; i++){
+            shadowShader.setUniformMatrix4fv("u_LightProjection", shadowTransforms[i]);
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, shadowCubeMap, 0);
 
-        batch.draw();
-
+            glClear(GL_DEPTH_BUFFER_BIT);
+            batch.draw();
+        }
 
 
         shader.bind();
@@ -187,24 +173,12 @@ public class GLRenderer implements GLSurfaceView.Renderer {
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        shader.setUniform3f("u_LightPosition", lightPosition.x, lightPosition.y, lightPosition.z);
         shader.setUniformMatrix4fv("mvpmatrix", Camera.getMatrix());
+
 
         batch.draw();
 
-
-        /*shadowDebugShader.bind();
-
-        glViewport(0, 0, width, height);
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        glBindBuffer(GL_ARRAY_BUFFER, shadowVertexBuffer);
-        glEnableVertexAttribArray(0);
-        glEnableVertexAttribArray(1);
-        glVertexAttribPointer(0, 2, GL_FLOAT, false, 4 * Float.BYTES, 0);
-        glVertexAttribPointer(1, 2, GL_FLOAT, false, 4 * Float.BYTES, 2 * Float.BYTES);
-        glDrawArrays(GL_TRIANGLES, 0, 6);*/
 
         //world.movePlayerPosition(1, 0);
         batch.updateVertices(MeshBuilder.generateMesh(world.renderedWorld, world.renderedWorldSize, world.worldMaxHeight));

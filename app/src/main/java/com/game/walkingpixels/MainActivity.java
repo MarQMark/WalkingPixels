@@ -5,8 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.SeekBar;
 
-import javax.microedition.khronos.opengles.GL;
-
 public class MainActivity extends AppCompatActivity {
 
     @Override

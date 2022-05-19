@@ -1,10 +1,10 @@
 package com.game.walkingpixels.openGL;
 
-import static android.opengl.GLES20.GL_FLOAT;
-import static android.opengl.GLES20.GL_SHORT;
-import static android.opengl.GLES20.glEnableVertexAttribArray;
-import static android.opengl.GLES20.glGetAttribLocation;
-import static android.opengl.GLES20.glVertexAttribPointer;
+import static android.opengl.GLES31.GL_FLOAT;
+import static android.opengl.GLES31.GL_SHORT;
+import static android.opengl.GLES31.glEnableVertexAttribArray;
+import static android.opengl.GLES31.glGetAttribLocation;
+import static android.opengl.GLES31.glVertexAttribPointer;
 
 public class VertexBufferLayout {
     private final String attributeName;

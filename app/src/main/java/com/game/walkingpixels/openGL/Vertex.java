@@ -4,8 +4,7 @@ import com.game.walkingpixels.openGL.VertexBufferLayout;
 
 import java.nio.FloatBuffer;
 
-import static android.opengl.GLES20.GL_FLOAT;
-import static android.opengl.GLES20.GL_SHORT;
+import static android.opengl.GLES31.GL_FLOAT;
 
 public class Vertex {
     public static final int size = Float.BYTES * (3 + 2 + 3 + 4 + 1);

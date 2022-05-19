@@ -4,9 +4,8 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
-import java.util.ArrayList;
 
-import static android.opengl.GLES20.*;
+import static android.opengl.GLES31.*;
 
 public class IndexBuffer {
 

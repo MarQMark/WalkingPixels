@@ -1,19 +1,30 @@
 #shader vertex
+#version 310 es
 
-attribute vec4 a_Position;
+in vec4 a_Position;
 
-uniform mat4 lightProjection;
+uniform mat4 u_LightProjection;
+
+out vec4 v_FragPos;
 
 void main()
 {
-    gl_Position = lightProjection  * vec4(a_Position.x, a_Position.y, a_Position.z, 1.0);
+    gl_Position = u_LightProjection  * vec4(a_Position.x, a_Position.y, a_Position.z, 1.0);
+    v_FragPos = a_Position;
 }
 
 
 #shader fragment
+#version 310 es
 
 precision mediump float;
 
+in vec4 v_FragPos;
+
+uniform vec3 u_LightPosition;
+uniform float u_FarPlane;
+
 void main()
 {
+    gl_FragDepth  = length(v_FragPos.xyz - u_LightPosition) / u_FarPlane;
 }

@@ -1,21 +1,19 @@
 #shader vertex
+#version 310 es
 
-attribute vec4 a_Position;
-attribute vec2 a_TexCoord;
-attribute vec3 a_Normal;
-attribute vec4 a_Color;
-attribute float a_TextureSlot;
+in vec4 a_Position;
+in vec2 a_TexCoord;
+in vec3 a_Normal;
+in vec4 a_Color;
+in float a_TextureSlot;
 
-varying vec2 v_TexCoord;
-varying vec3 v_Normal;
-varying vec3 v_CurrentPosition;
-varying vec4 v_Color;
-varying float v_TextureSlot;
-
-varying vec4 fragPosLight;
+out vec2 v_TexCoord;
+out vec3 v_Normal;
+out vec3 v_CurrentPosition;
+out vec4 v_Color;
+out float v_TextureSlot;
 
 uniform mat4 mvpmatrix;
-uniform mat4 lightProjection;
 
 void main()
 {
@@ -25,31 +23,31 @@ void main()
     v_Normal = a_Normal;
     v_Color = a_Color;
     v_TextureSlot =  a_TextureSlot;
-
-    fragPosLight = lightProjection * vec4(a_Position.x, a_Position.y, a_Position.z, 1.0);
 }
 
 
 #shader fragment
+#version 310 es
 
 precision mediump float;
 
-varying vec2 v_TexCoord;
-varying vec3 v_Normal;
-varying vec3 v_CurrentPosition;
-varying vec4 v_Color;
-varying float v_TextureSlot;
-
-varying vec4 fragPosLight;
+in vec2 v_TexCoord;
+in vec3 v_Normal;
+in vec3 v_CurrentPosition;
+in vec4 v_Color;
+in float v_TextureSlot;
 
 uniform sampler2D u_Textures[2];
+uniform samplerCube u_ShadowCubeMap;
 uniform vec3 u_LightPosition;
 uniform vec4 u_LightColor;
+
+out vec4 Color;
 
 void main()
 {
         int index = int(v_TextureSlot);
-        vec4 texColor = texture2D(u_Textures[index], v_TexCoord);
+        vec4 texColor = texture(u_Textures[index], v_TexCoord);
 
         float a = 1.0 - (1.0 - texColor.w) * (1.0 - v_Color.w);
         float r = (v_Color.r * (1.0 - texColor.w) + texColor.r * texColor.w);
@@ -65,40 +63,35 @@ void main()
 	    float diffuse = max(dot(v_Normal, lightDirection), 0.0);
 
 
-
         // Shadow value
+        float farPlane = 1000.0;
         float shadow = 0.0;
-        // Sets lightCoords to cull space
-        vec3 lightCoords = fragPosLight.xyz / fragPosLight.w;
-        if(lightCoords.z <= 1.0)
+        vec3 fragToLight = v_CurrentPosition - u_LightPosition;
+        float currentDepth = length(fragToLight);
+        float bias = max(0.5 * (1.0 - dot(v_Normal, lightDirection)), 0.0005);
+
+        // Not really a radius, more like half the width of a square
+        float sampleRadius = 2.0;
+        float offset = 0.02;
+        for(float z = -sampleRadius; z <= sampleRadius; z++)
         {
-            // Get from [-1, 1] range to [0, 1] range just like the shadow map
-            lightCoords = (lightCoords + 1.0) / 2.0;
-            float currentDepth = lightCoords.z;
-            // Prevents shadow acne
-            float bias = max(0.025 * (1.0 - dot(v_Normal, lightDirection)), 0.0005);
+        	for(float y = -sampleRadius; y <= sampleRadius; y++)
+        	{
+        	    for(float x = -sampleRadius; x <= sampleRadius; x++)
+        	    {
+        	        float closestDepth = texture(u_ShadowCubeMap, fragToLight + vec3(x, y, z) * offset).r;
 
-            // Smoothens out the shadows
-            float sampleRadius = 2.0;
-            vec2 pixelSize = vec2(1.0 / 2048.0, 1.0 / 2048.0);
-            for(float y = -sampleRadius; y <= sampleRadius; y++)
-            {
-                for(float x = -sampleRadius; x <= sampleRadius; x++)
-                {
-                    float closestDepth = texture2D(u_Textures[1], lightCoords.xy + vec2(x, y) * pixelSize).r;
-                    if (currentDepth > closestDepth + bias)
-                        shadow += 1.0;
-                }
-            }
-            // Get average shadow
-            shadow /= pow((sampleRadius * 2.0 + 1.0), 2.0);
-
+        			closestDepth *= farPlane;
+        			if (currentDepth > closestDepth + bias)
+        				shadow += 1.0;
+        	    }
+        	}
         }
-
-
+        // Average shadow
+        shadow /= pow((sampleRadius * 2.0 + 1.0), 3.0);
 
         vec4 lightColor = u_LightColor * (diffuse * (1.0 - shadow) + ambient);
         lightColor.w = 1.0;
 
-        gl_FragColor = vec4(r, g, b, a) * lightColor;
+        Color = vec4(r, g, b, a) * lightColor;
 }
