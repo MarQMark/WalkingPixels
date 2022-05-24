@@ -3,9 +3,8 @@ package com.game.walkingpixels.openGL;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static android.opengl.GLES31.GL_TRIANGLES;
-import static android.opengl.GLES31.GL_UNSIGNED_SHORT;
-import static android.opengl.GLES31.glDrawElements;
+import static android.opengl.GLES31.*;
+
 
 public class Batch {
 
@@ -54,12 +53,15 @@ public class Batch {
     public void bind(){
         vb.fillBuffer(vertices);
         vb.bind();
-        //tx.bind();
         ib.bind();
     }
 
-    public void draw(){
+    public void unbind(){
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    }
 
+    public void draw(){
         glDrawElements(GL_TRIANGLES, lastVertexPosition, GL_UNSIGNED_SHORT, 0);
     }
 }

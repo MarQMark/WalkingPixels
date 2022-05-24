@@ -53,4 +53,8 @@ public class Vector4 {
     public float dot(Vector4 v){
         return x*v.x + y*v.y + z*v.z + w*v.w;
     }
+
+    public static Vector4 zero(){
+        return new Vector4(0.0f, 0.0f, 0.0f, 0.0f);
+    }
 }

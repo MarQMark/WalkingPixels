@@ -36,14 +36,14 @@ varying vec4 v_Color;
 varying float v_TextureSlot;
 
 uniform sampler2D u_Textures[2];
-uniform samplerCube u_ShadowCubeMap;
+uniform samplerCube u_ShadowCubeMap[4];
 uniform vec3 u_LightPosition;
 uniform vec4 u_LightColor;
 
 void main()
 {
         int index = int(v_TextureSlot);
-        vec4 texColor = texture2D(u_Textures[0], v_TexCoord);
+        vec4 texColor = texture2D(u_Textures[index], v_TexCoord);
 
         float a = 1.0 - (1.0 - texColor.w) * (1.0 - v_Color.w);
         float r = (v_Color.r * (1.0 - texColor.w) + texColor.r * texColor.w);
@@ -60,11 +60,11 @@ void main()
 
 
         // Shadow value
-        float farPlane = 1000.0 - float(index);
+        float farPlane = 1000.0;
         float shadow = 0.0;
         vec3 fragToLight = v_CurrentPosition - u_LightPosition;
         float currentDepth = length(fragToLight);
-        float bias = max(0.5 * (1.0 - dot(v_Normal, lightDirection)), 0.0005);
+        float bias = max(0.5 * (1.0 - dot(v_Normal, lightDirection)), 0.005);
 
         // Not really a radius, more like half the width of a square
         float sampleRadius = 2.0;
@@ -75,7 +75,7 @@ void main()
         	{
         	    for(float x = -sampleRadius; x <= sampleRadius; x++)
         	    {
-        	        float closestDepth = textureCube(u_ShadowCubeMap, fragToLight + vec3(x, y, z) * offset).r;
+        	        float closestDepth = textureCube(u_ShadowCubeMap[0], fragToLight + vec3(x, y, z) * offset).r;
 
         			closestDepth *= farPlane;
         			if (currentDepth > closestDepth + bias)

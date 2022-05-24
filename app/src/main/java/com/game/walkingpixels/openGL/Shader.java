@@ -1,8 +1,12 @@
 package com.game.walkingpixels.openGL;
 
 import android.content.Context;
+import android.opengl.GLES32;
 import android.renderscript.Matrix4f;
 
+
+import com.game.walkingpixels.util.Vector3;
+import com.game.walkingpixels.util.Vector4;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -15,20 +19,35 @@ public class Shader {
 
     private final int id;
     private final HashMap<String, Integer> uniformLocations = new HashMap<String, Integer>();
-
+    private boolean hasGeometry;
 
     public Shader(Context context, String path){
+        String gsSource = getShaderSource(context, "geometry", path);
+        int gs = 0;
+        if(!gsSource.isEmpty()){
+            gs = compileShader(GLES32.GL_GEOMETRY_SHADER, gsSource, path);
+            if(!hasGeometry)
+                path = path.replace("Geometry", "");
+        }
+
+
         String vsSource = getShaderSource(context, "vertex", path);
         String fsSource = getShaderSource(context, "fragment", path);
+
 
         id = glCreateProgram();
         int vs = compileShader(GL_VERTEX_SHADER, vsSource, path);
         int fs = compileShader(GL_FRAGMENT_SHADER, fsSource, path);
         glAttachShader(id, vs);
         glAttachShader(id, fs);
+
+        if(hasGeometry)
+            glAttachShader(id, gs);
+
         glLinkProgram(id);
         glUseProgram(id);
     }
+
 
     public int getID() { return id;}
 
@@ -39,6 +58,8 @@ public class Shader {
     public void unbind(){
         glUseProgram(0);
     }
+
+    public boolean hasGeometry(){return hasGeometry;}
 
     private int getUniformLocation(String uniform){
         if(uniformLocations.containsKey(uniform)){
@@ -74,11 +95,21 @@ public class Shader {
         if(location != -1)
             glUniform3f(location, x, y, z);
     }
+    public void setUniform3f(String uniform, Vector3 v){
+        int location = getUniformLocation(uniform);
+        if(location != -1)
+            glUniform3f(location, v.x, v.y, v.z);
+    }
 
     public void setUniform4f(String uniform, float x, float y, float z, float w){
         int location = getUniformLocation(uniform);
         if(location != -1)
            glUniform4f(location, x, y, z, w);
+    }
+    public void setUniform4f(String uniform, Vector4 v){
+        int location = getUniformLocation(uniform);
+        if(location != -1)
+            glUniform4f(location, v.x, v.y, v.z, v.w);
     }
 
     public void setUniformMatrix4fv(String uniform, Matrix4f matrix4f){
@@ -90,6 +121,10 @@ public class Shader {
 
     private int compileShader(int type, String source, String path){
         int shader = glCreateShader(type);
+        if(shader == 0 && type == GLES32.GL_GEOMETRY_SHADER){
+            hasGeometry = false;
+            return 0;
+        }
         glShaderSource(shader, source);
         glCompileShader(shader);
 
@@ -101,6 +136,7 @@ public class Shader {
         switch (type){
             case GL_VERTEX_SHADER: shaderType = "vertex"; break;
             case GL_FRAGMENT_SHADER: shaderType = "fragment"; break;
+            case GLES32.GL_GEOMETRY_SHADER: shaderType = "geometry"; break;
         }
         System.out.println("[COMPILE] " + shaderType + " " + path +" Status: " + status);
         if(status == 0){
