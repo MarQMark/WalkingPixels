@@ -1,17 +1,16 @@
 #shader vertex
-#version 310 es
 
-in vec4 a_Position;
-in vec2 a_TexCoord;
-in vec3 a_Normal;
-in vec4 a_Color;
-in float a_TextureSlot;
+attribute vec4 a_Position;
+attribute vec2 a_TexCoord;
+attribute vec3 a_Normal;
+attribute vec4 a_Color;
+attribute float a_TextureSlot;
 
-out vec2 v_TexCoord;
-out vec3 v_Normal;
-out vec3 v_CurrentPosition;
-out vec4 v_Color;
-out float v_TextureSlot;
+varying vec2 v_TexCoord;
+varying vec3 v_Normal;
+varying vec3 v_CurrentPosition;
+varying vec4 v_Color;
+varying float v_TextureSlot;
 
 uniform mat4 mvpmatrix;
 
@@ -27,27 +26,24 @@ void main()
 
 
 #shader fragment
-#version 310 es
 
 precision mediump float;
 
-in vec2 v_TexCoord;
-in vec3 v_Normal;
-in vec3 v_CurrentPosition;
-in vec4 v_Color;
-in float v_TextureSlot;
+varying vec2 v_TexCoord;
+varying vec3 v_Normal;
+varying vec3 v_CurrentPosition;
+varying vec4 v_Color;
+varying float v_TextureSlot;
 
 uniform sampler2D u_Textures[2];
 uniform samplerCube u_ShadowCubeMap;
 uniform vec3 u_LightPosition;
 uniform vec4 u_LightColor;
 
-out vec4 Color;
-
 void main()
 {
         int index = int(v_TextureSlot);
-        vec4 texColor = texture(u_Textures[index], v_TexCoord);
+        vec4 texColor = texture2D(u_Textures[0], v_TexCoord);
 
         float a = 1.0 - (1.0 - texColor.w) * (1.0 - v_Color.w);
         float r = (v_Color.r * (1.0 - texColor.w) + texColor.r * texColor.w);
@@ -64,7 +60,7 @@ void main()
 
 
         // Shadow value
-        float farPlane = 1000.0;
+        float farPlane = 1000.0 - float(index);
         float shadow = 0.0;
         vec3 fragToLight = v_CurrentPosition - u_LightPosition;
         float currentDepth = length(fragToLight);
@@ -79,7 +75,7 @@ void main()
         	{
         	    for(float x = -sampleRadius; x <= sampleRadius; x++)
         	    {
-        	        float closestDepth = texture(u_ShadowCubeMap, fragToLight + vec3(x, y, z) * offset).r;
+        	        float closestDepth = textureCube(u_ShadowCubeMap, fragToLight + vec3(x, y, z) * offset).r;
 
         			closestDepth *= farPlane;
         			if (currentDepth > closestDepth + bias)
@@ -93,5 +89,5 @@ void main()
         vec4 lightColor = u_LightColor * (diffuse * (1.0 - shadow) + ambient);
         lightColor.w = 1.0;
 
-        Color = vec4(r, g, b, a) * lightColor;
+        gl_FragColor = vec4(r, g, b, a) * lightColor;
 }
