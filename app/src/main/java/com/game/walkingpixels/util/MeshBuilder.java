@@ -14,6 +14,7 @@ public class MeshBuilder {
 
     private enum Side{
         TOP,
+        BOTTOM,
         LEFT,
         RIGHT,
         FRONT,
@@ -28,6 +29,10 @@ public class MeshBuilder {
                 for(int z = 0; z < worldMaxHeight; z ++) {
 
                     if(renderedWorld[x][y][z] != World.Block.AIR){
+                        if(z == 0|| renderedWorld[x][y][z - 1] == World.Block.AIR){
+                            addSideToMesh(mesh, x, y, z, Side.BOTTOM, renderedWorld[x][y][z], renderedWorldSize);
+                        }
+
                         if(z == worldMaxHeight - 1 || renderedWorld[x][y][z + 1] == World.Block.AIR){
                             addSideToMesh(mesh, x, y, z, Side.TOP, renderedWorld[x][y][z], renderedWorldSize);
                         }
@@ -78,6 +83,8 @@ public class MeshBuilder {
 
     private static Vector3 getNormal(Side side){
         switch (side){
+            case BOTTOM:
+                return new Vector3(0.0f, -1.0f, 0.0f);
             case TOP:
                 return new Vector3(0.0f, 1.0f, 0.0f);
             case LEFT:
@@ -147,6 +154,12 @@ public class MeshBuilder {
         Vector3[] corners = new Vector3[4];
 
         switch (side){
+            case BOTTOM:
+                corners[0] = allCorners[0];
+                corners[1] = allCorners[1];
+                corners[2] = allCorners[2];
+                corners[3] = allCorners[3];
+                break;
             case TOP:
                 corners[0] = allCorners[4];
                 corners[1] = allCorners[5];

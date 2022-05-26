@@ -42,16 +42,17 @@ public class Batch {
     public void addVertices(Vertex[] vertices){
         this.vertices.addAll(Arrays.asList(vertices));
         lastVertexPosition += (vertices.length / 4) * 6;
+        update();
     }
 
     public void updateVertices(Vertex[] vertices){
         this.vertices.clear();
         this.vertices.addAll(Arrays.asList(vertices));
         lastVertexPosition = (vertices.length / 4) * 6;
+        update();
     }
 
     public void bind(){
-        vb.fillBuffer(vertices);
         vb.bind();
         ib.bind();
     }
@@ -59,6 +60,10 @@ public class Batch {
     public void unbind(){
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    }
+
+    private void update(){
+        vb.fillBuffer(vertices);
     }
 
     public void draw(){

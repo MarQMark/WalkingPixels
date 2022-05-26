@@ -14,42 +14,28 @@ import static android.opengl.GLES31.*;
 
 public class PointLight {
 
-    public static final int maxNumberOfPointLights = 4;
-    public static int numberOfPointLights = 0;
-
     private static final int shadowMapWidth = 2048;
     private static final int shadowMapHeight = 2048;
     private int textureSlot = 4;
 
-    private static Shader shader = null;
-    private static int framebuffer = 0;
+    private Shader shader = null;
 
     private Vector3 position;
     private Vector4 color;
+    private float intensity;
     private final int cubeMap;
     private final Matrix4f[] transforms = new Matrix4f[6];
 
     private boolean positionChanged = false;
 
-    public PointLight(Vector3 position, Vector4 color){
-        numberOfPointLights++;
-        if(numberOfPointLights > maxNumberOfPointLights)
-            throw new NumberOfPointLightsOutOfBoundsException();
-
+    public PointLight(Vector3 position, Vector4 color, float intensity, int framebuffer, Shader shader, int number){
 
         this.position = position;
         this.color = color;
-        textureSlot += numberOfPointLights - 1;
+        this.intensity = intensity;
+        textureSlot += number;
 
-        if(shader == null){
-            throw new PointLightShaderIsNotInitialized();
-        }
-        if(framebuffer == 0){
-            int[] genFrameBuffer = new int[1];
-            glGenFramebuffers(1, genFrameBuffer, 0);
-            framebuffer = genFrameBuffer[0];
-        }
-
+        this.shader = shader;
 
         glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 
@@ -80,14 +66,11 @@ public class PointLight {
         shader.unbind();
     }
 
-    public void draw(Batch[] batches, int width, int height){
-        shader.bind();
-
+    public void draw(Batch[] batches){
         if(positionChanged)
             createTransforms();
 
-        glBindFramebuffer(GL_FRAMEBUFFER  , framebuffer);
-        glViewport(0, 0, shadowMapWidth, shadowMapHeight);
+        setShaderSpecifics();
 
         if(shader.hasGeometry()){
             for (Batch batch : batches){
@@ -108,10 +91,6 @@ public class PointLight {
             }
         }
 
-
-        shader.unbind();
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
-        glViewport(0, 0, width, height);
         positionChanged = false;
     }
 
@@ -126,6 +105,10 @@ public class PointLight {
 
     public void setColor(Vector4 color){ this.color = color;}
 
+    public float getIntensity() {return intensity;}
+
+    public void setIntensity(float intensity){ this.intensity = intensity;}
+
     public int getTextureSlot(){  return textureSlot; }
 
     private void createTransforms(){
@@ -139,28 +122,13 @@ public class PointLight {
         transforms[3].multiply(Camera.lookAt(position, position.add(new Vector3(0.0f, -1.0f, 0.0f)), new Vector3(0.0f, 0.0f, -1.0f)));
         transforms[4].multiply(Camera.lookAt(position, position.add(new Vector3(0.0f, 0.0f, 1.0f)), new Vector3(0.0f, -1.0f, 0.0f)));
         transforms[5].multiply(Camera.lookAt(position, position.add(new Vector3(0.0f, 0.0f, -1.0f)), new Vector3(0.0f, -1.0f, 0.0f)));
+    }
 
+    private void setShaderSpecifics(){
         shader.setUniform3f("u_LightPosition", position.x, position.y, position.z);
         if(shader.hasGeometry()){
             for (int i = 0; i < 6; i++)
                 shader.setUniformMatrix4fv("u_shadowMatrices[" + i + "]", transforms[i]);
-        }
-    }
-
-    public static void initShader(Shader shader){
-        if(PointLight.shader == null)
-            PointLight.shader = shader;
-    }
-
-    private static class NumberOfPointLightsOutOfBoundsException extends RuntimeException {
-        public NumberOfPointLightsOutOfBoundsException(){
-            super("Number of PointLights: " + PointLight.numberOfPointLights + "  Maximum: " + PointLight.maxNumberOfPointLights);
-        }
-    }
-
-    private static class PointLightShaderIsNotInitialized extends RuntimeException {
-        public PointLightShaderIsNotInitialized(){
-            super("PointLight shader has not been initialized");
         }
     }
 }

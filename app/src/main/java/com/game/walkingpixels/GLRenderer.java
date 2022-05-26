@@ -11,6 +11,7 @@ import androidx.annotation.RequiresApi;
 
 import com.game.walkingpixels.model.World;
 import com.game.walkingpixels.openGL.Batch;
+import com.game.walkingpixels.openGL.LightManager;
 import com.game.walkingpixels.openGL.PointLight;
 import com.game.walkingpixels.openGL.Shader;
 import com.game.walkingpixels.openGL.Texture;
@@ -37,8 +38,6 @@ public class GLRenderer implements GLSurfaceView.Renderer {
     private float lightRotation = 0;
     private final Vector3 lightPosition = new Vector3(0.0f, lightMaxHeight, 0.0f);
 
-    private PointLight sun;
-
     private int width;
     private int height;
 
@@ -62,61 +61,51 @@ public class GLRenderer implements GLSurfaceView.Renderer {
         glEnable(GL_BLEND);
 
 
-        PointLight.initShader(new Shader(context, "Shaders/ShadowGeometry.shaders"));
-        sun = new PointLight(lightPosition, new Vector4(1f, 1f, 1f, 1.0f));
-
-
         shader = new Shader(context, "Shaders/Basic.shaders");
+
+        LightManager.initShader(new Shader(context, "Shaders/ShadowGeometry.shaders"));
+        LightManager.initWorldShader(shader);
+        LightManager.createPointLight(lightPosition, new Vector4(1f, 1f, 1f, 1.0f), 1000f);
+        LightManager.createPointLight(new Vector3(2.0f, 5.0f, 0.0f), new Vector4(1f, 1f, 1f, 1.0f), 300f);
+
         shader.bind();
 
-        batch = new Batch(shader.getID(), 1500);
+        batch = new Batch(shader.getID(), 20000);
         batch.addVertices(MeshBuilder.generateMesh(world.renderedWorld, world.renderedWorldSize, world.worldMaxHeight));
         batch.bind();
 
         Texture tx = new Texture(context, "textures/texture_atlas.png");
         tx.bind();
 
-        int[] samplers = new int[] {0, 1};
-        shader.setUniform1iv("u_Textures", 2, samplers, 0);
-
-        shader.setUniform3f("u_LightPosition", sun.getPosition());
-        shader.setUniform4f("u_LightColor", sun.getColor());
-        int[] samplerCubs = new int[] {sun.getTextureSlot()};
-        shader.setUniform1iv("u_ShadowCubeMap", samplerCubs.length, samplerCubs, 0);
+        shader.setUniform1iv("u_Textures", 2, new int[] {0, 1}, 0);
     }
 
     @Override
     public void onDrawFrame(GL10 gl) {
+        shader.setUniformMatrix4fv("mvpmatrix", Camera.getMatrix());
 
-        //update light
+        //update sun
         lightRotation++;
-
         lightPosition.z = (float) (Math.cos(Math.toRadians(lightRotation)) * lightMaxHeight);
         lightPosition.y = (float) (Math.sin(Math.toRadians(lightRotation)) * lightMaxHeight);
+        LightManager.setLightPosition(0, lightPosition);
 
 
         //calculate sun
-        sun.setPosition(lightPosition);
-        sun.draw(new Batch[]{ batch }, width, height);
-
+        LightManager.calculateShadow(new Batch[]{ batch }, width, height);
 
         //draw
         shader.bind();
         batch.bind();
-
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        shader.setUniform3f("u_LightPosition", lightPosition.x, lightPosition.y, lightPosition.z);
-        shader.setUniformMatrix4fv("mvpmatrix", Camera.getMatrix());
-        shader.setUniform1i("u_ShadowCubeMap", 4);
-
         batch.draw();
 
 
         //move world
-        world.movePlayerPosition(1, 0);
-        batch.updateVertices(MeshBuilder.generateMesh(world.renderedWorld, world.renderedWorldSize, world.worldMaxHeight));
-        batch.bind();
+        //world.movePlayerPosition(1, 0);
+        //batch.updateVertices(MeshBuilder.generateMesh(world.renderedWorld, world.renderedWorldSize, world.worldMaxHeight));
+        //batch.bind();
     }
 
     @Override

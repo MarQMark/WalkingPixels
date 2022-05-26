@@ -37,8 +37,62 @@ varying float v_TextureSlot;
 
 uniform sampler2D u_Textures[2];
 uniform samplerCube u_ShadowCubeMap[4];
-uniform vec3 u_LightPosition;
-uniform vec4 u_LightColor;
+uniform float u_LightCount;
+uniform vec3 u_LightPosition[4];
+uniform vec4 u_LightColor[4];
+uniform float u_LightIntensity[4];
+
+float calculateShadow(int cubeIndex)
+{
+        if(u_LightPosition[cubeIndex].y < 0.0)
+            return 1.0;
+
+        float farPlane = 1000.0;
+        float shadow = 0.0;
+        vec3 fragToLight = v_CurrentPosition - u_LightPosition[cubeIndex];
+        float currentDepth = length(fragToLight);
+        float bias = max(0.5 * (1.0 - dot(v_Normal, normalize(u_LightPosition[cubeIndex] - v_CurrentPosition))), 0.005);
+
+        float sampleRadius = 2.0;
+        float offset = 0.02;
+        for(float z = -sampleRadius; z <= sampleRadius; z++)
+        {
+        	for(float y = -sampleRadius; y <= sampleRadius; y++)
+        	{
+        	    for(float x = -sampleRadius; x <= sampleRadius; x++)
+        	    {
+        	        float closestDepth = textureCube(u_ShadowCubeMap[cubeIndex], fragToLight + vec3(x, y, z) * offset).r;
+
+        			closestDepth *= farPlane;
+        			if (currentDepth > closestDepth + bias)
+        				shadow += 1.0;
+        	    }
+        	}
+        }
+        // Average shadow
+        shadow /= pow((sampleRadius * 2.0 + 1.0), 3.0);
+
+        return shadow;
+}
+
+float diffuseLighting(int lightIndex)
+{
+         if(u_LightPosition[lightIndex].y < 0.0)
+            return 0.0;
+
+        vec3 lightDirection = u_LightPosition[lightIndex] - v_CurrentPosition;
+
+        vec3 n_lightDirection = normalize(lightDirection);
+	    float diffuse = dot(v_Normal, n_lightDirection);
+	    diffuse = max(diffuse, 0.0);
+
+        float distance = length(lightDirection);
+        float intensity = 1.0 / u_LightIntensity[lightIndex];
+        float attenuation = clamp(1.0 / (1.0 +  intensity * distance + 3.0 * (intensity * intensity) * (distance * distance)), 0.0, 1.0);
+        diffuse *= attenuation;
+
+	    return diffuse;
+}
 
 void main()
 {
@@ -54,39 +108,18 @@ void main()
         // ambient lighting
 	    float ambient = 0.2;
 
-        // diffuse lighting
-	    vec3 lightDirection = normalize(u_LightPosition - v_CurrentPosition);
-	    float diffuse = max(dot(v_Normal, lightDirection), 0.0);
+        float diffuse = 0.0;
+        float shadow = 1.0;
 
-
-        // Shadow value
-        float farPlane = 1000.0;
-        float shadow = 0.0;
-        vec3 fragToLight = v_CurrentPosition - u_LightPosition;
-        float currentDepth = length(fragToLight);
-        float bias = max(0.5 * (1.0 - dot(v_Normal, lightDirection)), 0.005);
-
-        // Not really a radius, more like half the width of a square
-        float sampleRadius = 2.0;
-        float offset = 0.02;
-        for(float z = -sampleRadius; z <= sampleRadius; z++)
+        for(int i = 0; i < int(u_LightCount); i++)
         {
-        	for(float y = -sampleRadius; y <= sampleRadius; y++)
-        	{
-        	    for(float x = -sampleRadius; x <= sampleRadius; x++)
-        	    {
-        	        float closestDepth = textureCube(u_ShadowCubeMap[0], fragToLight + vec3(x, y, z) * offset).r;
-
-        			closestDepth *= farPlane;
-        			if (currentDepth > closestDepth + bias)
-        				shadow += 1.0;
-        	    }
-        	}
+            diffuse += diffuseLighting(i);
+            shadow = min(shadow, calculateShadow(i));
         }
-        // Average shadow
-        shadow /= pow((sampleRadius * 2.0 + 1.0), 3.0);
+	    diffuse = min(diffuse, 1.0);
 
-        vec4 lightColor = u_LightColor * (diffuse * (1.0 - shadow) + ambient);
+
+        vec4 lightColor = u_LightColor[0] * (diffuse * (1.0 - shadow) + ambient);
         lightColor.w = 1.0;
 
         gl_FragColor = vec4(r, g, b, a) * lightColor;

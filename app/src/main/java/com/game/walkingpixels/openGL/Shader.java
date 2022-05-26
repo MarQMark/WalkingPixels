@@ -82,6 +82,11 @@ public class Shader {
         if(location != -1)
             glUniform1f(location, x);
     }
+    public void setUniform1fv(String uniform, int count, float[] v, int offset){
+        int location = getUniformLocation(uniform);
+        if(location != -1)
+            glUniform1fv(location, count, v, offset);
+    }
 
     public void setUniform1iv(String uniform, int count, int[] v, int offset){
         int location = getUniformLocation(uniform);
