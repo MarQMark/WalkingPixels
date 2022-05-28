@@ -59,7 +59,7 @@ public class LightManager {
         lights[numberOfPointLights] = new PointLight(position, color, intensity, framebuffer, shader, numberOfPointLights);
 
         worldShader.bind();
-        worldShader.setUniform1f("u_LightCount", numberOfPointLights + 1);
+        worldShader.setUniform1f("u_LightCount", (numberOfPointLights + 1));
         worldShader.setUniform3f("u_LightPosition[" + numberOfPointLights + "]", position);
         worldShader.setUniform4f("u_LightColor[" + numberOfPointLights + "]", color);
         worldShader.setUniform1f("u_LightIntensity[" + numberOfPointLights + "]", intensity);
@@ -67,6 +67,8 @@ public class LightManager {
         worldShader.unbind();
 
         numberOfPointLights++;
+
+        System.out.println(numberOfPointLights);
     }
 
     public static void initShader(Shader shader){
@@ -74,6 +76,9 @@ public class LightManager {
     }
     public static void initWorldShader(Shader shader){
         worldShader = shader;
+        worldShader.bind();
+        worldShader.setUniform1f("u_LightCount", 0);
+        worldShader.unbind();
     }
 
     public static Vector3 getLightPosition(int light){

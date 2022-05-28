@@ -5,7 +5,7 @@ import com.game.walkingpixels.openGL.Vertex;
 
 import java.util.ArrayList;
 
-public class MeshBuilder {
+public class WorldMeshBuilder {
 
     private static final int textureAtlasWidth = 64;
     private static final int textureAtlasHeight = 64;
@@ -28,7 +28,7 @@ public class MeshBuilder {
             for(int y = 0; y < renderedWorldSize; y ++) {
                 for(int z = 0; z < worldMaxHeight; z ++) {
 
-                    if(renderedWorld[x][y][z] != World.Block.AIR){
+                    if(renderedWorld[x][y][z] != World.Block.AIR && renderedWorld[x][y][z] != World.Block.PLAYER){
                         if(z == 0|| renderedWorld[x][y][z - 1] == World.Block.AIR){
                             addSideToMesh(mesh, x, y, z, Side.BOTTOM, renderedWorld[x][y][z], renderedWorldSize);
                         }
@@ -53,6 +53,10 @@ public class MeshBuilder {
                             addSideToMesh(mesh, x, y, z, Side.FRONT, renderedWorld[x][y][z], renderedWorldSize);
                         }
                     }
+
+                    if(renderedWorld[x][y][z] == World.Block.PLAYER){
+                        MobMeshBuilder.getMobVertices(mesh, new Vector3(x, z, y).sub(new Vector3(renderedWorldSize / 2, 0, renderedWorldSize / 2)), renderedWorld[x][y][z]);
+                    }
                 }
             }
         }
@@ -76,8 +80,9 @@ public class MeshBuilder {
                     new float[]{ corners[i].x, corners[i].y, corners[i].z },
                     new float[]{ texture[i].x, texture[i].y },
                     new float[]{ normal.x, normal.y, normal.z},
-                    new float[]{ 0.0f, 0.0f, 0.0f, 0.0f, },
-                    0.0f));
+                    new float[]{ 0.0f, 0.0f, 0.0f, 1.0f },
+                    0.0f,
+                    1.0f));
         }
     }
 

@@ -17,7 +17,7 @@ public class Texture {
     private final int width;
     private final int height;
 
-    public Texture(Context context, String path){
+    public Texture(Context context, String path, int slot){
 
         Bitmap img = loadTexture(context, path);
         width = img.getWidth();
@@ -27,9 +27,10 @@ public class Texture {
         matrix.setScale(1, -1);
         img = Bitmap.createBitmap(img,0,0, width, height, matrix,true);
 
-        IntBuffer ib = IntBuffer.allocate(Integer.BYTES);
-        glGenTextures(1, ib);
-        id = ib.get();
+        glActiveTexture(GL_TEXTURE0 + slot);
+        int[] ib = new int[1];
+        glGenTextures(1, ib, 0);
+        id = ib[0];
         glBindTexture(GL_TEXTURE_2D, id);
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -38,6 +39,7 @@ public class Texture {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
         GLUtils.texImage2D(GL_TEXTURE_2D, 0, img, 0);
+        glGenerateMipmap(GL_TEXTURE_2D);
         unbind();
     }
 

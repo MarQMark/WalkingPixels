@@ -10,7 +10,8 @@ public class World {
         DIRT,
         WATER,
         GRASS,
-        SNOW
+        SNOW,
+        PLAYER
     }
 
     public final int worldMaxHeight = 5;
@@ -57,9 +58,9 @@ public class World {
             }
         }
 
-        renderedWorld[renderedWorldSize / 2][renderedWorldSize / 2][worldMaxHeight - 1] = Block.DIRT;
-        renderedWorld[renderedWorldSize / 2][renderedWorldSize / 2][worldMaxHeight - 2] = Block.DIRT;
-        renderedWorld[renderedWorldSize / 2][renderedWorldSize / 2][worldMaxHeight - 3] = Block.DIRT;
+        renderedWorld[renderedWorldSize / 2][renderedWorldSize / 2][worldMaxHeight - 2] = Block.PLAYER;
+        //renderedWorld[renderedWorldSize / 2][renderedWorldSize / 2][worldMaxHeight - 2] = Block.DIRT;
+        //renderedWorld[renderedWorldSize / 2][renderedWorldSize / 2][worldMaxHeight - 3] = Block.DIRT;
         renderedWorld[renderedWorldSize / 2 + 4][renderedWorldSize / 2][worldMaxHeight - 1] = Block.DIRT;
     }
 

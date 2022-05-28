@@ -2,6 +2,7 @@ package com.game.walkingpixels.openGL;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 import static android.opengl.GLES31.*;
 
@@ -9,6 +10,19 @@ import static android.opengl.GLES31.*;
 public class Batch {
 
     private final ArrayList<Vertex> vertices = new ArrayList<>();
+
+    private class BatchPart{
+        public String name;
+        public int offset;
+        public int size;
+        public BatchPart(String name, int offset, int size){
+            this.name = name;
+            this.offset = offset;
+            this.size = size;
+        }
+    };
+    private final ArrayList<BatchPart> parts = new ArrayList<>();
+
 
     private VertexBuffer vb;
     private IndexBuffer ib;
@@ -39,18 +53,35 @@ public class Batch {
         ib = new IndexBuffer(indices);
     }
 
-    public void addVertices(Vertex[] vertices){
+    public void addVertices(String name, Vertex[] vertices){
+        if(parts.size() == 0)
+            parts.add(new BatchPart(name, 0, vertices.length));
+        else
+            parts.add(new BatchPart(name, parts.get(parts.size() - 1).offset + parts.get(parts.size() - 1).size, vertices.length));
+
         this.vertices.addAll(Arrays.asList(vertices));
         lastVertexPosition += (vertices.length / 4) * 6;
-        update();
+
+        vb.fillPartBuffer(vertices, parts.get(parts.size() - 1).offset);
     }
 
-    public void updateVertices(Vertex[] vertices){
-        this.vertices.clear();
-        this.vertices.addAll(Arrays.asList(vertices));
-        lastVertexPosition = (vertices.length / 4) * 6;
-        update();
+    public void updateVertices(String name, Vertex[] vertices){
+        int partNumber = -1;
+        for (int i = 0; i < parts.size(); i++) {
+            if(parts.get(i).name.equals(name)){
+                partNumber = i;
+                break;
+            }
+        }
+
+        if(partNumber == -1){
+            addVertices(name, vertices);
+            return;
+        }
+
+        vb.fillPartBuffer(vertices, parts.get(partNumber).offset);
     }
+
 
     public void bind(){
         vb.bind();
@@ -62,9 +93,6 @@ public class Batch {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     }
 
-    private void update(){
-        vb.fillBuffer(vertices);
-    }
 
     public void draw(){
         glDrawElements(GL_TRIANGLES, lastVertexPosition, GL_UNSIGNED_SHORT, 0);

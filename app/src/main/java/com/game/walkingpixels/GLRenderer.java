@@ -1,25 +1,18 @@
 package com.game.walkingpixels;
 
 import android.content.Context;
-import android.opengl.GLES32;
 import android.opengl.GLSurfaceView;
-import android.os.Build;
-import android.renderscript.Matrix4f;
 import android.util.Log;
-
-import androidx.annotation.RequiresApi;
 
 import com.game.walkingpixels.model.World;
 import com.game.walkingpixels.openGL.Batch;
 import com.game.walkingpixels.openGL.LightManager;
-import com.game.walkingpixels.openGL.PointLight;
 import com.game.walkingpixels.openGL.Shader;
 import com.game.walkingpixels.openGL.Texture;
-import com.game.walkingpixels.util.MeshBuilder;
+import com.game.walkingpixels.util.MobMeshBuilder;
+import com.game.walkingpixels.util.WorldMeshBuilder;
 import com.game.walkingpixels.util.Vector3;
 import com.game.walkingpixels.util.Vector4;
-
-import java.nio.IntBuffer;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -41,6 +34,8 @@ public class GLRenderer implements GLSurfaceView.Renderer {
     private int width;
     private int height;
 
+    Texture tx;
+    Texture tx2;
 
     public GLRenderer(Context context){
         this.context = context;
@@ -52,9 +47,9 @@ public class GLRenderer implements GLSurfaceView.Renderer {
         String version = gl.glGetString(GL10.GL_VERSION);
         System.out.println("[INFO] OpenGL Version: " + version);
 
-        IntBuffer maxTexture = IntBuffer.allocate(Integer.BYTES);
-        glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, maxTexture);
-        System.out.println("[INFO] Maximum image units " + maxTexture.get());
+        int[] maxTexture = new int[1];
+        glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, maxTexture, 0);
+        System.out.println("[INFO] Maximum image units " + maxTexture[0]);
 
         glEnable(GL_DEPTH_TEST);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -66,23 +61,29 @@ public class GLRenderer implements GLSurfaceView.Renderer {
         LightManager.initShader(new Shader(context, "Shaders/ShadowGeometry.shaders"));
         LightManager.initWorldShader(shader);
         LightManager.createPointLight(lightPosition, new Vector4(1f, 1f, 1f, 1.0f), 1000f);
-        LightManager.createPointLight(new Vector3(2.0f, 5.0f, 0.0f), new Vector4(1f, 1f, 1f, 1.0f), 300f);
+        LightManager.createPointLight(new Vector3(2.0f, 5.0f, 0.0f), new Vector4(1f, 1f, 1f, 1.0f), 3f);
 
         shader.bind();
 
         batch = new Batch(shader.getID(), 20000);
-        batch.addVertices(MeshBuilder.generateMesh(world.renderedWorld, world.renderedWorldSize, world.worldMaxHeight));
+        //batch.addVertices("Player", MobMeshBuilder.generateMesh(world.renderedWorld, world.renderedWorldSize, world.worldMaxHeight));
+        batch.addVertices("World", WorldMeshBuilder.generateMesh(world.renderedWorld, world.renderedWorldSize, world.worldMaxHeight));
         batch.bind();
 
-        Texture tx = new Texture(context, "textures/texture_atlas.png");
-        tx.bind();
+        tx = new Texture(context, "textures/texture_atlas.png", 0);
+        tx.bind(0);
+        tx2 = new Texture(context, "textures/upa.png", 1);
+        tx2.bind(1);
 
         shader.setUniform1iv("u_Textures", 2, new int[] {0, 1}, 0);
     }
 
     @Override
     public void onDrawFrame(GL10 gl) {
-        shader.setUniformMatrix4fv("mvpmatrix", Camera.getMatrix());
+
+
+        shader.setUniformMatrix4fv("mvpmatrix", Camera.getMVPMatrix());
+        shader.setUniformMatrix4fv("mpmatrix", Camera.getMPMatrix());
 
         //update sun
         lightRotation++;
@@ -97,14 +98,13 @@ public class GLRenderer implements GLSurfaceView.Renderer {
         //draw
         shader.bind();
         batch.bind();
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClearColor(0.2f, 0.3f, 0.8f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         batch.draw();
 
-
         //move world
         //world.movePlayerPosition(1, 0);
-        //batch.updateVertices(MeshBuilder.generateMesh(world.renderedWorld, world.renderedWorldSize, world.worldMaxHeight));
+        batch.updateVertices("World" , WorldMeshBuilder.generateMesh(world.renderedWorld, world.renderedWorldSize, world.worldMaxHeight));
         //batch.bind();
     }
 

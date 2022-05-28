@@ -14,8 +14,8 @@ import static android.opengl.GLES31.*;
 
 public class PointLight {
 
-    private static final int shadowMapWidth = 2048;
-    private static final int shadowMapHeight = 2048;
+    private static final int shadowMapWidth = 512;
+    private static final int shadowMapHeight = 512;
     private int textureSlot = 4;
 
     private Shader shader = null;

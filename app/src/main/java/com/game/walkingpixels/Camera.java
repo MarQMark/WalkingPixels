@@ -26,7 +26,7 @@ public class Camera {
         projection.loadPerspective(fov, ratio, nearPlane, farPlane);
     }
 
-    static public Matrix4f getMatrix(){
+    static public Matrix4f getMVPMatrix(){
         Matrix4f view = lookAt(position, position.add(orientation), up);
         Matrix4f mvp = new Matrix4f(projection.getArray());
         mvp.multiply(view);
@@ -34,6 +34,13 @@ public class Camera {
         mvp.rotate(rotationY, 0.0f, 1.0f, 0.0f);
         mvp.rotate(rotationZ, 0.0f, 0.0f, 1.0f);
         return mvp;
+    }
+
+    static public Matrix4f getMPMatrix(){
+        Matrix4f view = lookAt(position, position.add(orientation), up);
+        Matrix4f mp = new Matrix4f(projection.getArray());
+        mp.multiply(view);
+        return mp;
     }
 
     public static Matrix4f lookAt(Vector3 eye, Vector3 center, Vector3 up){

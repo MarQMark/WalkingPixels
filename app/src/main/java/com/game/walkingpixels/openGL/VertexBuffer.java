@@ -58,6 +58,19 @@ public class VertexBuffer {
         glBindBuffer(GL_ARRAY_BUFFER, id);
         glBufferSubData(GL_ARRAY_BUFFER, 0, vertices.size() * Vertex.size, fb);
     }
+    public void fillPartBuffer(Vertex[] vertices, int offset){
+        ByteBuffer vbb = ByteBuffer.allocateDirect(Vertex.size * vertices.length);
+        vbb.order(ByteOrder.nativeOrder());
+        FloatBuffer fb = vbb.asFloatBuffer();
+
+        for (Vertex vertex: vertices)
+            vertex.writeToBuffer(fb);
+
+        fb.position(0);
+
+        glBindBuffer(GL_ARRAY_BUFFER, id);
+        glBufferSubData(GL_ARRAY_BUFFER, offset * Vertex.size, vertices.length * Vertex.size, fb);
+    }
 
     private void addLayout(VertexBufferLayout[] layouts)
     {
