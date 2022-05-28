@@ -19,7 +19,7 @@ public class LightManager {
     private static Shader worldShader= null;
 
     private static int framebuffer = 0;
-    private static Shader shader = null;
+    public static Shader shader = null;
 
     private static final int shadowMapWidth = 2048;
     private static final int shadowMapHeight = 2048;

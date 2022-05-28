@@ -1,5 +1,6 @@
 package com.game.walkingpixels.util;
 
+import com.game.walkingpixels.Camera;
 import com.game.walkingpixels.model.World;
 import com.game.walkingpixels.openGL.Vertex;
 
@@ -31,74 +32,49 @@ public class MobMeshBuilder {
 
     public static void getMobVertices(ArrayList<Vertex> mobs, Vector3 position, World.Block type){
         Vector3 center = new Vector3(position.x + 0.5f, position.y, position.z + 0.5f);
-        float mobWidth = 1;
-        float delta = (float) ((mobWidth / 2.0f) / Math.sqrt(2));
 
+
+        float mobWidth = 1.0f;
         float textureSlot = 1.0f;
-        float rotates = 1.0f;
+        switch (type){
+            case PLAYER:
+                mobWidth = 1.0f;
+                textureSlot = 1.0f;
+                break;
+        }
+
+        float deltaX = (float) Math.cos(Math.toRadians(2.0 * Camera.rotationY) * (mobWidth / 2.0f)) / 2.0f;
+        float deltaZ = (float) Math.sin(Math.toRadians(2.0 * Camera.rotationY) * (mobWidth / 2.0f)) / 2.0f;
+
+        Vector3 normals = new Vector3(-deltaZ, 0.0f, deltaX);
+        normals.normalize();
 
         mobs.add(new Vertex(
-                new float[]{ center.x - delta, position.y, center.z - delta },
+                new float[]{ center.x - deltaX, position.y, center.z - deltaZ },
                 new float[]{ 0.0f, 0.0f },
-                new float[]{-(float) (1.0f/ Math.sqrt(2.0)), 0.0f, (float) -(1.0f/ Math.sqrt(2.0))},
+                new float[] {normals.x, normals.y, normals.z},
                 new float[]{ 0.0f, 0.0f, 0.0f, 0.0f },
-                textureSlot,
-                rotates));
+                textureSlot));
 
         mobs.add(new Vertex(
-                new float[]{ center.x + delta, position.y, center.z + delta },
+                new float[]{ center.x + deltaX, position.y, center.z + deltaZ },
                 new float[]{ 1.0f, 0.0f },
-                new float[]{-(float) (1.0f/ Math.sqrt(2.0)), 0.0f, -(float) (1.0f/ Math.sqrt(2.0))},
+                new float[] {normals.x, normals.y, normals.z},
                 new float[]{ 0.0f, 0.0f, 0.0f, 0.0f },
-                textureSlot,
-                rotates));
+                textureSlot));
 
         mobs.add(new Vertex(
-                new float[]{ center.x - delta, position.y + 1, center.z - delta },
+                new float[]{ center.x - deltaX, position.y + 2, center.z - deltaZ },
                 new float[]{ 0.0f, 1.0f },
-                new float[]{-(float) (1.0f/ Math.sqrt(2.0)), 0.0f, -(float) (1.0f/ Math.sqrt(2.0))},
+                new float[] {normals.x, normals.y, normals.z},
                 new float[]{ 0.0f, 0.0f, 0.0f, 0.0f },
-                textureSlot,
-                rotates));
+                textureSlot));
 
         mobs.add(new Vertex(
-                new float[]{ center.x + delta, position.y + 1, center.z + delta },
+                new float[]{ center.x + deltaX, position.y + 2, center.z + deltaZ },
                 new float[]{ 1.0f, 1.0f },
-                new float[]{-(float) (1.0f/ Math.sqrt(2.0)), 0.0f,- (float) (1.0f/ Math.sqrt(2.0))},
+                new float[] {normals.x, normals.y, normals.z},
                 new float[]{ 1.0f, 0.0f, 0.0f, 0.0f },
-                textureSlot,
-                rotates));
-
-        /*mobs.add(new Vertex(
-                new float[]{ center.x - 1, position.y, position.z },
-                new float[]{ 0.0f, 0.0f },
-                new float[]{0.0f, 0.0f, 1.0f},
-                new float[]{ 0.0f, 0.0f, 0.0f, 0.0f },
-                1.0f,
-                1.0f));
-
-        mobs.add(new Vertex(
-                new float[]{ center.x + 1, position.y, position.z },
-                new float[]{ 1.0f, 0.0f },
-                new float[]{0.0f, 0.0f, 1.0f},
-                new float[]{ 0.0f, 0.0f, 0.0f, 0.0f },
-                1.0f,
-                1.0f));
-
-        mobs.add(new Vertex(
-                new float[]{ center.x - 1, position.y + 1, position.z },
-                new float[]{ 0.0f, 1.0f },
-                new float[]{0.0f, 0.0f, 1.0f},
-                new float[]{ 0.0f, 0.0f, 0.0f, 0.0f },
-                1.0f,
-                1.0f));
-
-        mobs.add(new Vertex(
-                new float[]{ center.x + 1, position.y + 1, position.z },
-                new float[]{ 1.0f, 1.0f },
-                new float[]{0.0f, 0.0f, 1.0f},
-                new float[]{ 1.0f, 0.0f, 0.0f, 0.0f },
-                1.0f,
-                1.0f));*/
+                textureSlot));
     }
 }

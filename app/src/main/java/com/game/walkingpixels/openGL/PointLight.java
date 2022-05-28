@@ -14,8 +14,8 @@ import static android.opengl.GLES31.*;
 
 public class PointLight {
 
-    private static final int shadowMapWidth = 512;
-    private static final int shadowMapHeight = 512;
+    private static final int shadowMapWidth = 2048;
+    private static final int shadowMapHeight = 2048;
     private int textureSlot = 4;
 
     private Shader shader = null;
@@ -53,6 +53,8 @@ public class PointLight {
         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+        glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
 
         if(shader.hasGeometry() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
                 GLES32.glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, cubeMap, 0);

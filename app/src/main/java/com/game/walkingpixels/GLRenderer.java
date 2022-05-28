@@ -1,6 +1,7 @@
 package com.game.walkingpixels;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.opengl.GLSurfaceView;
 import android.util.Log;
 
@@ -56,26 +57,34 @@ public class GLRenderer implements GLSurfaceView.Renderer {
         glEnable(GL_BLEND);
 
 
-        shader = new Shader(context, "Shaders/Basic.shaders");
+        SharedPreferences sharedPref = context.getSharedPreferences("Test", Context.MODE_PRIVATE);
+        if(sharedPref.getBoolean("shadowOn", false))
+            shader = new Shader(context, "Shaders/BasicShadow.shaders");
+        else
+            shader = new Shader(context, "Shaders/Basic.shaders");
 
         LightManager.initShader(new Shader(context, "Shaders/ShadowGeometry.shaders"));
         LightManager.initWorldShader(shader);
         LightManager.createPointLight(lightPosition, new Vector4(1f, 1f, 1f, 1.0f), 1000f);
-        LightManager.createPointLight(new Vector3(2.0f, 5.0f, 0.0f), new Vector4(1f, 1f, 1f, 1.0f), 3f);
+        //LightManager.createPointLight(new Vector3(2.0f, 5.0f, 0.0f), new Vector4(1f, 1f, 1f, 1.0f), 8f);
 
         shader.bind();
 
         batch = new Batch(shader.getID(), 20000);
-        //batch.addVertices("Player", MobMeshBuilder.generateMesh(world.renderedWorld, world.renderedWorldSize, world.worldMaxHeight));
+        batch.addVertices("Player", MobMeshBuilder.generateMesh(world.renderedWorld, world.renderedWorldSize, world.worldMaxHeight));
         batch.addVertices("World", WorldMeshBuilder.generateMesh(world.renderedWorld, world.renderedWorldSize, world.worldMaxHeight));
         batch.bind();
 
         tx = new Texture(context, "textures/texture_atlas.png", 0);
         tx.bind(0);
-        tx2 = new Texture(context, "textures/upa.png", 1);
+        tx2 = new Texture(context, "textures/christina.png", 1);
         tx2.bind(1);
 
         shader.setUniform1iv("u_Textures", 2, new int[] {0, 1}, 0);
+        LightManager.shader.bind();
+        LightManager.shader.setUniform1iv("u_Textures", 2, new int[] {0, 1}, 0);
+
+        shader.bind();
     }
 
     @Override
@@ -104,7 +113,8 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 
         //move world
         //world.movePlayerPosition(1, 0);
-        batch.updateVertices("World" , WorldMeshBuilder.generateMesh(world.renderedWorld, world.renderedWorldSize, world.worldMaxHeight));
+        batch.updateVertices("Player", MobMeshBuilder.generateMesh(world.renderedWorld, world.renderedWorldSize, world.worldMaxHeight));
+        //batch.updateVertices("World" , WorldMeshBuilder.generateMesh(world.renderedWorld, world.renderedWorldSize, world.worldMaxHeight));
         //batch.bind();
     }
 

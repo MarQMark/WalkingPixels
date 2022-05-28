@@ -2,8 +2,11 @@ package com.game.walkingpixels;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.widget.CompoundButton;
 import android.widget.SeekBar;
+import android.widget.Switch;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -11,6 +14,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        SharedPreferences preferences = getSharedPreferences("Test", MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+
+        Switch sw = findViewById(R.id.switch1);
+        sw.setChecked(preferences.getBoolean("shadowOn",false));
+        sw.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            editor.putBoolean("shadowOn", isChecked);
+            editor.apply();
+        });
 
         SeekBar per = findViewById(R.id.seekBar);
         per.setProgress(200);

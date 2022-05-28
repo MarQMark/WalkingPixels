@@ -54,9 +54,9 @@ public class WorldMeshBuilder {
                         }
                     }
 
-                    if(renderedWorld[x][y][z] == World.Block.PLAYER){
+                    /*if(renderedWorld[x][y][z] == World.Block.PLAYER){
                         MobMeshBuilder.getMobVertices(mesh, new Vector3(x, z, y).sub(new Vector3(renderedWorldSize / 2, 0, renderedWorldSize / 2)), renderedWorld[x][y][z]);
-                    }
+                    }*/
                 }
             }
         }
@@ -81,8 +81,7 @@ public class WorldMeshBuilder {
                     new float[]{ texture[i].x, texture[i].y },
                     new float[]{ normal.x, normal.y, normal.z},
                     new float[]{ 0.0f, 0.0f, 0.0f, 1.0f },
-                    0.0f,
-                    1.0f));
+                    0.0f));
         }
     }
 

@@ -43,6 +43,39 @@ uniform vec3 u_LightPosition[4];
 uniform vec4 u_LightColor[4];
 uniform float u_LightIntensity[4];
 
+float calculateShadow(int cubeIndex)
+{
+        if(u_LightPosition[cubeIndex].y < 0.0)
+            return 1.0;
+
+        float farPlane = 1000.0;
+        float shadow = 0.0;
+        vec3 fragToLight = v_CurrentPosition - u_LightPosition[cubeIndex];
+        float currentDepth = length(fragToLight);
+        float bias = max(0.5 * (1.0 - dot(v_Normal, normalize(u_LightPosition[cubeIndex] - v_CurrentPosition))), 0.005);
+
+        float sampleRadius = 1.0;
+        float offset = 0.02;
+        for(float z = -sampleRadius; z <= sampleRadius; z++)
+        {
+        	for(float y = -sampleRadius; y <= sampleRadius; y++)
+        	{
+        	    for(float x = -sampleRadius; x <= sampleRadius; x++)
+        	    {
+        	        float closestDepth = textureCube(u_ShadowCubeMap[cubeIndex], fragToLight + vec3(x, y, z) * offset).r;
+
+        			closestDepth *= farPlane;
+        			if (currentDepth > closestDepth + bias)
+        				shadow += 1.0;
+        	    }
+        	}
+        }
+        // Average shadow
+        shadow /= pow((sampleRadius * 2.0 + 1.0), 3.0);
+
+        return shadow;
+}
+
 float diffuseLighting(int lightIndex)
 {
          if(u_LightPosition[lightIndex].y < v_CurrentPosition.y)
@@ -84,24 +117,29 @@ void main()
 
 
             float diffuse = 0.0;
+            float shadow = 1.0;
 
             int lightCount = int(u_LightCount);
             if(lightCount >= 1){
                 diffuse += diffuseLighting(0);
+                shadow = min(shadow, calculateShadow(0));
             }
             if(lightCount >= 2){
                 diffuse += diffuseLighting(1);
+                shadow = min(shadow, calculateShadow(1));
             }
             if(lightCount >= 3){
                 diffuse += diffuseLighting(2);
+                shadow = min(shadow, calculateShadow(2));
             }
             if(lightCount >= 4){
                 diffuse += diffuseLighting(3);
+                shadow = min(shadow, calculateShadow(3));
             }
 
             diffuse = min(diffuse, 1.0);
 
-            vec4 lightColor = u_LightColor[0] * (diffuse + ambient);
+            vec4 lightColor = u_LightColor[0] * (diffuse * (1.0 - shadow) + ambient);
             lightColor.w = 1.0;
 
             gl_FragColor = vec4(r, g, b, a) * lightColor;

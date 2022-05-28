@@ -19,7 +19,7 @@ public class Shader {
 
     private final int id;
     private final HashMap<String, Integer> uniformLocations = new HashMap<String, Integer>();
-    private boolean hasGeometry;
+    private boolean hasGeometry = false;
 
     public Shader(Context context, String path){
         String gsSource = getShaderSource(context, "geometry", path);
