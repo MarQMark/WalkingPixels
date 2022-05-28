@@ -1,15 +1,17 @@
 package com.game.walkingpixels.openGL;
 
+import com.game.walkingpixels.openGL.vertices.IVertex;
+import com.game.walkingpixels.openGL.vertices.worldVertex;
+
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 
 import static android.opengl.GLES31.*;
 
 
 public class Batch {
 
-    private final ArrayList<Vertex> vertices = new ArrayList<>();
+    private final ArrayList<IVertex> vertices = new ArrayList<>();
 
     private class BatchPart{
         public String name;
@@ -31,9 +33,9 @@ public class Batch {
     private final int shaderID;
     private int lastVertexPosition;
 
-    public Batch(int shaderID, int maxQuadCount){
+    public Batch(int shaderID, int maxQuadCount, int vertexSize, VertexBufferLayout[] layouts){
         this.shaderID = shaderID;
-        vb = new VertexBuffer(shaderID, maxQuadCount * 4);
+        vb = new VertexBuffer(shaderID, maxQuadCount * 4, vertexSize, layouts);
 
         short[] indices = new short[maxQuadCount * 6];
 
@@ -53,7 +55,7 @@ public class Batch {
         ib = new IndexBuffer(indices);
     }
 
-    public void addVertices(String name, Vertex[] vertices){
+    public void addVertices(String name, IVertex[] vertices){
         if(parts.size() == 0)
             parts.add(new BatchPart(name, 0, vertices.length));
         else
@@ -65,7 +67,7 @@ public class Batch {
         vb.fillPartBuffer(vertices, parts.get(parts.size() - 1).offset);
     }
 
-    public void updateVertices(String name, Vertex[] vertices){
+    public void updateVertices(String name, worldVertex[] vertices){
         int partNumber = -1;
         for (int i = 0; i < parts.size(); i++) {
             if(parts.get(i).name.equals(name)){

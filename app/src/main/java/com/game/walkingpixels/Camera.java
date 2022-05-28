@@ -1,9 +1,8 @@
 package com.game.walkingpixels;
 
 import android.renderscript.Matrix4f;
-import android.renderscript.Float3;
 
-import com.game.walkingpixels.util.Vector3;
+import com.game.walkingpixels.util.vector.Vector3;
 
 public class Camera {
 
@@ -36,12 +35,6 @@ public class Camera {
         return mvp;
     }
 
-    static public Matrix4f getMPMatrix(){
-        Matrix4f view = lookAt(position, position.add(orientation), up);
-        Matrix4f mp = new Matrix4f(projection.getArray());
-        mp.multiply(view);
-        return mp;
-    }
 
     public static Matrix4f lookAt(Vector3 eye, Vector3 center, Vector3 up){
         Matrix4f M = new Matrix4f();

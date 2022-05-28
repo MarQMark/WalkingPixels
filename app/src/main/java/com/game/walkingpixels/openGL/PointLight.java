@@ -5,11 +5,9 @@ import android.os.Build;
 import android.renderscript.Matrix4f;
 
 import com.game.walkingpixels.Camera;
-import com.game.walkingpixels.GLRenderer;
-import com.game.walkingpixels.util.Vector3;
-import com.game.walkingpixels.util.Vector4;
+import com.game.walkingpixels.util.vector.Vector3;
+import com.game.walkingpixels.util.vector.Vector4;
 
-import java.nio.IntBuffer;
 import static android.opengl.GLES31.*;
 
 public class PointLight {

@@ -10,7 +10,7 @@ public class CanvasView extends GLSurfaceView {
 
         setEGLContextClientVersion(3);
 
-        GLRenderer renderer = new GLRenderer(context);
+        GLRenderer renderer = new GLRenderer(context, GLRenderer.Scene.WALKING);
         setRenderer(renderer);
     }
 }

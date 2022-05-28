@@ -1,5 +1,8 @@
 package com.game.walkingpixels.openGL;
 
+import com.game.walkingpixels.openGL.vertices.IVertex;
+import com.game.walkingpixels.openGL.vertices.worldVertex;
+
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
@@ -13,63 +16,45 @@ public class VertexBuffer {
     private final int id;
     private final int shaderID;
     private final ArrayList<VertexBufferLayout> layouts = new ArrayList<>();
+    private final int vertexSize;
 
-    public VertexBuffer(int shaderID, Vertex[] vertices){
+    public VertexBuffer(int shaderID, int maxVertexCount, int vertexSize, VertexBufferLayout[] layouts){
         this.shaderID = shaderID;
-
-        ByteBuffer vbb = ByteBuffer.allocateDirect(Vertex.size * vertices.length);
-        vbb.order(ByteOrder.nativeOrder());
-        FloatBuffer fb = vbb.asFloatBuffer();
-        for (Vertex vertex: vertices)
-            vertex.writeToBuffer(fb);
-        fb.position(0);
+        this.vertexSize = vertexSize;
 
         IntBuffer buffer = IntBuffer.allocate(Integer.BYTES);
         glGenBuffers(1 , buffer);
         id = buffer.get();
 
         glBindBuffer(GL_ARRAY_BUFFER, id);
-        glBufferData(GL_ARRAY_BUFFER, fb.capacity() * Float.BYTES, fb, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, maxVertexCount * vertexSize, null, GL_DYNAMIC_DRAW);
 
-        addLayout(Vertex.getLayout());
+        addLayout(layouts);
     }
 
-    public VertexBuffer(int shaderID, int maxVertexCount){
-        this.shaderID = shaderID;
-
-        IntBuffer buffer = IntBuffer.allocate(Integer.BYTES);
-        glGenBuffers(1 , buffer);
-        id = buffer.get();
-
-        glBindBuffer(GL_ARRAY_BUFFER, id);
-        glBufferData(GL_ARRAY_BUFFER, maxVertexCount * Vertex.size, null, GL_DYNAMIC_DRAW);
-
-        addLayout(Vertex.getLayout());
-    }
-
-    public void fillBuffer(ArrayList<Vertex> vertices){
-        ByteBuffer vbb = ByteBuffer.allocateDirect(Vertex.size * vertices.size());
+    public void fillBuffer(ArrayList<IVertex> vertices){
+        ByteBuffer vbb = ByteBuffer.allocateDirect(vertexSize * vertices.size());
         vbb.order(ByteOrder.nativeOrder());
         FloatBuffer fb = vbb.asFloatBuffer();
-        for (Vertex vertex: vertices)
+        for (IVertex vertex: vertices)
             vertex.writeToBuffer(fb);
         fb.position(0);
 
         glBindBuffer(GL_ARRAY_BUFFER, id);
-        glBufferSubData(GL_ARRAY_BUFFER, 0, vertices.size() * Vertex.size, fb);
+        glBufferSubData(GL_ARRAY_BUFFER, 0, vertices.size() * vertexSize, fb);
     }
-    public void fillPartBuffer(Vertex[] vertices, int offset){
-        ByteBuffer vbb = ByteBuffer.allocateDirect(Vertex.size * vertices.length);
+    public void fillPartBuffer(IVertex[] vertices, int offset){
+        ByteBuffer vbb = ByteBuffer.allocateDirect(vertexSize * vertices.length);
         vbb.order(ByteOrder.nativeOrder());
         FloatBuffer fb = vbb.asFloatBuffer();
 
-        for (Vertex vertex: vertices)
+        for (IVertex vertex: vertices)
             vertex.writeToBuffer(fb);
 
         fb.position(0);
 
         glBindBuffer(GL_ARRAY_BUFFER, id);
-        glBufferSubData(GL_ARRAY_BUFFER, offset * Vertex.size, vertices.length * Vertex.size, fb);
+        glBufferSubData(GL_ARRAY_BUFFER, offset * vertexSize, vertices.length * vertexSize, fb);
     }
 
     private void addLayout(VertexBufferLayout[] layouts)

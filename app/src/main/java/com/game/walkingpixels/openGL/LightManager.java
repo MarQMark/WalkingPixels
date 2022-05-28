@@ -1,9 +1,7 @@
 package com.game.walkingpixels.openGL;
 
-import com.game.walkingpixels.util.Vector3;
-import com.game.walkingpixels.util.Vector4;
-
-import java.util.ArrayList;
+import com.game.walkingpixels.util.vector.Vector3;
+import com.game.walkingpixels.util.vector.Vector4;
 
 import static android.opengl.GLES20.GL_FRAMEBUFFER;
 import static android.opengl.GLES20.glBindFramebuffer;
@@ -14,12 +12,12 @@ public class LightManager {
 
     public static final int maxNumberOfPointLights = 4;
     public static int numberOfPointLights = 0;
-    public static PointLight[] lights = new PointLight[maxNumberOfPointLights];
+    private static PointLight[] lights = new PointLight[maxNumberOfPointLights];
 
     private static Shader worldShader= null;
 
     private static int framebuffer = 0;
-    public static Shader shader = null;
+    private static Shader shader = null;
 
     private static final int shadowMapWidth = 2048;
     private static final int shadowMapHeight = 2048;
@@ -67,8 +65,6 @@ public class LightManager {
         worldShader.unbind();
 
         numberOfPointLights++;
-
-        System.out.println(numberOfPointLights);
     }
 
     public static void initShader(Shader shader){

@@ -5,8 +5,8 @@ import android.opengl.GLES32;
 import android.renderscript.Matrix4f;
 
 
-import com.game.walkingpixels.util.Vector3;
-import com.game.walkingpixels.util.Vector4;
+import com.game.walkingpixels.util.vector.Vector3;
+import com.game.walkingpixels.util.vector.Vector4;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

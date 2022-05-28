@@ -1,4 +1,4 @@
-package com.game.walkingpixels.util;
+package com.game.walkingpixels.util.vector;
 
 public class Vector4 {
     public float x = 0;

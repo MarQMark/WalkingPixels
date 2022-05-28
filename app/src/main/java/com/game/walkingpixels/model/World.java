@@ -1,7 +1,7 @@
 package com.game.walkingpixels.model;
 
 import com.game.walkingpixels.util.NoiseGenerator;
-import com.game.walkingpixels.util.Vector2;
+import com.game.walkingpixels.util.vector.Vector2;
 
 public class World {
 
