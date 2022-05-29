@@ -1,4 +1,4 @@
-package com.game.walkingpixels.openGL;
+package com.game.walkingpixels.openGL.buffer;
 
 import com.game.walkingpixels.util.DataType;
 

@@ -1,8 +1,12 @@
 package com.game.walkingpixels.openGL;
 
+import com.game.walkingpixels.openGL.buffer.IndexBuffer;
+import com.game.walkingpixels.openGL.buffer.VertexBuffer;
+import com.game.walkingpixels.openGL.buffer.VertexBufferLayout;
 import com.game.walkingpixels.openGL.vertices.IVertex;
 import com.game.walkingpixels.openGL.vertices.worldVertex;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -11,16 +15,14 @@ import static android.opengl.GLES31.*;
 
 public class Batch {
 
-    private final ArrayList<IVertex> vertices = new ArrayList<>();
-
     private static class BatchPart{
         public String name;
         public int offset;
-        public int size;
-        public BatchPart(String name, int offset, int size){
+        public IVertex[] vertices;
+        public BatchPart(String name, int offset,  IVertex[] vertices){
             this.name = name;
             this.offset = offset;
-            this.size = size;
+            this.vertices = vertices;
         }
     }
 
@@ -58,17 +60,16 @@ public class Batch {
 
     public void addVertices(String name, IVertex[] vertices){
         if(parts.size() == 0)
-            parts.add(new BatchPart(name, 0, vertices.length));
+            parts.add(new BatchPart(name, 0, vertices));
         else
-            parts.add(new BatchPart(name, parts.get(parts.size() - 1).offset + parts.get(parts.size() - 1).size, vertices.length));
+            parts.add(new BatchPart(name, parts.get(parts.size() - 1).offset + parts.get(parts.size() - 1).vertices.length, vertices));
 
-        this.vertices.addAll(Arrays.asList(vertices));
         lastVertexPosition += (vertices.length / 4) * 6;
 
         vb.fillPartBuffer(vertices, parts.get(parts.size() - 1).offset);
     }
 
-    public void updateVertices(String name, worldVertex[] vertices){
+    public void updateVertices(String name, IVertex[] vertices){
         int partNumber = -1;
         for (int i = 0; i < parts.size(); i++) {
             if(parts.get(i).name.equals(name)){
@@ -82,7 +83,29 @@ public class Batch {
             return;
         }
 
+        int oldSize = parts.get(partNumber).vertices.length;
+
+        parts.get(partNumber).vertices = vertices;
         vb.fillPartBuffer(vertices, parts.get(partNumber).offset);
+
+        if(vertices.length > oldSize){
+
+            lastVertexPosition += ((vertices.length - oldSize) / 4) * 6;
+
+            for (int i = partNumber + 1; i < parts.size(); i++){
+                parts.get(i).offset = parts.get(i - 1).offset + parts.get(i - 1).vertices.length;
+                vb.fillPartBuffer(parts.get(i).vertices, parts.get(i).offset);
+            }
+        }
+        else if(vertices.length < oldSize){
+
+            lastVertexPosition -= ((oldSize - vertices.length) / 4) * 6;
+
+            for (int i = partNumber + 1; i < parts.size(); i++){
+                parts.get(i).offset = parts.get(i - 1).offset + parts.get(i - 1).vertices.length;
+                vb.fillPartBuffer(parts.get(i).vertices, parts.get(i).offset);
+            }
+        }
     }
 
 

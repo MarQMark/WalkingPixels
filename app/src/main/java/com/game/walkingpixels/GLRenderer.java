@@ -14,9 +14,11 @@ import com.game.walkingpixels.openGL.Shader;
 import com.game.walkingpixels.openGL.Texture;
 import com.game.walkingpixels.openGL.vertices.drawGridVertex;
 import com.game.walkingpixels.openGL.vertices.worldVertex;
+import com.game.walkingpixels.util.EventHandler;
 import com.game.walkingpixels.util.meshbuilder.DrawGridMeshBuilder;
 import com.game.walkingpixels.util.meshbuilder.MobMeshBuilder;
 import com.game.walkingpixels.util.meshbuilder.WorldMeshBuilder;
+import com.game.walkingpixels.util.vector.Vector2;
 import com.game.walkingpixels.util.vector.Vector3;
 import com.game.walkingpixels.util.vector.Vector4;
 
@@ -76,6 +78,7 @@ public class GLRenderer implements GLSurfaceView.Renderer {
     @Override
     public void onDrawFrame(GL10 gl) {
        drawWalkingScene();
+       updateDrawingScene();
        drawDrawingScene();
     }
 
@@ -135,14 +138,14 @@ public class GLRenderer implements GLSurfaceView.Renderer {
         walkingBatch.draw();
 
         //move world
-        //world.movePlayerPosition(1, 0);
+        world.movePlayerPosition(1, 0);
         walkingBatch.updateVertices("Player", MobMeshBuilder.generateMesh(world.renderedWorld, world.renderedWorldSize, world.worldMaxHeight));
-        //walkingBatch.updateVertices("World" , WorldMeshBuilder.generateMesh(world.renderedWorld, world.renderedWorldSize, world.worldMaxHeight));
+        walkingBatch.updateVertices("World" , WorldMeshBuilder.generateMesh(world.renderedWorld, world.renderedWorldSize, world.worldMaxHeight));
         //walkingBatch.bind();
     }
 
     private void createDrawingScene(){
-        drawGrid = new DrawGrid(8);
+        drawGrid = new DrawGrid(64, 0.8f, new Vector2(0.1f, 0.1f));
 
         drawingShader = new Shader(context, "Shaders/DrawGrid.shaders");
         drawingShader.bind();
@@ -151,12 +154,17 @@ public class GLRenderer implements GLSurfaceView.Renderer {
         drawingBatch.addVertices("Grid", DrawGridMeshBuilder.generateMesh(drawGrid));
     }
 
+    private void updateDrawingScene(){
+        drawGrid.update(width, height);
+        drawingBatch.updateVertices("Grid", DrawGridMeshBuilder.generateMesh(drawGrid));
+    }
+
     private void drawDrawingScene(){
 
         Matrix4f view = new Matrix4f();
         view.loadIdentity();
-        view.translate(-0.9f, -0.9f, 0.0f);
-        float scale = 1.8f * (1.0f / drawGrid.getSize());
+        view.translate(-1.0f + 2 * drawGrid.offset.x, -1.0f + 2 * drawGrid.offset.y * (width / (float)height), 0.0f);
+        float scale = 2.0f * drawGrid.scale * (1.0f / drawGrid.getSize());
         view.scale(scale,  scale * (width / (float)height), 1.0f);
 
         drawingShader.bind();
@@ -165,7 +173,7 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 
         drawingBatch.bind();
         //glClearColor(0.2f, 0.3f, 0.8f, 1.0f);
-        //glClear(GL_COLOR_BUFFER_BIT);
+        //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         drawingBatch.draw();
     }
 

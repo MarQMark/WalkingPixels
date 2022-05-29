@@ -1,7 +1,7 @@
 package com.game.walkingpixels.util;
 
 public class DataType {
-    public static int FloatBYTES = 4;
-    public static int IntegerBYTES = 4;
-    public static int ShortBYTES = 2;
+    public static final int FloatBYTES = 4;
+    public static final int IntegerBYTES = 4;
+    public static final int ShortBYTES = 2;
 }

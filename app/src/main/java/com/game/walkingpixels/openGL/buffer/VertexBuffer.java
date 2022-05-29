@@ -1,11 +1,10 @@
-package com.game.walkingpixels.openGL;
+package com.game.walkingpixels.openGL.buffer;
 
 import com.game.walkingpixels.openGL.vertices.IVertex;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
 import java.util.ArrayList;
 
 import static android.opengl.GLES31.*;

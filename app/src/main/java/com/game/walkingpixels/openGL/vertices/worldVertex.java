@@ -1,6 +1,6 @@
 package com.game.walkingpixels.openGL.vertices;
 
-import com.game.walkingpixels.openGL.VertexBufferLayout;
+import com.game.walkingpixels.openGL.buffer.VertexBufferLayout;
 import com.game.walkingpixels.util.DataType;
 
 import java.nio.FloatBuffer;

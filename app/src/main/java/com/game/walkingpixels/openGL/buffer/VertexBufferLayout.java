@@ -1,4 +1,4 @@
-package com.game.walkingpixels.openGL;
+package com.game.walkingpixels.openGL.buffer;
 
 import static android.opengl.GLES31.GL_FLOAT;
 import static android.opengl.GLES31.GL_SHORT;
