@@ -5,10 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:foregroundTint="#00FF0000"
-    tools:context=".MainActivity">
+    tools:context=".Walking">
 
     <com.game.walkingpixels.CanvasView
-        android:id="@+id/myGLSurfaceView"
+        android:id="@+id/myGLSurfaceViewWalking"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"

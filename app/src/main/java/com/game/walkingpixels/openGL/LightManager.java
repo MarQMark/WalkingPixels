@@ -10,19 +10,22 @@ import static android.opengl.GLES20.glViewport;
 
 public class LightManager {
 
-    public static final int maxNumberOfPointLights = 4;
-    public static int numberOfPointLights = 0;
-    private static final PointLight[] lights = new PointLight[maxNumberOfPointLights];
+    private final int maxNumberOfPointLights = 4;
+    private int numberOfPointLights = 0;
+    private final PointLight[] lights = new PointLight[maxNumberOfPointLights];
 
-    private static Shader worldShader= null;
+    private Shader worldShader= null;
 
-    private static int framebuffer = 0;
-    private static Shader shader = null;
+    private int framebuffer = 0;
+    private Shader shader = null;
 
-    private static final int shadowMapWidth = 2048;
-    private static final int shadowMapHeight = 2048;
+    private final int shadowMapWidth = 2048;
+    private final int shadowMapHeight = 2048;
 
-    public static void calculateShadow(Batch[] batches, int width, int height){
+    public LightManager(){
+    }
+
+    public void calculateShadow(Batch[] batches, int width, int height){
         if(numberOfPointLights == 0)
             return;
 
@@ -38,7 +41,7 @@ public class LightManager {
         glBindFramebuffer(GL_FRAMEBUFFER  , 0);
     }
 
-    public static void createPointLight(Vector3 position, Vector4 color, float intensity){
+    public void createPointLight(Vector3 position, Vector4 color, float intensity){
         if(numberOfPointLights >= maxNumberOfPointLights)
             throw new NumberOfPointLightsOutOfBoundsException();
 
@@ -67,45 +70,45 @@ public class LightManager {
         numberOfPointLights++;
     }
 
-    public static void initShader(Shader shader){
-        LightManager.shader = shader;
+    public void initShader(Shader shader){
+        this.shader = shader;
     }
-    public static void initWorldShader(Shader shader){
+    public void initWorldShader(Shader shader){
         worldShader = shader;
         worldShader.bind();
         worldShader.setUniform1f("u_LightCount", 0);
         worldShader.unbind();
     }
 
-    public static Vector3 getLightPosition(int light){
+    public Vector3 getLightPosition(int light){
         return lights[light].getPosition();
     }
-    public static Vector4 getLightColor(int light){
+    public Vector4 getLightColor(int light){
         return lights[light].getColor();
     }
-    public static float getLightIntensity(int light){
+    public float getLightIntensity(int light){
         return lights[light].getIntensity();
     }
-    public static void setLightPosition(int light, Vector3 position){
+    public void setLightPosition(int light, Vector3 position){
         lights[light].setPosition(position);
         worldShader.bind();
         worldShader.setUniform3f("u_LightPosition[" + light + "]", position);
         worldShader.unbind();
     }
-    public static void setLightColor(int light, Vector4 color){
+    public void setLightColor(int light, Vector4 color){
         lights[light].setColor(color);
         worldShader.bind();
         worldShader.setUniform4f("u_LightColor[" + light + "]", color);
         worldShader.unbind();
     }
-    public static void setLightIntensity(int light, float intensity){
+    public void setLightIntensity(int light, float intensity){
         lights[light].setIntensity(intensity);
         worldShader.bind();
         worldShader.setUniform1f("u_LightIntensity[" + light + "]", intensity);
         worldShader.unbind();
     }
 
-    public static void removeLight(int light){
+    public void removeLight(int light){
         if(lights[light] == null) return;
         lights[light] = null;
 
@@ -129,7 +132,7 @@ public class LightManager {
         worldShader.bind();
     }
 
-    private static class NumberOfPointLightsOutOfBoundsException extends RuntimeException {
+    private class NumberOfPointLightsOutOfBoundsException extends RuntimeException {
         public NumberOfPointLightsOutOfBoundsException(){
             super("Number of PointLights: " + numberOfPointLights + "  Maximum: " + maxNumberOfPointLights);
         }

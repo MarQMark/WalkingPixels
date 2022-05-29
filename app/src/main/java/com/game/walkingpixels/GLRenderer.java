@@ -15,6 +15,7 @@ import com.game.walkingpixels.openGL.Texture;
 import com.game.walkingpixels.openGL.vertices.drawGridVertex;
 import com.game.walkingpixels.openGL.vertices.worldVertex;
 import com.game.walkingpixels.util.EventHandler;
+import com.game.walkingpixels.util.Scene;
 import com.game.walkingpixels.util.meshbuilder.DrawGridMeshBuilder;
 import com.game.walkingpixels.util.meshbuilder.MobMeshBuilder;
 import com.game.walkingpixels.util.meshbuilder.WorldMeshBuilder;
@@ -29,12 +30,6 @@ import static android.opengl.GLES31.*;
 
 public class GLRenderer implements GLSurfaceView.Renderer {
 
-    public enum Scene{
-        DRAWING,
-        WALKING,
-        MAP
-    }
-
     private final Scene scene;
 
 
@@ -42,6 +37,8 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 
     private Batch walkingBatch;
     private Shader walkingShader;
+    private LightManager lightManager;
+
     private Batch drawingBatch;
     private Shader drawingShader;
 
@@ -60,6 +57,7 @@ public class GLRenderer implements GLSurfaceView.Renderer {
     public GLRenderer(Context context, Scene scene){
         this.context = context;
         this.scene = scene;
+        System.err.println(scene);
     }
 
     @Override
@@ -71,15 +69,25 @@ public class GLRenderer implements GLSurfaceView.Renderer {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glEnable(GL_BLEND);
 
-        createWalkingScene();
-        createDrawingScene();
+
+        switch (scene){
+            case WALKING: createWalkingScene(); break;
+            case DRAWING: createDrawingScene(); break;
+        }
     }
 
     @Override
     public void onDrawFrame(GL10 gl) {
-       drawWalkingScene();
-       updateDrawingScene();
-       drawDrawingScene();
+        switch (scene){
+            case WALKING:
+                drawWalkingScene();
+                break;
+            case DRAWING:
+                updateDrawingScene();
+                drawDrawingScene();
+                queryErrors("error");
+                break;
+        }
     }
 
     @Override
@@ -96,9 +104,10 @@ public class GLRenderer implements GLSurfaceView.Renderer {
         else
             walkingShader = new Shader(context, "Shaders/Basic.shaders");
 
-        LightManager.initShader(new Shader(context, "Shaders/ShadowGeometry.shaders"));
-        LightManager.initWorldShader(walkingShader);
-        LightManager.createPointLight(lightPosition, new Vector4(1f, 1f, 1f, 1.0f), 1000f);
+        lightManager = new LightManager();
+        lightManager.initShader(new Shader(context, "Shaders/ShadowGeometry.shaders"));
+        lightManager.initWorldShader(walkingShader);
+        lightManager.createPointLight(lightPosition, new Vector4(1f, 1f, 1f, 1.0f), 1000f);
         //LightManager.createPointLight(new Vector3(2.0f, 5.0f, 0.0f), new Vector4(1f, 1f, 1f, 1.0f), 8f);
 
         walkingShader.bind();
@@ -124,11 +133,11 @@ public class GLRenderer implements GLSurfaceView.Renderer {
         lightRotation++;
         lightPosition.z = (float) (Math.cos(Math.toRadians(lightRotation)) * lightMaxHeight);
         lightPosition.y = (float) (Math.sin(Math.toRadians(lightRotation)) * lightMaxHeight);
-        LightManager.setLightPosition(0, lightPosition);
+        lightManager.setLightPosition(0, lightPosition);
 
 
         //calculate sun
-        LightManager.calculateShadow(new Batch[]{walkingBatch}, width, height);
+        lightManager.calculateShadow(new Batch[]{walkingBatch}, width, height);
 
         //draw
         walkingShader.bind();
@@ -172,8 +181,8 @@ public class GLRenderer implements GLSurfaceView.Renderer {
         drawingShader.setUniformMatrix4fv("viewmatrix", view);
 
         drawingBatch.bind();
-        //glClearColor(0.2f, 0.3f, 0.8f, 1.0f);
-        //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glClearColor(0.2f, 0.3f, 0.8f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         drawingBatch.draw();
     }
 

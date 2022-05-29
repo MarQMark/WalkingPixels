@@ -9,12 +9,12 @@ import android.view.View;
 import android.widget.SeekBar;
 import android.widget.Switch;
 
-public class MainActivity extends AppCompatActivity {
+public class Walking extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_walking);
 
 
         View decorView = getWindow().getDecorView();

@@ -36,4 +36,8 @@ public class IndexBuffer {
     public void unbind(){
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     }
+
+    public void destroy(){
+        glDeleteBuffers(1, new int[]{id}, 0);
+    }
 }

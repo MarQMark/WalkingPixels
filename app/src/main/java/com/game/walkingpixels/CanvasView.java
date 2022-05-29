@@ -6,7 +6,9 @@ import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
+import com.game.walkingpixels.model.GameState;
 import com.game.walkingpixels.util.EventHandler;
+import com.game.walkingpixels.util.Scene;
 
 public class CanvasView extends GLSurfaceView {
     public CanvasView(Context context, AttributeSet attrs) {
@@ -14,7 +16,7 @@ public class CanvasView extends GLSurfaceView {
 
         setEGLContextClientVersion(3);
 
-        GLRenderer renderer = new GLRenderer(context, GLRenderer.Scene.WALKING);
+        GLRenderer renderer = new GLRenderer(context, GameState.scene);
         setRenderer(renderer);
     }
 

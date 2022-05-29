@@ -83,4 +83,8 @@ public class VertexBuffer {
     public void unbind(){
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
+
+    public void destroy(){
+        glDeleteBuffers(1, new int[]{id}, 0);
+    }
 }
