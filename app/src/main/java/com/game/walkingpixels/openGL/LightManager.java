@@ -12,7 +12,7 @@ public class LightManager {
 
     public static final int maxNumberOfPointLights = 4;
     public static int numberOfPointLights = 0;
-    private static PointLight[] lights = new PointLight[maxNumberOfPointLights];
+    private static final PointLight[] lights = new PointLight[maxNumberOfPointLights];
 
     private static Shader worldShader= null;
 

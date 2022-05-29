@@ -13,7 +13,7 @@ public class Batch {
 
     private final ArrayList<IVertex> vertices = new ArrayList<>();
 
-    private class BatchPart{
+    private static class BatchPart{
         public String name;
         public int offset;
         public int size;
@@ -22,12 +22,13 @@ public class Batch {
             this.offset = offset;
             this.size = size;
         }
-    };
+    }
+
     private final ArrayList<BatchPart> parts = new ArrayList<>();
 
 
-    private VertexBuffer vb;
-    private IndexBuffer ib;
+    private final VertexBuffer vb;
+    private final IndexBuffer ib;
     //private Texture tx;
 
     private final int shaderID;

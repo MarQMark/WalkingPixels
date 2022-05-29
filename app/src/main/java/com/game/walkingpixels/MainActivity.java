@@ -2,9 +2,9 @@ package com.game.walkingpixels;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.widget.CompoundButton;
 import android.widget.SeekBar;
 import android.widget.Switch;
 
@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences preferences = getSharedPreferences("Test", MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
 
-        Switch sw = findViewById(R.id.switch1);
+        @SuppressLint("UseSwitchCompatOrMaterialCode") Switch sw = findViewById(R.id.switch1);
         sw.setChecked(preferences.getBoolean("shadowOn",false));
         sw.setOnCheckedChangeListener((buttonView, isChecked) -> {
             editor.putBoolean("shadowOn", isChecked);

@@ -1,7 +1,6 @@
 package com.game.walkingpixels.openGL;
 
 import com.game.walkingpixels.openGL.vertices.IVertex;
-import com.game.walkingpixels.openGL.vertices.worldVertex;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -22,9 +21,9 @@ public class VertexBuffer {
         this.shaderID = shaderID;
         this.vertexSize = vertexSize;
 
-        IntBuffer buffer = IntBuffer.allocate(Integer.BYTES);
-        glGenBuffers(1 , buffer);
-        id = buffer.get();
+        int[] buffer = new int[1];
+        glGenBuffers(1 , buffer, 0);
+        id = buffer[0];
 
         glBindBuffer(GL_ARRAY_BUFFER, id);
         glBufferData(GL_ARRAY_BUFFER, maxVertexCount * vertexSize, null, GL_DYNAMIC_DRAW);

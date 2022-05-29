@@ -1,10 +1,8 @@
 package com.game.walkingpixels.model;
 
-import android.graphics.drawable.Drawable;
-
 public class DrawGrid {
 
-    private Boolean[][] grid;
+    private final Boolean[][] grid;
     private final int size;
 
     public DrawGrid(int size){

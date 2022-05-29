@@ -1,5 +1,6 @@
 package com.game.walkingpixels.openGL;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.opengl.GLES32;
 import android.renderscript.Matrix4f;
@@ -18,9 +19,10 @@ import static android.opengl.GLES31.*;
 public class Shader {
 
     private final int id;
-    private final HashMap<String, Integer> uniformLocations = new HashMap<String, Integer>();
+    private final HashMap<String, Integer> uniformLocations = new HashMap<>();
     private boolean hasGeometry = false;
 
+    @SuppressLint("InlinedApi")
     public Shader(Context context, String path){
         String gsSource = getShaderSource(context, "geometry", path);
         int gs = 0;
@@ -63,6 +65,7 @@ public class Shader {
 
     private int getUniformLocation(String uniform){
         if(uniformLocations.containsKey(uniform)){
+            //noinspection ConstantConditions
             return uniformLocations.get(uniform);
         }
 
@@ -133,9 +136,9 @@ public class Shader {
         glShaderSource(shader, source);
         glCompileShader(shader);
 
-        IntBuffer ib = IntBuffer.allocate(Integer.BYTES);
-        glGetShaderiv(shader, GL_COMPILE_STATUS, ib);
-        int status = ib.get();
+        int[] ib = new int[1];
+        glGetShaderiv(shader, GL_COMPILE_STATUS, ib, 0);
+        int status = ib[0];
         String shaderType = "";
 
         switch (type){
@@ -152,7 +155,7 @@ public class Shader {
     }
 
     private String getShaderSource(Context context, String type, String path){
-        String source = "";
+        StringBuilder source = new StringBuilder();
 
         BufferedReader bf;
         try{
@@ -165,7 +168,7 @@ public class Shader {
                     active = line.contains(type);
                 }
                 else if(active){
-                    source += line + '\n';
+                    source.append(line).append('\n');
                 }
             }
 
@@ -174,6 +177,6 @@ public class Shader {
             e.printStackTrace();
         }
 
-        return source;
+        return source.toString();
     }
 }
