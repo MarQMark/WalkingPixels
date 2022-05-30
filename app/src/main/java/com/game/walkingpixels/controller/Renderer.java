@@ -45,10 +45,6 @@ public abstract class Renderer implements GLSurfaceView.Renderer {
     public abstract void update(double dt);
     public abstract void render(double dt);
 
-    public void cleanup(){
-
-    }
-
     public void registerShader(String name, Shader shader){
         shaders.put(name, shader);
     }
