@@ -6,6 +6,8 @@ import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
+import com.game.walkingpixels.controller.DrawingRenderer;
+import com.game.walkingpixels.controller.WalkingRenderer;
 import com.game.walkingpixels.model.GameState;
 import com.game.walkingpixels.util.EventHandler;
 import com.game.walkingpixels.util.Scene;
@@ -16,8 +18,13 @@ public class CanvasView extends GLSurfaceView {
 
         setEGLContextClientVersion(3);
 
-        GLRenderer renderer = new GLRenderer(context, GameState.scene);
-        setRenderer(renderer);
+        if (GameState.scene == Scene.DRAWING){
+            DrawingRenderer renderer = new DrawingRenderer(context);
+            setRenderer(renderer);
+        }else {
+            WalkingRenderer renderer = new WalkingRenderer(context);
+            setRenderer(renderer);
+        }
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -25,6 +32,7 @@ public class CanvasView extends GLSurfaceView {
     public boolean onTouchEvent(MotionEvent event) {
 
         if(event.getAction() == MotionEvent.ACTION_DOWN || event.getAction() == MotionEvent.ACTION_MOVE){
+
             EventHandler.lastTouchPosition.x = EventHandler.touchPosition.x;
             EventHandler.lastTouchPosition.y = EventHandler.touchPosition.y;
 

@@ -20,6 +20,9 @@ public class DrawGridMeshBuilder {
                 if(drawGrid.getGrid()[x][y] == 1){
                     getVertices(pixels, new Vector2(x, y), new Vector4(0.0f, 0.0f, 0.0f, 1.0f));
                 }
+                if(drawGrid.getGrid()[x][y] == 2){
+                    getVertices(pixels, new Vector2(x, y), new Vector4(0.33f, 0.33f, 0.33f, 1.0f));
+                }
 
             }
         }

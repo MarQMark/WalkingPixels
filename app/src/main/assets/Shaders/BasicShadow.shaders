@@ -54,7 +54,7 @@ float calculateShadow(int cubeIndex)
         float currentDepth = length(fragToLight);
         float bias = max(0.5 * (1.0 - dot(v_Normal, normalize(u_LightPosition[cubeIndex] - v_CurrentPosition))), 0.005);
 
-        float sampleRadius = 1.0;
+        float sampleRadius = 0.0;
         float offset = 0.02;
         for(float z = -sampleRadius; z <= sampleRadius; z++)
         {

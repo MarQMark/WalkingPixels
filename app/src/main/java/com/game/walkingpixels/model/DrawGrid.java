@@ -1,22 +1,35 @@
 package com.game.walkingpixels.model;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.renderscript.Matrix4f;
+
 import com.game.walkingpixels.util.EventHandler;
 import com.game.walkingpixels.util.vector.Vector2;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 public class DrawGrid {
 
+    private static final int DISTANCE_EQUILIBRIUM = 2;
     private final int[][] grid;
     private final int size;
-    private int brushSize = 1;
+    private int brushSize = 2;
+
+    private final boolean[][] shapeGrid;
+    private int shapePixels = 0;
 
     public final float scale;
     public final Vector2 offset;
 
     public DrawGrid(int size, float scale, Vector2 offset){
         grid = new int[size][size];
+        shapeGrid = new boolean[size][size];
         this.size = size;
         this.scale = scale;
         this.offset = offset;
@@ -25,9 +38,11 @@ public class DrawGrid {
     }
 
     public void clear(){
+        shapePixels = 0;
         for (int x = 0; x < size; x++){
             for (int y = 0; y < size; y++) {
                 grid[x][y] = 0;
+                shapeGrid[x][y] = false;
             }
         }
     }
@@ -57,6 +72,98 @@ public class DrawGrid {
                 }
             }
         }
+    }
+
+    public void loadShape(Context context, String path){
+
+        Bitmap shape = loadTexture(context, path);
+
+        if(shape.getWidth() == size && shape.getHeight() == size){
+            for (int y = 0; y < size; y++){
+                for (int x = 0; x < size; x++) {
+                    if(Color.alpha(shape.extractAlpha().getPixel(x, size - 1 - y))  != 0.0f){
+                        grid[x][y] = 2;
+                        shapeGrid[x][y] = true;
+                        shapePixels++;
+                    }
+                }
+            }
+        }
+    }
+
+    public float calculateScore(){
+        double score = 0;
+
+        final int POINT_PER_CORRECT_PIXEL = 1;
+        final int MAX_POINT_LOSS_PER_PIXEL = 2;
+
+        for (int y = 0; y < size; y++){
+            for (int x = 0; x < size; x++) {
+
+                if(grid[x][y] == 1 && shapeGrid[x][y]){
+                    score += POINT_PER_CORRECT_PIXEL;
+                }
+                else if(grid[x][y] == 1){
+                    double distance = closestDistance(x, y, false);
+                    if (distance <= DISTANCE_EQUILIBRIUM)
+                        score += POINT_PER_CORRECT_PIXEL * ((DISTANCE_EQUILIBRIUM - distance) / DISTANCE_EQUILIBRIUM);
+                    else
+                        score += MAX_POINT_LOSS_PER_PIXEL * ((DISTANCE_EQUILIBRIUM - distance) / DISTANCE_EQUILIBRIUM);
+                }
+                else if(shapeGrid[x][y]){
+                    double distance = closestDistance(x, y, true);
+                    if (distance <= DISTANCE_EQUILIBRIUM)
+                        score += POINT_PER_CORRECT_PIXEL * ((DISTANCE_EQUILIBRIUM - distance) / DISTANCE_EQUILIBRIUM);
+                    else
+                        score += MAX_POINT_LOSS_PER_PIXEL * ((DISTANCE_EQUILIBRIUM - distance) / DISTANCE_EQUILIBRIUM);
+                }
+
+            }
+        }
+
+        float roundedScore = Math.round(score);
+        return (roundedScore / (float)shapePixels) * 100.0f;
+    }
+
+    private double closestDistance(int px, int py, boolean isGrid){
+        double distance = DISTANCE_EQUILIBRIUM * 2.0f;
+        for (int y = 0; y < size; y++){
+            for (int x = 0; x < size; x++) {
+
+                int d = (x - px) * (x - px) + (y - py) * (y - py);
+                if(isGrid){
+                    if(grid[x][y] == 1)
+                        distance = Math.min(distance, Math.sqrt(d));
+                }else {
+                    if(shapeGrid[x][y])
+                        distance = Math.min(distance, Math.sqrt(d));
+                }
+
+            }
+        }
+        return distance;
+    }
+
+    public int[][] getGrid(){
+        return grid;
+    }
+
+    public int getSize(){
+        return size;
+    }
+
+    private Bitmap loadTexture(Context context, String path){
+        Bitmap img = null;
+        try {
+            InputStream is = context.getAssets().open(path);
+            img = BitmapFactory.decodeStream(is);
+            is.close();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return img;
     }
 
     private Boolean inside_circle(Vector2 center, Vector2 tile, float radius) {
@@ -99,13 +206,5 @@ public class DrawGrid {
             }
         }
         return line;
-    }
-
-    public int[][] getGrid(){
-        return grid;
-    }
-
-    public int getSize(){
-        return size;
     }
 }

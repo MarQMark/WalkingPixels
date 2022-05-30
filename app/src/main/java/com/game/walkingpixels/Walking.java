@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.SeekBar;
 import android.widget.Switch;
 
+import com.game.walkingpixels.controller.WalkingRenderer;
+
 public class Walking extends AppCompatActivity {
 
     @Override
@@ -56,7 +58,7 @@ public class Walking extends AppCompatActivity {
         size.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                GLRenderer.world.SetRenderedSize(progress);
+                WalkingRenderer.world.SetRenderedSize(progress);
             }
 
             @Override
