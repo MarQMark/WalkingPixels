@@ -46,16 +46,13 @@ public class DrawingRenderer extends Renderer {
 
         GameState.updateDrawTime(dt / 1000);
         if(GameState.getDrawTime() == 0.0){
+
+            drawGrid.disable();
+
             float score = drawGrid.calculateScore();
             Log.e("score", "Score: " + score);
             GameState.setDrawTime(5.0);
             drawGrid.clear();
-
-            Random r = new Random();
-            int ri = r.nextInt() % 3;
-            String a = (ri == 0) ? "triangle" : (ri == 1) ? "fire" : "circle";
-
-            drawGrid.loadShape(context, "shapes/" + a + ".png");
         }
     }
 

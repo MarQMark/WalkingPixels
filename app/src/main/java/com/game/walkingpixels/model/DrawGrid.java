@@ -27,6 +27,8 @@ public class DrawGrid {
     public final float scale;
     public final Vector2 offset;
 
+    private boolean isEnabled = false;
+
     public DrawGrid(int size, float scale, Vector2 offset){
         grid = new int[size][size];
         shapeGrid = new boolean[size][size];
@@ -48,7 +50,7 @@ public class DrawGrid {
     }
 
     public void update(int width, int height){
-        if(EventHandler.lastTouchPosition.x != -1){
+        if(isEnabled && EventHandler.lastTouchPosition.x != -1){
 
             Vector2 touchPosition = EventHandler.touchPosition;
 
@@ -89,6 +91,8 @@ public class DrawGrid {
                 }
             }
         }
+
+        enable();
     }
 
     public float calculateScore(){
@@ -206,5 +210,12 @@ public class DrawGrid {
             }
         }
         return line;
+    }
+
+    public void enable(){
+        isEnabled = true;
+    }
+    public void disable(){
+        isEnabled = false;
     }
 }

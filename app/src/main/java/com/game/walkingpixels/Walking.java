@@ -27,6 +27,11 @@ public class Walking extends AppCompatActivity {
         SharedPreferences preferences = getSharedPreferences("Test", MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
 
+
+        CanvasView cw = findViewById(R.id.myGLSurfaceViewWalking);
+        cw.setWalkingRenderer();
+
+
         @SuppressLint("UseSwitchCompatOrMaterialCode") Switch sw = findViewById(R.id.switch1);
         sw.setChecked(preferences.getBoolean("shadowOn",false));
         sw.setOnCheckedChangeListener((buttonView, isChecked) -> {

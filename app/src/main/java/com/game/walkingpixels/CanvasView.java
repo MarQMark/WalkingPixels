@@ -13,18 +13,20 @@ import com.game.walkingpixels.util.EventHandler;
 import com.game.walkingpixels.util.Scene;
 
 public class CanvasView extends GLSurfaceView {
+
+    Context context;
+
     public CanvasView(Context context, AttributeSet attrs) {
         super(context, attrs);
-
+        this.context = context;
         setEGLContextClientVersion(3);
+    }
 
-        if (GameState.scene == Scene.DRAWING){
-            DrawingRenderer renderer = new DrawingRenderer(context);
-            setRenderer(renderer);
-        }else {
-            WalkingRenderer renderer = new WalkingRenderer(context);
-            setRenderer(renderer);
-        }
+    public void setWalkingRenderer(){
+        setRenderer(new WalkingRenderer(context));
+    }
+    public void setDrawingRenderer(){
+        setRenderer(new DrawingRenderer(context));
     }
 
     @SuppressLint("ClickableViewAccessibility")
