@@ -11,7 +11,8 @@ public class World {
         WATER,
         GRASS,
         SNOW,
-        PLAYER
+        PLAYER,
+        SLIME
     }
 
     public final int worldMaxHeight = 5;

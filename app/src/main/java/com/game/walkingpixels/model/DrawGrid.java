@@ -28,6 +28,7 @@ public class DrawGrid {
     public final Vector2 offset;
 
     private boolean isEnabled = false;
+    private boolean isDrawing = false;
 
     public DrawGrid(int size, float scale, Vector2 offset){
         grid = new int[size][size];
@@ -56,6 +57,8 @@ public class DrawGrid {
 
             if (touchPosition.x >= width * offset.x && touchPosition.x <= width - width * offset.x){
                 if(touchPosition.y >= height - width * (offset.y + scale) && touchPosition.y <= height - width * offset.y){
+
+                    isDrawing = true;
 
                     int x0 = (int)((touchPosition.x - width * offset.x) / (width * scale) * size);
                     int y0 = (int)((height - touchPosition.y - width * offset.y) / (width * scale) * size);
@@ -96,6 +99,8 @@ public class DrawGrid {
     }
 
     public float calculateScore(){
+        isDrawing = false;
+
         double score = 0;
 
         final int POINT_PER_CORRECT_PIXEL = 1;
@@ -218,4 +223,5 @@ public class DrawGrid {
     public void disable(){
         isEnabled = false;
     }
+    public boolean isDrawing() {return isDrawing;}
 }

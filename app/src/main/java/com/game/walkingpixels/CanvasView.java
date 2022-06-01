@@ -8,6 +8,7 @@ import android.view.MotionEvent;
 
 import com.game.walkingpixels.controller.DrawingRenderer;
 import com.game.walkingpixels.controller.WalkingRenderer;
+import com.game.walkingpixels.model.Enemy;
 import com.game.walkingpixels.model.GameState;
 import com.game.walkingpixels.util.EventHandler;
 import com.game.walkingpixels.util.Scene;
@@ -15,6 +16,8 @@ import com.game.walkingpixels.util.Scene;
 public class CanvasView extends GLSurfaceView {
 
     Context context;
+    WalkingRenderer walkingRenderer;
+    DrawingRenderer drawingRenderer;
 
     public CanvasView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -23,10 +26,12 @@ public class CanvasView extends GLSurfaceView {
     }
 
     public void setWalkingRenderer(){
-        setRenderer(new WalkingRenderer(context));
+        walkingRenderer = new WalkingRenderer(context);
+        setRenderer(walkingRenderer);
     }
-    public void setDrawingRenderer(){
-        setRenderer(new DrawingRenderer(context));
+    public void setDrawingRenderer(Enemy enemy){
+        drawingRenderer = new DrawingRenderer(context, enemy);
+        setRenderer(drawingRenderer);
     }
 
     @SuppressLint("ClickableViewAccessibility")

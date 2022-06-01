@@ -30,7 +30,7 @@ public class WorldMeshBuilder {
             for(int y = 0; y < renderedWorldSize; y ++) {
                 for(int z = 0; z < worldMaxHeight; z ++) {
 
-                    if(renderedWorld[x][y][z] != World.Block.AIR && renderedWorld[x][y][z] != World.Block.PLAYER){
+                    if(renderedWorld[x][y][z] != World.Block.AIR && renderedWorld[x][y][z] != World.Block.PLAYER && renderedWorld[x][y][z] != World.Block.SLIME){
                         if(z == 0|| renderedWorld[x][y][z - 1] == World.Block.AIR){
                             addSideToMesh(mesh, x, y, z, Side.BOTTOM, renderedWorld[x][y][z], renderedWorldSize);
                         }

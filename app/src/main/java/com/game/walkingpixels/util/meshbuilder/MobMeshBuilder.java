@@ -19,6 +19,9 @@ public class MobMeshBuilder {
                     if(renderedWorld[x][y][z] == World.Block.PLAYER){
                         getMobVertices(mobs, new Vector3(x, z, y).sub(new Vector3(renderedWorldSize / 2, 0, renderedWorldSize / 2)), renderedWorld[x][y][z]);
                     }
+                    if(renderedWorld[x][y][z] == World.Block.SLIME){
+                        getMobVertices(mobs, new Vector3(x, z, y).sub(new Vector3(renderedWorldSize / 2, 0, renderedWorldSize / 2)), renderedWorld[x][y][z]);
+                    }
 
                 }
             }
@@ -36,11 +39,18 @@ public class MobMeshBuilder {
 
 
         float mobWidth = 1.0f;
+        float mobHeight = 1.0f;
         float textureSlot = 1.0f;
         switch (type){
             case PLAYER:
                 mobWidth = 1.0f;
+                mobHeight = 2.0f;
                 textureSlot = 1.0f;
+                break;
+            case SLIME:
+                mobWidth = 1.0f;
+                mobHeight = 1.0f;
+                textureSlot = 2.0f;
                 break;
         }
 
@@ -65,14 +75,14 @@ public class MobMeshBuilder {
                 textureSlot));
 
         mobs.add(new worldVertex(
-                new float[]{ center.x - deltaX, position.y + 2, center.z - deltaZ },
+                new float[]{ center.x - deltaX, position.y + mobHeight, center.z - deltaZ },
                 new float[]{ 0.0f, 1.0f },
                 new float[] {normals.x, normals.y, normals.z},
                 new float[]{ 0.0f, 0.0f, 0.0f, 0.0f },
                 textureSlot));
 
         mobs.add(new worldVertex(
-                new float[]{ center.x + deltaX, position.y + 2, center.z + deltaZ },
+                new float[]{ center.x + deltaX, position.y + mobHeight, center.z + deltaZ },
                 new float[]{ 1.0f, 1.0f },
                 new float[] {normals.x, normals.y, normals.z},
                 new float[]{ 1.0f, 0.0f, 0.0f, 0.0f },

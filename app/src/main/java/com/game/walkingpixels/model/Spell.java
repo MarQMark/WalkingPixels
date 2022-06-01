@@ -2,18 +2,20 @@ package com.game.walkingpixels.model;
 
 public class Spell {
 
-    private int icon;
-    private String name;
-    private String description;
+    private final String iconPath;
+    private final String name;
+    private final String description;
+    private final String shapePath;
 
-    public Spell(int icon, String name, String description){
-        this.icon = icon;
+    public Spell(String name, String description, String iconPath, String shapePath){
+        this.iconPath = iconPath;
         this.name = name;
         this.description = description;
+        this.shapePath = shapePath;
     }
 
-    public int getIcon(){
-        return icon;
+    public String getIconPath(){
+        return iconPath;
     }
     public String getName(){
         return name;
@@ -21,4 +23,5 @@ public class Spell {
     public String getDescription(){
         return description;
     }
+    public String getShapePath() { return  shapePath;}
 }

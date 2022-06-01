@@ -6,7 +6,7 @@ import com.game.walkingpixels.util.vector.Vector3;
 
 public class Camera {
 
-    public static Vector3 position = new Vector3(0.0f, 0.0f, 1.0f);
+    public static Vector3 position = new Vector3(0.0f, 0.0f, 20.0f);
     public static Vector3 orientation = new Vector3(0.0f, 0.0f, -1.0f);
     public static Vector3 up = new Vector3( 0.0f, 1.0f, 0.0f);
 
