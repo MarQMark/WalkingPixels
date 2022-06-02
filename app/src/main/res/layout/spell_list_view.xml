@@ -8,35 +8,38 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/spell_list_view_image"
+        android:layout_marginTop="16dp"
+        android:adjustViewBounds="true"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/spell_list_view_image"
+        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_spell_scroll" />
 
     <ImageView
         android:id="@+id/spell_list_view_image"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView"
         app:layout_constraintDimensionRatio="1"
         app:layout_constraintEnd_toStartOf="@+id/spell_list_view_description"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_percent="0.25" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imageView"
+        app:layout_constraintWidth_percent="0.2" />
 
     <TextView
         android:id="@+id/spell_list_view_name"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="25dp"
         android:gravity="center_vertical"
         android:textStyle="bold"
         android:textColor="@color/black"
-        app:layout_constraintDimensionRatio="9"
+        app:layout_constraintDimensionRatio="12"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_percent="0.7" />
+        app:layout_constraintWidth_percent="0.65" />
 
     <TextView
         android:id="@+id/spell_list_view_description"
@@ -46,6 +49,6 @@
         app:layout_constraintDimensionRatio="4.1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spell_list_view_name"
-        app:layout_constraintWidth_percent="0.7" />
+        app:layout_constraintWidth_percent="0.65" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

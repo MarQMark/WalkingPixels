@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.game.walkingpixels.controller.DrawingGLSurfaceView;
 import com.game.walkingpixels.model.Enemy;
 import com.game.walkingpixels.model.GameState;
 import com.game.walkingpixels.model.Player;
@@ -43,8 +44,8 @@ public class Drawing extends AppCompatActivity {
         Enemy enemy = new Enemy("textures/slime.png");
 
 
-        CanvasView cw = findViewById(R.id.myGLSurfaceViewDrawing);
-        cw.setDrawingRenderer(enemy);
+        DrawingGLSurfaceView cw = findViewById(R.id.myGLSurfaceViewDrawing);
+        cw.init(enemy);
 
 
         Button btnAttackSelector = findViewById(R.id.btn_drawing_attack_selector);
@@ -58,7 +59,7 @@ public class Drawing extends AppCompatActivity {
 
             builderSingle.setAdapter(spellAdapter, (dialog, which) -> {
                 Spell spell = spellAdapter.getItem(which);
-                cw.drawingRenderer.drawGrid.loadShape(Drawing.this, spell.getShapePath());
+                cw.getRenderer().drawGrid.loadShape(Drawing.this, spell.getShapePath());
             });
 
 

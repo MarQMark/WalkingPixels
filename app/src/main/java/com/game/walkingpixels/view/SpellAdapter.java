@@ -21,8 +21,8 @@ import java.util.ArrayList;
 
 public class SpellAdapter extends ArrayAdapter<Spell> {
 
-    private Context context;
-    private ArrayList<Spell> spells = new ArrayList<>();
+    private final Context context;
+    private final ArrayList<Spell> spells;
 
     public SpellAdapter(Context context, ArrayList<Spell> spells){
         super(context, android.R.layout.select_dialog_item, spells);
@@ -37,7 +37,6 @@ public class SpellAdapter extends ArrayAdapter<Spell> {
         LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if(convertView == null) convertView = inflater.inflate(R.layout.spell_list_view, parent, false);
 
-
         TextView title = convertView.findViewById(R.id.spell_list_view_name);
         TextView description = convertView.findViewById(R.id.spell_list_view_description);
         ImageView image = convertView.findViewById(R.id.spell_list_view_image);
@@ -46,18 +45,11 @@ public class SpellAdapter extends ArrayAdapter<Spell> {
         title.setText(spell.getName());
         description.setText(spell.getDescription());
 
-        // load image
         try {
-            // get input stream
-            InputStream ims = context.getAssets().open(spell.getIconPath());
-            // load image as Drawable
-            Drawable d = Drawable.createFromStream(ims, null);
-            // set image to ImageView
+            Drawable d = Drawable.createFromStream(context.getAssets().open(spell.getIconPath()), null);
             image.setImageDrawable(d);
-            image.setPadding(50, 50, 50, 50);
         }
-        catch(IOException ex) {
-
+        catch(IOException ignored) {
         }
 
         return convertView;
