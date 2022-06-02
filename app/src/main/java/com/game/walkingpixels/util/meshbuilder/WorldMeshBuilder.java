@@ -1,7 +1,7 @@
 package com.game.walkingpixels.util.meshbuilder;
 
 import com.game.walkingpixels.model.World;
-import com.game.walkingpixels.openGL.vertices.worldVertex;
+import com.game.walkingpixels.openGL.vertices.WorldVertex;
 import com.game.walkingpixels.util.vector.Vector2;
 import com.game.walkingpixels.util.vector.Vector3;
 
@@ -23,8 +23,8 @@ public class WorldMeshBuilder {
         BACK
     }
 
-    public static worldVertex[] generateMesh(World.Block[][][] renderedWorld, int renderedWorldSize, int worldMaxHeight){
-        ArrayList<worldVertex> mesh = new ArrayList<>();
+    public static WorldVertex[] generateMesh(World.Block[][][] renderedWorld, int renderedWorldSize, int worldMaxHeight){
+        ArrayList<WorldVertex> mesh = new ArrayList<>();
 
         for(int x = 0; x < renderedWorldSize; x ++){
             for(int y = 0; y < renderedWorldSize; y ++) {
@@ -60,21 +60,21 @@ public class WorldMeshBuilder {
         }
 
 
-        worldVertex[] finishedMesh = new worldVertex[mesh.size()];
+        WorldVertex[] finishedMesh = new WorldVertex[mesh.size()];
         for (int i = 0; i < mesh.size(); i++){
             finishedMesh[i] = mesh.get(i);
         }
         return finishedMesh;
     }
 
-    private static void addSideToMesh(ArrayList<worldVertex> mesh, int x, int z, int y, Side side, World.Block block, int renderedWorldSize){
+    private static void addSideToMesh(ArrayList<WorldVertex> mesh, int x, int z, int y, Side side, World.Block block, int renderedWorldSize){
 
         Vector3[] corners = getCorners(x, y, z, side, renderedWorldSize);
         Vector2[] texture = getTextureCoords(side, block);
         Vector3 normal = getNormal(side);
 
         for (int i = 0; i < 4; i++){
-            mesh.add(new worldVertex(
+            mesh.add(new WorldVertex(
                     new float[]{ corners[i].x, corners[i].y, corners[i].z },
                     new float[]{ texture[i].x, texture[i].y },
                     new float[]{ normal.x, normal.y, normal.z},

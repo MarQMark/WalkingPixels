@@ -2,15 +2,15 @@ package com.game.walkingpixels.util.meshbuilder;
 
 import com.game.walkingpixels.Camera;
 import com.game.walkingpixels.model.World;
-import com.game.walkingpixels.openGL.vertices.worldVertex;
+import com.game.walkingpixels.openGL.vertices.WorldVertex;
 import com.game.walkingpixels.util.vector.Vector3;
 
 import java.util.ArrayList;
 
 public class MobMeshBuilder {
 
-    public static worldVertex[] generateMesh(World.Block[][][] renderedWorld, int renderedWorldSize, int worldMaxHeight, Camera camera){
-        ArrayList<worldVertex> mobs = new ArrayList<>();
+    public static WorldVertex[] generateMesh(World.Block[][][] renderedWorld, int renderedWorldSize, int worldMaxHeight, Camera camera){
+        ArrayList<WorldVertex> mobs = new ArrayList<>();
 
         for(int x = 0; x < renderedWorldSize; x ++){
             for(int y = 0; y < renderedWorldSize; y ++) {
@@ -27,14 +27,14 @@ public class MobMeshBuilder {
             }
         }
 
-        worldVertex[] finishedMesh = new worldVertex[mobs.size()];
+        WorldVertex[] finishedMesh = new WorldVertex[mobs.size()];
         for (int i = 0; i < mobs.size(); i++){
             finishedMesh[i] = mobs.get(i);
         }
         return finishedMesh;
     }
 
-    public static void getMobVertices(ArrayList<worldVertex> mobs, Vector3 position, World.Block type, Camera camera){
+    public static void getMobVertices(ArrayList<WorldVertex> mobs, Vector3 position, World.Block type, Camera camera){
         Vector3 center = new Vector3(position.x + 0.5f, position.y, position.z + 0.5f);
 
 
@@ -60,28 +60,28 @@ public class MobMeshBuilder {
         Vector3 normals = new Vector3(-deltaZ, 0.0f, deltaX);
         normals.normalize();
 
-        mobs.add(new worldVertex(
+        mobs.add(new WorldVertex(
                 new float[]{ center.x - deltaX, position.y, center.z - deltaZ },
                 new float[]{ 0.0f, 0.0f },
                 new float[] {normals.x, normals.y, normals.z},
                 new float[]{ 0.0f, 0.0f, 0.0f, 0.0f },
                 textureSlot));
 
-        mobs.add(new worldVertex(
+        mobs.add(new WorldVertex(
                 new float[]{ center.x + deltaX, position.y, center.z + deltaZ },
                 new float[]{ 1.0f, 0.0f },
                 new float[] {normals.x, normals.y, normals.z},
                 new float[]{ 0.0f, 0.0f, 0.0f, 0.0f },
                 textureSlot));
 
-        mobs.add(new worldVertex(
+        mobs.add(new WorldVertex(
                 new float[]{ center.x - deltaX, position.y + mobHeight, center.z - deltaZ },
                 new float[]{ 0.0f, 1.0f },
                 new float[] {normals.x, normals.y, normals.z},
                 new float[]{ 0.0f, 0.0f, 0.0f, 0.0f },
                 textureSlot));
 
-        mobs.add(new worldVertex(
+        mobs.add(new WorldVertex(
                 new float[]{ center.x + deltaX, position.y + mobHeight, center.z + deltaZ },
                 new float[]{ 1.0f, 1.0f },
                 new float[] {normals.x, normals.y, normals.z},

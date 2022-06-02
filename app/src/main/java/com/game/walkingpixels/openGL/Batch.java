@@ -4,11 +4,8 @@ import com.game.walkingpixels.openGL.buffer.IndexBuffer;
 import com.game.walkingpixels.openGL.buffer.VertexBuffer;
 import com.game.walkingpixels.openGL.buffer.VertexBufferLayout;
 import com.game.walkingpixels.openGL.vertices.IVertex;
-import com.game.walkingpixels.openGL.vertices.worldVertex;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import static android.opengl.GLES31.*;
 

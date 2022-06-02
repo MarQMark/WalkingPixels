@@ -2,7 +2,6 @@ package com.game.walkingpixels.controller;
 
 import android.content.Context;
 import android.renderscript.Matrix4f;
-import android.util.Log;
 
 import com.game.walkingpixels.Camera;
 import com.game.walkingpixels.model.DrawGrid;
@@ -14,15 +13,13 @@ import com.game.walkingpixels.model.World;
 import com.game.walkingpixels.openGL.Batch;
 import com.game.walkingpixels.openGL.Shader;
 import com.game.walkingpixels.openGL.Texture;
-import com.game.walkingpixels.openGL.vertices.drawGridVertex;
-import com.game.walkingpixels.openGL.vertices.worldVertex;
+import com.game.walkingpixels.openGL.vertices.DrawGridVertex;
+import com.game.walkingpixels.openGL.vertices.WorldVertex;
 import com.game.walkingpixels.util.meshbuilder.DrawGridMeshBuilder;
 import com.game.walkingpixels.util.meshbuilder.MobMeshBuilder;
 import com.game.walkingpixels.util.meshbuilder.WorldMeshBuilder;
 import com.game.walkingpixels.util.vector.Vector2;
 import com.game.walkingpixels.util.vector.Vector3;
-
-import java.util.Random;
 
 import static android.opengl.GLES20.GL_COLOR_BUFFER_BIT;
 import static android.opengl.GLES20.GL_DEPTH_BUFFER_BIT;
@@ -57,11 +54,11 @@ public class DrawingRenderer extends Renderer {
 
 
         shader("draw").bind();
-        registerBatch("draw", new Batch(shader("draw").getID(), drawGrid.getSize() * drawGrid.getSize(), drawGridVertex.size, drawGridVertex.getLayout()));
+        registerBatch("draw", new Batch(shader("draw").getID(), drawGrid.getSize() * drawGrid.getSize(), DrawGridVertex.size, DrawGridVertex.getLayout()));
         batch("draw").addVertices("Grid", DrawGridMeshBuilder.generateMesh(drawGrid));
 
 
-        registerBatch("world", new Batch(shader("world").getID(), 2000, worldVertex.size, worldVertex.getLayout()));
+        registerBatch("world", new Batch(shader("world").getID(), 2000, WorldVertex.size, WorldVertex.getLayout()));
         batch("world").addVertices("ground", WorldMeshBuilder.generateMesh(world, 5, 2));
         batch("world").addVertices("mobs", MobMeshBuilder.generateMesh(world, 5, 2, camera));
         //batch("world").addVertices("spell", new worldVertex[0]);
@@ -93,14 +90,7 @@ public class DrawingRenderer extends Renderer {
         //finished spell
         if(GameState.getDrawTime() == 0.0 && drawGrid.isEnabled()){
             drawGrid.disable();
-
-            float score = drawGrid.calculateScore();
-            Log.e("score", "Score: " + score);
-
-            //enemy.damage((int) ((Math.max(score, 0.0) / 100.0) * spell.getMaxDamage()));
-
-            renderedSpell = new RenderedSpell(drawGrid.getDrawnAsBitmap(), 1.0, (int) ((Math.max(score, 0.0) / 100.0) * spell.getMaxDamage()));
-
+            renderedSpell = new RenderedSpell(drawGrid.getDrawnAsBitmap(), 1.0, (int) ((Math.max(drawGrid.calculateScore(), 0.0) / 100.0) * spell.getMaxDamage()));
             drawGrid.clear();
         }
 

@@ -4,7 +4,7 @@ import android.graphics.Bitmap;
 
 import com.game.walkingpixels.Camera;
 import com.game.walkingpixels.openGL.Texture;
-import com.game.walkingpixels.openGL.vertices.worldVertex;
+import com.game.walkingpixels.openGL.vertices.WorldVertex;
 import com.game.walkingpixels.util.vector.Vector3;
 
 public class RenderedSpell {
@@ -35,8 +35,8 @@ public class RenderedSpell {
         }
     }
 
-    public worldVertex[] getVertices(Vector3 position, Camera camera){
-        worldVertex[] vertices = new worldVertex[4];
+    public WorldVertex[] getVertices(Vector3 position, Camera camera){
+        WorldVertex[] vertices = new WorldVertex[4];
 
         Vector3 center = new Vector3(position.x + 0.5f, position.y, position.z + 0.5f);
 
@@ -54,28 +54,28 @@ public class RenderedSpell {
             distance.scale((float) (TTL / initialTTL));
         center = center.add(distance);
 
-        vertices[0] = new worldVertex(
+        vertices[0] = new WorldVertex(
                 new float[]{ center.x - deltaX, position.y, center.z - deltaZ },
                 new float[]{ 0.0f, 0.0f },
                 new float[] {normals.x, normals.y, normals.z},
                 new float[]{ 0.0f, 0.0f, 0.0f, 0.0f },
                 TEXTURE_SLOT);
 
-        vertices[1] = new worldVertex(
+        vertices[1] = new WorldVertex(
                 new float[]{ center.x + deltaX, position.y, center.z + deltaZ },
                 new float[]{ 1.0f, 0.0f },
                 new float[] {normals.x, normals.y, normals.z},
                 new float[]{ 0.0f, 0.0f, 0.0f, 0.0f },
                 TEXTURE_SLOT);
 
-        vertices[2] = new worldVertex(
+        vertices[2] = new WorldVertex(
                 new float[]{ center.x - deltaX, position.y + height, center.z - deltaZ },
                 new float[]{ 0.0f, 1.0f },
                 new float[] {normals.x, normals.y, normals.z},
                 new float[]{ 0.0f, 0.0f, 0.0f, 0.0f },
                 TEXTURE_SLOT);
 
-        vertices[3] = new worldVertex(
+        vertices[3] = new WorldVertex(
                 new float[]{ center.x + deltaX, position.y + height, center.z + deltaZ },
                 new float[]{ 1.0f, 1.0f },
                 new float[] {normals.x, normals.y, normals.z},

@@ -73,6 +73,9 @@ public class LightManager {
 
     public void initShader(Shader shader){
         this.shader = shader;
+        //shader.bind();
+        //shader.setUniform1iv("u_Textures", 2, new int[] {0, 1}, 0);
+        //shader.unbind();
     }
     public void initWorldShader(Shader shader){
         worldShader = shader;

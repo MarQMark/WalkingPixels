@@ -7,14 +7,14 @@ import java.nio.FloatBuffer;
 
 import static android.opengl.GLES20.GL_FLOAT;
 
-public class drawGridVertex implements IVertex{
+public class DrawGridVertex implements IVertex{
 
     public static final int size = DataType.FloatBYTES * (3 + 4);
 
     public float[] position; //vec2 - x, y
     public float[] color;   //vec4 - r, g, b, a
 
-    public drawGridVertex(float[] position, float[] color){
+    public DrawGridVertex(float[] position, float[] color){
         this.position = position;
         this.color = color;
     }

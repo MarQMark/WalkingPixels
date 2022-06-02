@@ -9,7 +9,7 @@ import com.game.walkingpixels.openGL.Batch;
 import com.game.walkingpixels.openGL.LightManager;
 import com.game.walkingpixels.openGL.Shader;
 import com.game.walkingpixels.openGL.Texture;
-import com.game.walkingpixels.openGL.vertices.worldVertex;
+import com.game.walkingpixels.openGL.vertices.WorldVertex;
 import com.game.walkingpixels.util.meshbuilder.MobMeshBuilder;
 import com.game.walkingpixels.util.meshbuilder.WorldMeshBuilder;
 import com.game.walkingpixels.util.vector.Vector3;
@@ -50,7 +50,7 @@ public class WalkingRenderer extends Renderer{
 
         shader("walk").bind();
 
-        registerBatch("walk", new Batch(shader("walk").getID(), 20000, worldVertex.size, worldVertex.getLayout()));
+        registerBatch("walk", new Batch(shader("walk").getID(), 20000, WorldVertex.size, WorldVertex.getLayout()));
         batch("walk").addVertices("Player", MobMeshBuilder.generateMesh(world.renderedWorld, world.renderedWorldSize, world.worldMaxHeight, camera));
         batch("walk").addVertices("World", WorldMeshBuilder.generateMesh(world.renderedWorld, world.renderedWorldSize, world.worldMaxHeight));
         batch("walk").bind();
