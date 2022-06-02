@@ -2,20 +2,22 @@ package com.game.walkingpixels.model;
 
 public class Spell {
 
-    private final String iconPath;
+    private final String path;
     private final String name;
     private final String description;
-    private final String shapePath;
+    private final double castTime;
+    private final double maxDamage;
 
-    public Spell(String name, String description, String iconPath, String shapePath){
-        this.iconPath = iconPath;
+    public Spell(String name, String description, String path, double castTime, double maxDamage){
+        this.path = path;
         this.name = name;
         this.description = description;
-        this.shapePath = shapePath;
+        this.castTime = castTime;
+        this.maxDamage = maxDamage;
     }
 
-    public String getIconPath(){
-        return iconPath;
+    public String getPath(){
+        return path;
     }
     public String getName(){
         return name;
@@ -23,5 +25,6 @@ public class Spell {
     public String getDescription(){
         return description;
     }
-    public String getShapePath() { return  shapePath;}
+    public double getCastTime() {return castTime;}
+    public double getMaxDamage() {return maxDamage;}
 }

@@ -52,7 +52,7 @@ public class DrawGridMeshBuilder {
     }
 
     private static void getBackground(ArrayList<drawGridVertex> pixels, DrawGrid drawGrid){
-        Vector4 color = new Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+        Vector4 color = new Vector4(0.9f, 0.9f, 0.9f, 1.0f);
         pixels.add(new drawGridVertex(
                 new float[]{ 0.0f, 0.0f, 0.0f },
                 new float[]{ color.x, color.y, color.z, color.w }));

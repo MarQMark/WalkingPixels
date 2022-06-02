@@ -17,6 +17,7 @@ public class PointLight {
     private int textureSlot = 4;
 
     private Shader shader = null;
+    private final Camera camera;
 
     private Vector3 position;
     private Vector4 color;
@@ -26,8 +27,9 @@ public class PointLight {
 
     private boolean positionChanged = false;
 
-    public PointLight(Vector3 position, Vector4 color, float intensity, int framebuffer, Shader shader, int number){
+    public PointLight(Vector3 position, Vector4 color, float intensity, int framebuffer, Shader shader, int number, Camera camera){
 
+        this.camera = camera;
         this.position = position;
         this.color = color;
         this.intensity = intensity;
@@ -62,7 +64,7 @@ public class PointLight {
 
         shader.bind();
         createTransforms();
-        shader.setUniform1f("u_FarPlane", Camera.farPlane);
+        shader.setUniform1f("u_FarPlane", camera.farPlane);
         shader.unbind();
     }
 
@@ -114,7 +116,7 @@ public class PointLight {
     private void createTransforms(){
         for (int i = 0; i < transforms.length; i++){
             transforms[i] = new Matrix4f();
-            transforms[i].loadPerspective(90, 1.0f, Camera.nearPlane, Camera.farPlane);
+            transforms[i].loadPerspective(90, 1.0f, camera.nearPlane, camera.farPlane);
         }
         transforms[0].multiply(Camera.lookAt(position, position.add(new Vector3(1.0f, 0.0f, 0.0f)), new Vector3(0.0f, -1.0f, 0.0f)));
         transforms[1].multiply(Camera.lookAt(position, position.add(new Vector3(-1.0f, 0.0f, 0.0f)), new Vector3(0.0f, -1.0f, 0.0f)));

@@ -108,6 +108,43 @@ public class Batch {
         }
     }
 
+    public void removePart(String name){
+        int partNumber = -1;
+        for (int i = 0; i < parts.size(); i++) {
+            if(parts.get(i).name.equals(name)){
+                partNumber = i;
+                break;
+            }
+        }
+
+        if(partNumber == -1)
+            return;
+
+
+        int oldSize = parts.get(partNumber).vertices.length;
+
+        if(0 > oldSize){
+
+            lastVertexPosition += ((-oldSize) / 4) * 6;
+
+            for (int i = partNumber + 1; i < parts.size(); i++){
+                parts.get(i).offset = parts.get(i - 1).offset + parts.get(i - 1).vertices.length;
+                vb.fillPartBuffer(parts.get(i).vertices, parts.get(i).offset);
+            }
+        }
+        else if(0 < oldSize){
+
+            lastVertexPosition -= ((oldSize) / 4) * 6;
+
+            for (int i = partNumber + 1; i < parts.size(); i++){
+                parts.get(i).offset = parts.get(i - 1).offset + parts.get(i - 1).vertices.length;
+                vb.fillPartBuffer(parts.get(i).vertices, parts.get(i).offset);
+            }
+        }
+
+        parts.remove(partNumber);
+    }
+
 
     public void bind(){
         vb.bind();

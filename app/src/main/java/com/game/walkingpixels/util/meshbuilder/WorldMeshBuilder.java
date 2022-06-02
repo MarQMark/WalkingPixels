@@ -31,34 +31,30 @@ public class WorldMeshBuilder {
                 for(int z = 0; z < worldMaxHeight; z ++) {
 
                     if(renderedWorld[x][y][z] != World.Block.AIR && renderedWorld[x][y][z] != World.Block.PLAYER && renderedWorld[x][y][z] != World.Block.SLIME){
-                        if(z == 0|| renderedWorld[x][y][z - 1] == World.Block.AIR){
+                        if(z == 0 || renderedWorld[x][y][z - 1] == World.Block.AIR || renderedWorld[x][y][z] != World.Block.PLAYER || renderedWorld[x][y][z] != World.Block.SLIME){
                             addSideToMesh(mesh, x, y, z, Side.BOTTOM, renderedWorld[x][y][z], renderedWorldSize);
                         }
 
-                        if(z == worldMaxHeight - 1 || renderedWorld[x][y][z + 1] == World.Block.AIR){
+                        if(z == worldMaxHeight - 1 || renderedWorld[x][y][z + 1] == World.Block.AIR || renderedWorld[x][y][z] != World.Block.PLAYER || renderedWorld[x][y][z] != World.Block.SLIME){
                             addSideToMesh(mesh, x, y, z, Side.TOP, renderedWorld[x][y][z], renderedWorldSize);
                         }
 
-                        if(x == 0 || renderedWorld[x - 1][y][z] == World.Block.AIR){
+                        if(x == 0 || renderedWorld[x - 1][y][z] == World.Block.AIR || renderedWorld[x][y][z] != World.Block.PLAYER || renderedWorld[x][y][z] != World.Block.SLIME){
                             addSideToMesh(mesh, x, y, z, Side.LEFT, renderedWorld[x][y][z], renderedWorldSize);
                         }
 
-                        if(x == renderedWorldSize - 1 || renderedWorld[x + 1][y][z] == World.Block.AIR){
+                        if(x == renderedWorldSize - 1 || renderedWorld[x + 1][y][z] == World.Block.AIR || renderedWorld[x][y][z] != World.Block.PLAYER || renderedWorld[x][y][z] != World.Block.SLIME){
                             addSideToMesh(mesh, x, y, z, Side.RIGHT, renderedWorld[x][y][z], renderedWorldSize);
                         }
 
-                        if(y == 0 || renderedWorld[x][y - 1][z] == World.Block.AIR){
+                        if(y == 0 || renderedWorld[x][y - 1][z] == World.Block.AIR || renderedWorld[x][y][z] != World.Block.PLAYER || renderedWorld[x][y][z] != World.Block.SLIME){
                             addSideToMesh(mesh, x, y, z, Side.BACK, renderedWorld[x][y][z], renderedWorldSize);
                         }
 
-                        if(y == renderedWorldSize - 1 || renderedWorld[x][y + 1][z] == World.Block.AIR){
+                        if(y == renderedWorldSize - 1 || renderedWorld[x][y + 1][z] == World.Block.AIR || renderedWorld[x][y][z] != World.Block.PLAYER || renderedWorld[x][y][z] != World.Block.SLIME){
                             addSideToMesh(mesh, x, y, z, Side.FRONT, renderedWorld[x][y][z], renderedWorldSize);
                         }
                     }
-
-                    /*if(renderedWorld[x][y][z] == World.Block.PLAYER){
-                        MobMeshBuilder.getMobVertices(mesh, new Vector3(x, z, y).sub(new Vector3(renderedWorldSize / 2, 0, renderedWorldSize / 2)), renderedWorld[x][y][z]);
-                    }*/
                 }
             }
         }

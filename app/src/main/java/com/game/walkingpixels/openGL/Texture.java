@@ -12,13 +12,20 @@ import static android.opengl.GLES31.*;
 
 public class Texture {
 
-    private final int id;
-    private final int width;
-    private final int height;
+    private int id;
+    private int width;
+    private int height;
 
     public Texture(Context context, String path, int slot){
-
         Bitmap img = loadTexture(context, path);
+        init(img, slot);
+    }
+
+    public Texture(Bitmap img, int slot){
+        init(img, slot);
+    }
+
+    private void init(Bitmap img, int slot){
         width = img.getWidth();
         height = img.getHeight();
 

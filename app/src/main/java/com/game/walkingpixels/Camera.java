@@ -6,26 +6,32 @@ import com.game.walkingpixels.util.vector.Vector3;
 
 public class Camera {
 
-    public static Vector3 position = new Vector3(0.0f, 0.0f, 20.0f);
-    public static Vector3 orientation = new Vector3(0.0f, 0.0f, -1.0f);
-    public static Vector3 up = new Vector3( 0.0f, 1.0f, 0.0f);
+    public Vector3 position;
+    public Vector3 orientation;
+    public Vector3 up = new Vector3( 0.0f, 1.0f, 0.0f);
 
     private static final Matrix4f projection = new Matrix4f();
 
-    public static float fov = 90;
-    public static float nearPlane = 0.1f;
-    public static float farPlane = 1000f;
+    public float fov = 90;
+    public float nearPlane = 0.1f;
+    public float farPlane = 1000f;
 
-    public static float rotationX = 0;
-    public static float rotationY = 0;
-    public static float rotationZ = 0;
+    public float rotationX = 0;
+    public float rotationY = 0;
+    public float rotationZ = 0;
 
-    public static void setAspectRatio(float ratio){
+    public Camera(Vector3 position, Vector3 orientation){
+        this.position = position;
+        //orientation.normalize();
+        this.orientation = orientation;
+    }
+
+    public void setAspectRatio(float ratio){
         projection.loadIdentity();
         projection.loadPerspective(fov, ratio, nearPlane, farPlane);
     }
 
-    static public Matrix4f getMVPMatrix(){
+    public Matrix4f getMVPMatrix(){
         Matrix4f view = lookAt(position, position.add(orientation), up);
         Matrix4f mvp = new Matrix4f(projection.getArray());
         mvp.multiply(view);
@@ -34,7 +40,6 @@ public class Camera {
         mvp.rotate(rotationZ, 0.0f, 0.0f, 1.0f);
         return mvp;
     }
-
 
     public static Matrix4f lookAt(Vector3 eye, Vector3 center, Vector3 up){
         Matrix4f M = new Matrix4f();

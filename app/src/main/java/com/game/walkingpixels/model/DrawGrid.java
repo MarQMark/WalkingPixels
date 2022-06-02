@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.renderscript.Matrix4f;
 
 import com.game.walkingpixels.util.EventHandler;
@@ -11,6 +12,7 @@ import com.game.walkingpixels.util.vector.Vector2;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -96,6 +98,25 @@ public class DrawGrid {
         }
 
         enable();
+    }
+
+    public Bitmap getDrawnAsBitmap(){
+        Bitmap drawing = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
+        drawing.setHasAlpha(true);
+        for (int y = 0; y < size; y++){
+            for (int x = 0; x < size; x++) {
+                if(grid[x][y] == 1)
+                    drawing.setPixel(x, y, Color.argb(255, 0,0,0));
+                else
+                    drawing.setPixel(x, y, Color.argb(0, 0,0,0));
+            }
+        }
+
+        Matrix matrix = new Matrix();
+        matrix.setScale(1, -1);
+        drawing = Bitmap.createBitmap(drawing,0,0, size, size, matrix,true);
+
+        return drawing;
     }
 
     public float calculateScore(){
@@ -223,5 +244,6 @@ public class DrawGrid {
     public void disable(){
         isEnabled = false;
     }
+    public boolean isEnabled() {return isEnabled;}
     public boolean isDrawing() {return isDrawing;}
 }

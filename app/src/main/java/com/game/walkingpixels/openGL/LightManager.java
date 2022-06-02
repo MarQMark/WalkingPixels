@@ -1,5 +1,6 @@
 package com.game.walkingpixels.openGL;
 
+import com.game.walkingpixels.Camera;
 import com.game.walkingpixels.util.vector.Vector3;
 import com.game.walkingpixels.util.vector.Vector4;
 
@@ -41,7 +42,7 @@ public class LightManager {
         glBindFramebuffer(GL_FRAMEBUFFER  , 0);
     }
 
-    public void createPointLight(Vector3 position, Vector4 color, float intensity){
+    public void createPointLight(Vector3 position, Vector4 color, float intensity, Camera camera){
         if(numberOfPointLights >= maxNumberOfPointLights)
             throw new NumberOfPointLightsOutOfBoundsException();
 
@@ -57,7 +58,7 @@ public class LightManager {
             throw new WorldLightShadowShaderIsNotInitializedException();
 
 
-        lights[numberOfPointLights] = new PointLight(position, color, intensity, framebuffer, shader, numberOfPointLights);
+        lights[numberOfPointLights] = new PointLight(position, color, intensity, framebuffer, shader, numberOfPointLights, camera);
 
         worldShader.bind();
         worldShader.setUniform1f("u_LightCount", (numberOfPointLights + 1));

@@ -39,7 +39,7 @@ public class Walking extends AppCompatActivity {
         per.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                Camera.position.z = (progress / 100f);
+                cw.walkingRenderer.camera.position.z = (progress / 100f);
             }
 
             @Override
@@ -77,7 +77,7 @@ public class Walking extends AppCompatActivity {
         rotY.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                Camera.rotationY = progress;
+                cw.walkingRenderer.camera.rotationY = progress;
             }
 
             @Override
@@ -96,7 +96,7 @@ public class Walking extends AppCompatActivity {
         rotX.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                Camera.rotationX = progress;
+                cw.walkingRenderer.camera.rotationX = progress;
             }
 
             @Override
@@ -115,7 +115,7 @@ public class Walking extends AppCompatActivity {
         rotZ.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                Camera.rotationZ = progress;
+                cw.walkingRenderer.camera.rotationZ = progress;
             }
 
             @Override

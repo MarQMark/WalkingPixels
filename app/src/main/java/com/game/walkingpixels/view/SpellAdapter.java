@@ -46,7 +46,7 @@ public class SpellAdapter extends ArrayAdapter<Spell> {
         description.setText(spell.getDescription());
 
         try {
-            Drawable d = Drawable.createFromStream(context.getAssets().open(spell.getIconPath()), null);
+            Drawable d = Drawable.createFromStream(context.getAssets().open(spell.getPath()), null);
             image.setImageDrawable(d);
         }
         catch(IOException ignored) {

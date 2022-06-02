@@ -34,6 +34,8 @@ public class WalkingRenderer extends Renderer{
 
     @Override
     public void init() {
+        camera = new Camera(new Vector3(0.0f, 0.0f, 20.0f), new Vector3(0.0f, 0.0f, -1.0f));
+
         SharedPreferences sharedPref = context.getSharedPreferences("Test", Context.MODE_PRIVATE);
         if(sharedPref.getBoolean("shadowOn", true))
             registerShader("walk", new Shader(context, "Shaders/BasicShadow.shaders"));
@@ -43,13 +45,13 @@ public class WalkingRenderer extends Renderer{
         registerLightManager("walk", new LightManager());
         lightManager("walk").initShader(new Shader(context, "Shaders/ShadowGeometry.shaders"));
         lightManager("walk").initWorldShader(shader("walk"));
-        lightManager("walk").createPointLight(lightPosition, new Vector4(1f, 1f, 1f, 1.0f), 1000f);
-        lightManager("walk").createPointLight(new Vector3(2.0f, 5.0f, 0.0f), new Vector4(1f, 1f, 1f, 1.0f), 8f);
+        lightManager("walk").createPointLight(lightPosition, new Vector4(1f, 1f, 1f, 1.0f), 1000f, camera);
+        lightManager("walk").createPointLight(new Vector3(2.0f, 5.0f, 0.0f), new Vector4(1f, 1f, 1f, 1.0f), 8f, camera);
 
         shader("walk").bind();
 
         registerBatch("walk", new Batch(shader("walk").getID(), 20000, worldVertex.size, worldVertex.getLayout()));
-        batch("walk").addVertices("Player", MobMeshBuilder.generateMesh(world.renderedWorld, world.renderedWorldSize, world.worldMaxHeight));
+        batch("walk").addVertices("Player", MobMeshBuilder.generateMesh(world.renderedWorld, world.renderedWorldSize, world.worldMaxHeight, camera));
         batch("walk").addVertices("World", WorldMeshBuilder.generateMesh(world.renderedWorld, world.renderedWorldSize, world.worldMaxHeight));
         batch("walk").bind();
 
@@ -64,7 +66,7 @@ public class WalkingRenderer extends Renderer{
     @Override
     public void update(double dt) {
         shader("walk").bind();
-        shader("walk").setUniformMatrix4fv("mvpmatrix", Camera.getMVPMatrix());
+        shader("walk").setUniformMatrix4fv("mvpmatrix", camera.getMVPMatrix());
 
         //update sun
         lightRotation++;
@@ -87,7 +89,7 @@ public class WalkingRenderer extends Renderer{
 
         //move world
         world.movePlayerPosition(1, 0);
-        batch("walk").updateVertices("Player", MobMeshBuilder.generateMesh(world.renderedWorld, world.renderedWorldSize, world.worldMaxHeight));
+        batch("walk").updateVertices("Player", MobMeshBuilder.generateMesh(world.renderedWorld, world.renderedWorldSize, world.worldMaxHeight, camera));
         batch("walk").updateVertices("World" , WorldMeshBuilder.generateMesh(world.renderedWorld, world.renderedWorldSize, world.worldMaxHeight));
     }
 }

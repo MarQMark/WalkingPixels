@@ -34,6 +34,7 @@ public abstract class Renderer implements GLSurfaceView.Renderer {
     private final HashMap<String, LightManager> lightManagers = new HashMap<>();
 
     public Context context;
+    public Camera camera;
 
     private double lastTime;
 
@@ -91,7 +92,7 @@ public abstract class Renderer implements GLSurfaceView.Renderer {
     public void onSurfaceChanged(GL10 gl, int width, int height) {
         this.width = width;
         this.height = height;
-        Camera.setAspectRatio((float) width / (float)height);
+        camera.setAspectRatio((float) width / (float)height);
     }
 
     private void printOpenGLInfo(GL10 gl){
