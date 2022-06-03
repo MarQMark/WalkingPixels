@@ -141,7 +141,7 @@ public class WorldMeshBuilder {
     }
 
     private static Vector3[] getCorners(int x, int y, int z, Side side, int renderedWorldSize){
-        Vector3 toOrigin = new Vector3(renderedWorldSize / 2, 0, renderedWorldSize / 2);
+        Vector3 toOrigin = new Vector3(renderedWorldSize / 2.0f, 0, renderedWorldSize / 2.0f);
         Vector3[] allCorners = new Vector3[8];
         allCorners[0] = new Vector3(x, y, z).sub(toOrigin);
         allCorners[1] = new Vector3(x + 1, y, z).sub(toOrigin);

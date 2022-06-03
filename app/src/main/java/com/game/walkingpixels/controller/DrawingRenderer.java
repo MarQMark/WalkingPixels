@@ -41,7 +41,7 @@ public class DrawingRenderer extends Renderer {
 
     @Override
     public void init() {
-        camera = new Camera(new Vector3(1.0f, -2.5f, 6.5f), new Vector3(0.0f, 0.0f, -1.0f));
+        camera = new Camera(new Vector3(0.5f, -2.0f, 6.0f), new Vector3(0.0f, 0.0f, -1.0f));
         camera.rotationY = 135;
         camera.rotationX = 55;
         drawGrid = new DrawGrid(64, 0.8f, new Vector2(0.1f, 0.1f));
@@ -60,7 +60,7 @@ public class DrawingRenderer extends Renderer {
 
         registerBatch("world", new Batch(shader("world").getID(), 2000, WorldVertex.size, WorldVertex.getLayout()));
         batch("world").addVertices("ground", WorldMeshBuilder.generateMesh(world, 5, 2));
-        batch("world").addVertices("mobs", MobMeshBuilder.generateMesh(world, 5, 2, camera));
+        batch("world").addVertices("mobs", MobMeshBuilder.generateMesh(world, 5, 2, camera, true));
         //batch("world").addVertices("spell", new worldVertex[0]);
         batch("world").bind();
 
@@ -101,7 +101,7 @@ public class DrawingRenderer extends Renderer {
             }
             else {
                 renderedSpell.update(dt / 1000);
-                batch("world").updateVertices("spell", renderedSpell.getVertices(new Vector3(0.0f - 2.0f, 1.0f, 4.0f - 2.0f) , camera));
+                batch("world").updateVertices("spell", renderedSpell.getVertices(new Vector3(1.0f - 2.0f, 1.0f, 4.0f - 2.0f) , camera));
             }
         }
     }
@@ -150,10 +150,22 @@ public class DrawingRenderer extends Renderer {
                 }
             }
         }
-        world[0][0][0] = World.Block.GRASS;
-        world[0][0][1] = World.Block.PLAYER;
-        world[0][4][0] = World.Block.GRASS;
-        world[0][4][1] = World.Block.SLIME;
+        world[1][0][0] = World.Block.GRASS;
+        world[1][0][1] = World.Block.PLAYER;
+        world[1][4][1] = World.Block.SLIME;
+
+        world[1][1][0] = World.Block.GRASS;
+        world[1][2][0] = World.Block.GRASS;
+        world[1][3][0] = World.Block.GRASS;
+        world[1][4][0] = World.Block.GRASS;
+
+        world[2][1][0] = World.Block.GRASS;
+        world[2][2][0] = World.Block.GRASS;
+        world[2][3][0] = World.Block.GRASS;
+
+        world[0][1][0] = World.Block.GRASS;
+        world[0][2][0] = World.Block.GRASS;
+        world[0][3][0] = World.Block.GRASS;
 
         return world;
     }

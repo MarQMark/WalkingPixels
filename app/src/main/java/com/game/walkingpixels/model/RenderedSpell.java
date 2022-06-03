@@ -49,9 +49,13 @@ public class RenderedSpell {
         Vector3 normals = new Vector3(-deltaZ, 0.0f, deltaX);
         normals.normalize();
 
+        Vector3 centerTop = new Vector3(normals);
+        centerTop.scale((float) (-Math.cos(Math.toRadians(camera.rotationX)) * height));
+        centerTop.y += Math.sin(Math.toRadians(camera.rotationX)) * height;
+
         Vector3 distance = new Vector3(normals);
-        if(TTL / initialTTL < 0.5)
-            distance.scale((float) (TTL / initialTTL));
+        //if(TTL / initialTTL < 0.5)
+            //distance.scale((float) (TTL / initialTTL));
         center = center.add(distance);
 
         vertices[0] = new WorldVertex(
@@ -69,14 +73,14 @@ public class RenderedSpell {
                 TEXTURE_SLOT);
 
         vertices[2] = new WorldVertex(
-                new float[]{ center.x - deltaX, position.y + height, center.z - deltaZ },
+                new float[]{ center.x + centerTop.x - deltaX, position.y + centerTop.y, center.z + centerTop.z - deltaZ },
                 new float[]{ 0.0f, 1.0f },
                 new float[] {normals.x, normals.y, normals.z},
                 new float[]{ 0.0f, 0.0f, 0.0f, 0.0f },
                 TEXTURE_SLOT);
 
         vertices[3] = new WorldVertex(
-                new float[]{ center.x + deltaX, position.y + height, center.z + deltaZ },
+                new float[]{ center.x + centerTop.x + deltaX, position.y + centerTop.y, center.z + centerTop.z + deltaZ },
                 new float[]{ 1.0f, 1.0f },
                 new float[] {normals.x, normals.y, normals.z},
                 new float[]{ 1.0f, 0.0f, 0.0f, 0.0f },

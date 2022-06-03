@@ -38,36 +38,6 @@
         app:layout_constraintWidth_percent="0.1"/>
 
     <ProgressBar
-        android:id="@+id/bar_drawing_player_health"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:max="100"
-        android:progress="50"
-        app:layout_constraintBottom_toTopOf="@+id/btn_drawing_attack_selector"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.90"
-        app:layout_constraintWidth_percent="0.8" />
-
-    <ProgressBar
-        android:id="@+id/bar_drawing_enemy_health"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:max="100"
-        android:progress="20"
-        app:layout_constraintBottom_toTopOf="@+id/btn_drawing_attack_selector"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintHorizontal_bias="0.9"
-        app:layout_constraintVertical_bias="0.05"
-        app:layout_constraintWidth_percent="0.8" />
-
-    <ProgressBar
         android:id="@+id/bar_drawing_time_remaining"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="0dp"
@@ -77,5 +47,40 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_drawing_attack_selector"
         app:layout_constraintWidth_percent="0.9"/>
+
+    <com.game.walkingpixels.view.Timebar
+        android:id="@+id/timebar_drawing_time_remaining"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_drawing_attack_selector"
+        app:layout_constraintWidth_percent="0.9" />
+
+    <com.game.walkingpixels.view.Healthbar
+        android:id="@+id/healthbar_drawing_player_health"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/btn_drawing_attack_selector"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.95"
+        app:layout_constraintWidth_percent="0.8"  />
+
+    <com.game.walkingpixels.view.Healthbar
+        android:id="@+id/healthbar_drawing_enemy_health"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:scaleX="-1"
+        app:layout_constraintBottom_toTopOf="@+id/btn_drawing_attack_selector"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.9"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.05"
+        app:layout_constraintWidth_percent="0.8" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

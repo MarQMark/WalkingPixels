@@ -51,7 +51,7 @@ public class WalkingRenderer extends Renderer{
         shader("walk").bind();
 
         registerBatch("walk", new Batch(shader("walk").getID(), 20000, WorldVertex.size, WorldVertex.getLayout()));
-        batch("walk").addVertices("Player", MobMeshBuilder.generateMesh(world.renderedWorld, world.renderedWorldSize, world.worldMaxHeight, camera));
+        batch("walk").addVertices("Player", MobMeshBuilder.generateMesh(world.renderedWorld, world.renderedWorldSize, world.worldMaxHeight, camera, false));
         batch("walk").addVertices("World", WorldMeshBuilder.generateMesh(world.renderedWorld, world.renderedWorldSize, world.worldMaxHeight));
         batch("walk").bind();
 
@@ -89,7 +89,7 @@ public class WalkingRenderer extends Renderer{
 
         //move world
         world.movePlayerPosition(1, 0);
-        batch("walk").updateVertices("Player", MobMeshBuilder.generateMesh(world.renderedWorld, world.renderedWorldSize, world.worldMaxHeight, camera));
+        batch("walk").updateVertices("Player", MobMeshBuilder.generateMesh(world.renderedWorld, world.renderedWorldSize, world.worldMaxHeight, camera, false));
         batch("walk").updateVertices("World" , WorldMeshBuilder.generateMesh(world.renderedWorld, world.renderedWorldSize, world.worldMaxHeight));
     }
 }

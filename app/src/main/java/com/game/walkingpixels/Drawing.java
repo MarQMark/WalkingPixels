@@ -21,7 +21,9 @@ import com.game.walkingpixels.model.GameState;
 import com.game.walkingpixels.model.Player;
 import com.game.walkingpixels.model.Spell;
 import com.game.walkingpixels.model.World;
+import com.game.walkingpixels.view.Healthbar;
 import com.game.walkingpixels.view.SpellAdapter;
+import com.game.walkingpixels.view.Timebar;
 
 import java.util.ArrayList;
 
@@ -51,10 +53,11 @@ public class Drawing extends AppCompatActivity {
 
 
 
-        ProgressBar barTimeRemaining = findViewById(R.id.bar_drawing_time_remaining);
-        ProgressBar barEnemyHealth = findViewById(R.id.bar_drawing_enemy_health);
+        Timebar barTimeRemaining = findViewById(R.id.timebar_drawing_time_remaining);
+
+        Healthbar barEnemyHealth = findViewById(R.id.healthbar_drawing_enemy_health);
         barEnemyHealth.setMax(enemy.getHealth());
-        ProgressBar barPlayerHealth = findViewById(R.id.bar_drawing_player_health);
+        Healthbar barPlayerHealth = findViewById(R.id.healthbar_drawing_player_health);
         barPlayerHealth.setMax(player.health);
 
 
@@ -87,9 +90,9 @@ public class Drawing extends AppCompatActivity {
         final Runnable r = new Runnable() {
             public void run() {
                 handler.postDelayed(this, 10);
-                barTimeRemaining.setProgress((int)(GameState.getDrawTime() * 10));
+                barTimeRemaining.setTime((int)(GameState.getDrawTime() * 10));
 
-                barEnemyHealth.setProgress(enemy.getHealth(), true);
+                barEnemyHealth.setHealth(enemy.getHealth());
 
                 if(GameState.getDrawTime() == 0.0)
                     btnAttackSelector.setVisibility(View.VISIBLE);

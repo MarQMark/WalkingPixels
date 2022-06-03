@@ -21,7 +21,7 @@ public class DrawGrid {
     private static final int DISTANCE_EQUILIBRIUM = 2;
     private final int[][] grid;
     private final int size;
-    private int brushSize = 2;
+    private int brushSize = 1;
 
     private final boolean[][] shapeGrid;
     private int shapePixels = 0;
