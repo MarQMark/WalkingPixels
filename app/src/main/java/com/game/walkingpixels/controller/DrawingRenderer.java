@@ -4,6 +4,7 @@ import android.content.Context;
 import android.renderscript.Matrix4f;
 
 import com.game.walkingpixels.Camera;
+import com.game.walkingpixels.model.Background;
 import com.game.walkingpixels.model.DrawGrid;
 import com.game.walkingpixels.model.Enemy;
 import com.game.walkingpixels.model.GameState;
@@ -13,6 +14,7 @@ import com.game.walkingpixels.model.World;
 import com.game.walkingpixels.openGL.Batch;
 import com.game.walkingpixels.openGL.Shader;
 import com.game.walkingpixels.openGL.Texture;
+import com.game.walkingpixels.openGL.vertices.BackgroundVertex;
 import com.game.walkingpixels.openGL.vertices.DrawGridVertex;
 import com.game.walkingpixels.openGL.vertices.WorldVertex;
 import com.game.walkingpixels.util.meshbuilder.DrawGridMeshBuilder;
@@ -34,6 +36,9 @@ public class DrawingRenderer extends Renderer {
     private Spell spell;
     private RenderedSpell renderedSpell;
 
+    private Texture textureAtlas;
+    private Background background;
+
     public DrawingRenderer(Context context, Enemy enemy) {
         super(context);
         this.enemy = enemy;
@@ -44,28 +49,38 @@ public class DrawingRenderer extends Renderer {
         camera = new Camera(new Vector3(0.5f, -2.0f, 6.0f), new Vector3(0.0f, 0.0f, -1.0f));
         camera.rotationY = 135;
         camera.rotationX = 55;
-        drawGrid = new DrawGrid(64, 0.8f, new Vector2(0.1f, 0.1f));
 
         World.Block[][][] world = generateWorld();
 
-
+        //init shader
         registerShader("draw", new Shader(context, "Shaders/DrawGrid.shaders"));
         registerShader("world", new Shader(context, "Shaders/Basic.shaders"));
+        registerShader("background", new Shader(context, "Shaders/Background.shaders"));
 
 
+        //init background
+        background = new Background(new Texture(context, "textures/clouds.png", 0), 20);
+        shader("background").bind();
+        shader("background").setUniform1iv("u_Textures", 1, new int[] {0}, 0);
+        registerBatch("background", new Batch(shader("background").getID(), 1, BackgroundVertex.size, BackgroundVertex.getLayout()));
+        batch("background").addVertices("Background", background.getVertices());
+
+
+        //init draw grid
+        drawGrid = new DrawGrid(64, 0.8f, new Vector2(0.1f, 0.1f));
         shader("draw").bind();
         registerBatch("draw", new Batch(shader("draw").getID(), drawGrid.getSize() * drawGrid.getSize(), DrawGridVertex.size, DrawGridVertex.getLayout()));
         batch("draw").addVertices("Grid", DrawGridMeshBuilder.generateMesh(drawGrid));
 
 
+        //init world
         registerBatch("world", new Batch(shader("world").getID(), 2000, WorldVertex.size, WorldVertex.getLayout()));
         batch("world").addVertices("ground", WorldMeshBuilder.generateMesh(world, 5, 2));
         batch("world").addVertices("mobs", MobMeshBuilder.generateMesh(world, 5, 2, camera, true));
-        //batch("world").addVertices("spell", new worldVertex[0]);
         batch("world").bind();
 
-        Texture tx = new Texture(context, "textures/texture_atlas.png", 0);
-        tx.bind(0);
+        textureAtlas = new Texture(context, "textures/texture_atlas.png", 0);
+        textureAtlas.bind(0);
         Texture tx2 = new Texture(context, "textures/christina.png", 1);
         tx2.bind(1);
         Texture tx3 = new Texture(context, enemy.getSpritePath(), 2);
@@ -82,6 +97,12 @@ public class DrawingRenderer extends Renderer {
         //update DrawGrid
         drawGrid.update(width, height);
         batch("draw").updateVertices("Grid", DrawGridMeshBuilder.generateMesh(drawGrid));
+
+
+        //update background
+        background.update(dt / 1000, width, height);
+        batch("background").updateVertices("Background", background.getVertices());
+
 
         //lower time while drawing
         if(drawGrid.isDrawing())
@@ -108,9 +129,17 @@ public class DrawingRenderer extends Renderer {
 
     @Override
     public void render(double dt) {
-        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glClearColor(0.4f, 0.6f, 1.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
 
+        //render background
+        background.bind();
+        shader("background").bind();
+        batch("background").bind();
+        batch("background").draw();
+
+
+        glClear(GL_DEPTH_BUFFER_BIT);
         //render draw grid
         shader("draw").bind();
         shader("draw").setUniformMatrix4fv("viewmatrix", getViewMatrix());
@@ -119,6 +148,7 @@ public class DrawingRenderer extends Renderer {
 
 
         //render World
+        textureAtlas.bind(0);
         shader("world").bind();
         shader("world").setUniformMatrix4fv("mvpmatrix", camera.getMVPMatrix());
         batch("world").bind();
