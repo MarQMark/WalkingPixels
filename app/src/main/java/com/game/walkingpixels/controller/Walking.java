@@ -1,4 +1,4 @@
-package com.game.walkingpixels;
+package com.game.walkingpixels.controller;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.Switch;
 
+import com.game.walkingpixels.R;
 import com.game.walkingpixels.controller.WalkingGLSurfaceView;
 import com.game.walkingpixels.controller.WalkingRenderer;
 import com.game.walkingpixels.model.GameState;
@@ -33,19 +34,13 @@ public class Walking extends AppCompatActivity {
 
 
         Button btnMoveForward = findViewById(R.id.btn_walking_forward);
-        btnMoveForward.setOnClickListener(e -> {
-            WalkingRenderer.world.move(1, 0);
-        });
+        btnMoveForward.setOnClickListener(e -> WalkingRenderer.world.move(1, 0));
 
         int[] rotationLeft = new int[] {0};
         Button btnTurnLeft = findViewById(R.id.btn_walking_turn_left);
-        btnTurnLeft.setOnClickListener(e -> {
-            rotationLeft[0] = 90;
-        });
+        btnTurnLeft.setOnClickListener(e -> rotationLeft[0] = 90);
         Button btnTurnRight = findViewById(R.id.btn_walking_turn_right);
-        btnTurnRight.setOnClickListener(e -> {
-            rotationLeft[0] = -90;
-        });
+        btnTurnRight.setOnClickListener(e -> rotationLeft[0] = -90);
 
         //2nd Game loop
         Handler handler = new Handler();

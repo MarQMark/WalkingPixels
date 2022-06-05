@@ -14,9 +14,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.WalkingPixels">
-        <activity android:name=".Drawing" />
-        <activity android:name=".Walking" />
-        <activity android:name=".MainMenu">
+        <activity android:name=".controller.Drawing" />
+        <activity android:name=".controller.Walking" />
+        <activity android:name=".controller.MainMenu">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

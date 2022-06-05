@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:foregroundTint="#00FF0000"
-    tools:context=".Walking">
+    tools:context=".controller.Walking">
 
     <com.game.walkingpixels.controller.WalkingGLSurfaceView
         android:id="@+id/myGLSurfaceViewWalking"

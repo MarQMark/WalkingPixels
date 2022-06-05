@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Drawing">
+    tools:context=".controller.Drawing">
 
     <com.game.walkingpixels.controller.DrawingGLSurfaceView
         android:id="@+id/myGLSurfaceViewDrawing"

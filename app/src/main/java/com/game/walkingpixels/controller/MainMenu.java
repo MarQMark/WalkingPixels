@@ -1,15 +1,12 @@
-package com.game.walkingpixels;
+package com.game.walkingpixels.controller;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 
-import com.game.walkingpixels.model.DrawGrid;
-import com.game.walkingpixels.model.GameState;
-import com.game.walkingpixels.util.Scene;
+import com.game.walkingpixels.R;
 
 public class MainMenu extends AppCompatActivity {
 
