@@ -58,4 +58,8 @@ public class Background {
     public void bind(){
         image.bind();
     }
+
+    public Texture getTexture() {
+        return image;
+    }
 }

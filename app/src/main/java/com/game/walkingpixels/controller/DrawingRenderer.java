@@ -65,6 +65,7 @@ public class DrawingRenderer extends Renderer {
         shader("background").setUniform1iv("u_Textures", 1, new int[] {0}, 0);
         registerBatch("background", new Batch(shader("background").getID(), 1, PlaneVertex.size, PlaneVertex.getLayout()));
         batch("background").addVertices("Background", background.getVertices());
+        batch("background").addTexture(background.getTexture());
 
 
         //init spell
@@ -84,14 +85,9 @@ public class DrawingRenderer extends Renderer {
         registerBatch("world", new Batch(shader("world").getID(), 2000, WorldVertex.size, WorldVertex.getLayout()));
         batch("world").addVertices("ground", WorldMeshBuilder.generateMesh(world, 5, 2));
         batch("world").addVertices("mobs", MobMeshBuilder.generateMesh(world, 5, 2, camera, true));
-        batch("world").bind();
-
-        textureAtlas = new Texture(context, "textures/texture_atlas.png", 0);
-        textureAtlas.bind(0);
-        Texture tx2 = new Texture(context, "textures/christina.png", 1);
-        tx2.bind(1);
-        Texture tx3 = new Texture(context, enemy.getSpritePath(), 2);
-        tx3.bind(2);
+        batch("world").addTexture(new Texture(context, "textures/texture_atlas.png", 0));
+        batch("world").addTexture(new Texture(context, "textures/christina.png", 1));
+        batch("world").addTexture(new Texture(context, enemy.getSpritePath(), 2));
 
         shader("world").bind();
         shader("world").setUniform1f("u_LightCount", 0);
@@ -123,6 +119,7 @@ public class DrawingRenderer extends Renderer {
         if(GameState.getDrawTime() == 0.0 && drawGrid.isEnabled()){
             drawGrid.disable();
             renderedSpell = new RenderedSpell(drawGrid.getDrawnAsBitmap(), 1.0, (int) ((Math.max(drawGrid.calculateScore(), 0.0) / 100.0) * spell.getMaxDamage()));
+            batch("spell").addTexture(renderedSpell.getTexture());
             drawGrid.clear();
         }
 
@@ -146,7 +143,6 @@ public class DrawingRenderer extends Renderer {
         glClear(GL_COLOR_BUFFER_BIT);
 
         //render background
-        background.bind();
         shader("background").bind();
         batch("background").bind();
         batch("background").draw();
@@ -161,7 +157,6 @@ public class DrawingRenderer extends Renderer {
 
 
         //render World
-        textureAtlas.bind(0);
         shader("world").bind();
         shader("world").setUniformMatrix4fv("mvpmatrix", camera.getMVPMatrix());
         batch("world").bind();

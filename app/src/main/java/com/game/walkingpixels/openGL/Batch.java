@@ -28,7 +28,7 @@ public class Batch {
 
     private final VertexBuffer vb;
     private final IndexBuffer ib;
-    //private Texture tx;
+    private final ArrayList<Texture> textures = new ArrayList<>();
 
     private final int shaderID;
     private int lastVertexPosition;
@@ -120,32 +120,25 @@ public class Batch {
 
         int oldSize = parts.get(partNumber).vertices.length;
 
-        if(0 > oldSize){
-
-            lastVertexPosition += ((-oldSize) / 4) * 6;
-
-            for (int i = partNumber + 1; i < parts.size(); i++){
-                parts.get(i).offset = parts.get(i - 1).offset + parts.get(i - 1).vertices.length;
-                vb.fillPartBuffer(parts.get(i).vertices, parts.get(i).offset);
-            }
+        lastVertexPosition -= ((oldSize) / 4) * 6;
+        for (int i = partNumber + 1; i < parts.size(); i++){
+            parts.get(i).offset = parts.get(i - 1).offset + parts.get(i - 1).vertices.length;
+            vb.fillPartBuffer(parts.get(i).vertices, parts.get(i).offset);
         }
-        else if(0 < oldSize){
 
-            lastVertexPosition -= ((oldSize) / 4) * 6;
-
-            for (int i = partNumber + 1; i < parts.size(); i++){
-                parts.get(i).offset = parts.get(i - 1).offset + parts.get(i - 1).vertices.length;
-                vb.fillPartBuffer(parts.get(i).vertices, parts.get(i).offset);
-            }
-        }
 
         parts.remove(partNumber);
     }
 
+    public void addTexture(Texture texture){
+        textures.add(texture);
+    }
 
     public void bind(){
         vb.bind();
         ib.bind();
+        for (Texture texture : textures)
+            texture.bind();
     }
 
     public void unbind(){

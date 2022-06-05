@@ -30,7 +30,6 @@ public class RenderedSpell {
         this.initialTTL = TTL;
         this.TTL = TTL;
         this.damage = damage;
-        bind();
     }
 
     private Bitmap generateGlow(Bitmap spell){
@@ -98,8 +97,6 @@ public class RenderedSpell {
         centerTop.y += Math.sin(Math.toRadians(camera.rotationX)) * height;
 
         Vector3 distance = new Vector3(normals);
-        //if(TTL / initialTTL < 0.5)
-            //distance.scale((float) (TTL / initialTTL));
         center = center.add(distance);
 
         vertices[0] = new PlaneVertex(
@@ -134,6 +131,10 @@ public class RenderedSpell {
 
     public boolean isEnabled(){
         return isEnabled;
+    }
+
+    public Texture getTexture(){
+        return texture;
     }
 
     public void bind(){

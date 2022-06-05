@@ -15,6 +15,7 @@ public class Texture {
     private int id;
     private int width;
     private int height;
+    private int defaultSlot;
 
     public Texture(Context context, String path, int slot){
         Bitmap img = loadTexture(context, path);
@@ -28,6 +29,7 @@ public class Texture {
     private void init(Bitmap img, int slot){
         width = img.getWidth();
         height = img.getHeight();
+        defaultSlot = slot;
 
         Matrix matrix = new Matrix();
         matrix.setScale(1, -1);
@@ -50,7 +52,7 @@ public class Texture {
     }
 
     public void bind(){
-        glActiveTexture(GL_TEXTURE0);
+        glActiveTexture(GL_TEXTURE0 + defaultSlot);
         glBindTexture(GL_TEXTURE_2D, id);
     }
     public void bind(int slot){
