@@ -1,6 +1,7 @@
 package com.game.walkingpixels.util.meshbuilder;
 
 import com.game.walkingpixels.Camera;
+import com.game.walkingpixels.model.Block;
 import com.game.walkingpixels.model.World;
 import com.game.walkingpixels.openGL.vertices.WorldVertex;
 import com.game.walkingpixels.util.vector.Vector3;
@@ -9,17 +10,17 @@ import java.util.ArrayList;
 
 public class MobMeshBuilder {
 
-    public static WorldVertex[] generateMesh(World.Block[][][] renderedWorld, int renderedWorldSize, int worldMaxHeight, Camera camera, boolean adjust){
+    public static WorldVertex[] generateMesh(Block[][][] renderedWorld, int renderedWorldSize, int worldMaxHeight, Camera camera, boolean adjust){
         ArrayList<WorldVertex> mobs = new ArrayList<>();
 
         for(int x = 0; x < renderedWorldSize; x ++){
             for(int y = 0; y < renderedWorldSize; y ++) {
                 for (int z = 0; z < worldMaxHeight; z++) {
 
-                    if(renderedWorld[x][y][z] == World.Block.PLAYER){
+                    if(renderedWorld[x][y][z] == Block.PLAYER){
                         getMobVertices(mobs, new Vector3(x, z, y).sub(new Vector3(renderedWorldSize / 2.0f, 0, renderedWorldSize / 2.0f)), renderedWorld[x][y][z], camera, adjust);
                     }
-                    if(renderedWorld[x][y][z] == World.Block.SLIME){
+                    if(renderedWorld[x][y][z] == Block.SLIME){
                         getMobVertices(mobs, new Vector3(x, z, y).sub(new Vector3(renderedWorldSize / 2.0f, 0, renderedWorldSize / 2.0f)), renderedWorld[x][y][z], camera, adjust);
                     }
 
@@ -34,7 +35,7 @@ public class MobMeshBuilder {
         return finishedMesh;
     }
 
-    public static void getMobVertices(ArrayList<WorldVertex> mobs, Vector3 position, World.Block type, Camera camera, boolean adjust){
+    public static void getMobVertices(ArrayList<WorldVertex> mobs, Vector3 position, Block type, Camera camera, boolean adjust){
         Vector3 center = new Vector3(position.x + 0.5f, position.y, position.z + 0.5f);
 
 

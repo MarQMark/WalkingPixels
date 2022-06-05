@@ -7,7 +7,7 @@
     android:foregroundTint="#00FF0000"
     tools:context=".Walking">
 
-    <com.game.walkingpixels.CanvasView
+    <com.game.walkingpixels.controller.WalkingGLSurfaceView
         android:id="@+id/myGLSurfaceViewWalking"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -16,62 +16,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <SeekBar
-        android:id="@+id/seekBar"
-        android:layout_width="0dp"
-        android:layout_height="20dp"
-        android:max="10000"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <SeekBar
-        android:id="@+id/seekSizeBar"
-        android:layout_width="0dp"
-        android:layout_height="20dp"
-        android:layout_marginTop="16dp"
-        android:foreground="@android:drawable/presence_busy"
-        android:foregroundTint="#25FF0000"
-        android:max="128"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/seekBar" />
-
-    <SeekBar
-        android:id="@+id/seekRotYBar"
-        android:layout_width="0dp"
-        android:layout_height="20dp"
-        android:layout_marginTop="16dp"
-        android:max="360"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/seekSizeBar" />
-
-    <SeekBar
-        android:id="@+id/seekRotXBar"
-        android:layout_width="0dp"
-        android:layout_height="20dp"
-        android:max="360"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/seekRotYBar" />
-
-    <SeekBar
-        android:id="@+id/seekRotZBar"
-        android:layout_width="0dp"
-        android:layout_height="20dp"
-        android:max="360"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/seekRotXBar" />
 
     <Switch
         android:id="@+id/switch1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Shadow"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/seekRotZBar" />
+        app:layout_constraintBottom_toTopOf="@+id/btn_walking_forward"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
         android:id="@+id/btn_walking_stats"
@@ -118,6 +70,28 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/btn_walking_turn_right"
         app:layout_constraintTop_toTopOf="@+id/btn_walking_turn_right" />
+
+    <com.game.walkingpixels.view.Healthbar
+        android:id="@+id/bar_walking_stamina"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.8" />
+
+    <com.game.walkingpixels.view.Healthbar
+        android:id="@+id/bar_walking_health"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/bar_walking_stamina" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

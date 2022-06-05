@@ -1,5 +1,6 @@
 package com.game.walkingpixels.util.meshbuilder;
 
+import com.game.walkingpixels.model.Block;
 import com.game.walkingpixels.model.World;
 import com.game.walkingpixels.openGL.vertices.WorldVertex;
 import com.game.walkingpixels.util.vector.Vector2;
@@ -23,35 +24,36 @@ public class WorldMeshBuilder {
         BACK
     }
 
-    public static WorldVertex[] generateMesh(World.Block[][][] renderedWorld, int renderedWorldSize, int worldMaxHeight){
+    public static WorldVertex[] generateMesh(Block[][][] renderedWorld, int renderedWorldSize, int worldMaxHeight){
         ArrayList<WorldVertex> mesh = new ArrayList<>();
 
         for(int x = 0; x < renderedWorldSize; x ++){
             for(int y = 0; y < renderedWorldSize; y ++) {
                 for(int z = 0; z < worldMaxHeight; z ++) {
 
-                    if(renderedWorld[x][y][z] != World.Block.AIR && renderedWorld[x][y][z] != World.Block.PLAYER && renderedWorld[x][y][z] != World.Block.SLIME){
-                        if(z == 0 || renderedWorld[x][y][z - 1] == World.Block.AIR || renderedWorld[x][y][z] != World.Block.PLAYER || renderedWorld[x][y][z] != World.Block.SLIME){
+                    if(renderedWorld[x][y][z].ordinal() < Block.AIR.ordinal()){
+
+                        if(z == 0 || renderedWorld[x][y][z - 1].ordinal() >= Block.AIR.ordinal()){
                             addSideToMesh(mesh, x, y, z, Side.BOTTOM, renderedWorld[x][y][z], renderedWorldSize);
                         }
 
-                        if(z == worldMaxHeight - 1 || renderedWorld[x][y][z + 1] == World.Block.AIR || renderedWorld[x][y][z] != World.Block.PLAYER || renderedWorld[x][y][z] != World.Block.SLIME){
+                        if(z == worldMaxHeight - 1 || renderedWorld[x][y][z + 1].ordinal() >= Block.AIR.ordinal()){
                             addSideToMesh(mesh, x, y, z, Side.TOP, renderedWorld[x][y][z], renderedWorldSize);
                         }
 
-                        if(x == 0 || renderedWorld[x - 1][y][z] == World.Block.AIR || renderedWorld[x][y][z] != World.Block.PLAYER || renderedWorld[x][y][z] != World.Block.SLIME){
+                        if(x == 0 || renderedWorld[x - 1][y][z].ordinal() >= Block.AIR.ordinal()){
                             addSideToMesh(mesh, x, y, z, Side.LEFT, renderedWorld[x][y][z], renderedWorldSize);
                         }
 
-                        if(x == renderedWorldSize - 1 || renderedWorld[x + 1][y][z] == World.Block.AIR || renderedWorld[x][y][z] != World.Block.PLAYER || renderedWorld[x][y][z] != World.Block.SLIME){
+                        if(x == renderedWorldSize - 1 || renderedWorld[x + 1][y][z].ordinal() >= Block.AIR.ordinal()){
                             addSideToMesh(mesh, x, y, z, Side.RIGHT, renderedWorld[x][y][z], renderedWorldSize);
                         }
 
-                        if(y == 0 || renderedWorld[x][y - 1][z] == World.Block.AIR || renderedWorld[x][y][z] != World.Block.PLAYER || renderedWorld[x][y][z] != World.Block.SLIME){
+                        if(y == 0 || renderedWorld[x][y - 1][z].ordinal() >= Block.AIR.ordinal()){
                             addSideToMesh(mesh, x, y, z, Side.BACK, renderedWorld[x][y][z], renderedWorldSize);
                         }
 
-                        if(y == renderedWorldSize - 1 || renderedWorld[x][y + 1][z] == World.Block.AIR || renderedWorld[x][y][z] != World.Block.PLAYER || renderedWorld[x][y][z] != World.Block.SLIME){
+                        if(y == renderedWorldSize - 1 || renderedWorld[x][y + 1][z].ordinal() >= Block.AIR.ordinal()){
                             addSideToMesh(mesh, x, y, z, Side.FRONT, renderedWorld[x][y][z], renderedWorldSize);
                         }
                     }
@@ -67,7 +69,7 @@ public class WorldMeshBuilder {
         return finishedMesh;
     }
 
-    private static void addSideToMesh(ArrayList<WorldVertex> mesh, int x, int z, int y, Side side, World.Block block, int renderedWorldSize){
+    private static void addSideToMesh(ArrayList<WorldVertex> mesh, int x, int z, int y, Side side, Block block, int renderedWorldSize){
 
         Vector3[] corners = getCorners(x, y, z, side, renderedWorldSize);
         Vector2[] texture = getTextureCoords(side, block);
@@ -102,7 +104,7 @@ public class WorldMeshBuilder {
         return new Vector3(0.0f, 0.0f, 0.0f);
     }
 
-    private static Vector2[] getTextureCoords(Side side, World.Block block){
+    private static Vector2[] getTextureCoords(Side side, Block block){
 
         int id = 0;
 

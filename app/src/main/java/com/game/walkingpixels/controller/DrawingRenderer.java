@@ -5,6 +5,7 @@ import android.renderscript.Matrix4f;
 
 import com.game.walkingpixels.Camera;
 import com.game.walkingpixels.model.Background;
+import com.game.walkingpixels.model.Block;
 import com.game.walkingpixels.model.DrawGrid;
 import com.game.walkingpixels.model.Enemy;
 import com.game.walkingpixels.model.GameState;
@@ -36,7 +37,6 @@ public class DrawingRenderer extends Renderer {
     private Spell spell;
     private RenderedSpell renderedSpell;
 
-    private Texture textureAtlas;
     private Background background;
 
     public DrawingRenderer(Context context, Enemy enemy) {
@@ -50,7 +50,6 @@ public class DrawingRenderer extends Renderer {
         camera.rotationY = 135;
         camera.rotationX = 55;
 
-        World.Block[][][] world = generateWorld();
 
         //init shader
         registerShader("draw", new Shader(context, "Shaders/DrawGrid.shaders"));
@@ -82,6 +81,7 @@ public class DrawingRenderer extends Renderer {
 
 
         //init world
+        Block[][][] world = generateWorld();
         registerBatch("world", new Batch(shader("world").getID(), 2000, WorldVertex.size, WorldVertex.getLayout()));
         batch("world").addVertices("ground", WorldMeshBuilder.generateMesh(world, 5, 2));
         batch("world").addVertices("mobs", MobMeshBuilder.generateMesh(world, 5, 2, camera, true));
@@ -188,31 +188,31 @@ public class DrawingRenderer extends Renderer {
         return view;
     }
 
-    private World.Block[][][] generateWorld(){
-        World.Block[][][] world = new World.Block[5][5][2];
+    private Block[][][] generateWorld(){
+        Block[][][] world = new Block[5][5][2];
         for (int x = 0; x < 5; x++){
             for (int y = 0; y < 5; y++) {
                 for (int z = 0; z < 2; z++) {
-                    world[x][y][z] = World.Block.AIR;
+                    world[x][y][z] = Block.AIR;
                 }
             }
         }
-        world[1][0][0] = World.Block.GRASS;
-        world[1][0][1] = World.Block.PLAYER;
-        world[1][4][1] = World.Block.SLIME;
+        world[1][0][0] = Block.GRASS;
+        world[1][0][1] = Block.PLAYER;
+        world[1][4][1] = Block.SLIME;
 
-        world[1][1][0] = World.Block.GRASS;
-        world[1][2][0] = World.Block.GRASS;
-        world[1][3][0] = World.Block.GRASS;
-        world[1][4][0] = World.Block.GRASS;
+        world[1][1][0] = Block.GRASS;
+        world[1][2][0] = Block.GRASS;
+        world[1][3][0] = Block.GRASS;
+        world[1][4][0] = Block.GRASS;
 
-        world[2][1][0] = World.Block.GRASS;
-        world[2][2][0] = World.Block.GRASS;
-        world[2][3][0] = World.Block.GRASS;
+        world[2][1][0] = Block.GRASS;
+        world[2][2][0] = Block.GRASS;
+        world[2][3][0] = Block.GRASS;
 
-        world[0][1][0] = World.Block.GRASS;
-        world[0][2][0] = World.Block.GRASS;
-        world[0][3][0] = World.Block.GRASS;
+        world[0][1][0] = Block.GRASS;
+        world[0][2][0] = Block.GRASS;
+        world[0][3][0] = Block.GRASS;
 
         return world;
     }

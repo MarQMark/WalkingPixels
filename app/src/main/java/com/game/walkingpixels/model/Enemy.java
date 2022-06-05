@@ -9,14 +9,14 @@ public class Enemy {
 
     private int health;
     private final String spritePath;
-    private final World.Block type;
+    private final Block type;
     private final ArrayList<Attack> attacks = new ArrayList<>();
 
     private boolean isEnemyTurn = false;
     private static final double maxAttackDelay = 1;
     private double attackDelay = maxAttackDelay;
 
-    public Enemy(World.Block type, int health){
+    public Enemy(Block type, int health){
         this.type = type;
         this.health = health;
         this.spritePath = lookupSpritePath();

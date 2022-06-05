@@ -30,7 +30,6 @@ public class WalkingRenderer extends Renderer{
     private float lightRotation = 0;
     private final Vector3 lightPosition = new Vector3(0.0f, lightMaxHeight, 0.0f);
 
-    private Texture textureAtlas;
     private Background background;
 
     public WalkingRenderer(Context context) {
@@ -39,7 +38,9 @@ public class WalkingRenderer extends Renderer{
 
     @Override
     public void init() {
-        camera = new Camera(new Vector3(0.0f, 0.0f, 20.0f), new Vector3(0.0f, 0.0f, -1.0f));
+        camera = new Camera(new Vector3(0.0f, 0.0f, 12.8f), new Vector3(0.0f, 0.0f, -1.0f));
+        camera.rotationX = 50;
+        camera.rotationY = 45;
 
         //init shaders
         SharedPreferences sharedPref = context.getSharedPreferences("Settings", Context.MODE_PRIVATE);
@@ -56,6 +57,7 @@ public class WalkingRenderer extends Renderer{
         shader("background").setUniform1iv("u_Textures", 1, new int[] {0}, 0);
         registerBatch("background", new Batch(shader("background").getID(), 1, PlaneVertex.size, PlaneVertex.getLayout()));
         batch("background").addVertices("Background", background.getVertices());
+        batch("background").addTexture(background.getTexture());
 
 
         //init light
@@ -68,24 +70,17 @@ public class WalkingRenderer extends Renderer{
 
         //init world
         shader("walk").bind();
-        registerBatch("walk", new Batch(shader("walk").getID(), 20000, WorldVertex.size, WorldVertex.getLayout()));
+        registerBatch("walk", new Batch(shader("walk").getID(), 2000, WorldVertex.size, WorldVertex.getLayout()));
         batch("walk").addVertices("Player", MobMeshBuilder.generateMesh(world.renderedWorld, world.renderedWorldSize, world.worldMaxHeight, camera, false));
         batch("walk").addVertices("World", WorldMeshBuilder.generateMesh(world.renderedWorld, world.renderedWorldSize, world.worldMaxHeight));
-        batch("walk").bind();
-
-        textureAtlas = new Texture(context, "textures/texture_atlas.png", 0);
-        textureAtlas.bind(0);
-        Texture tx2 = new Texture(context, "textures/christina.png", 1);
-        tx2.bind(1);
+        batch("walk").addTexture(new Texture(context, "textures/texture_atlas.png", 0));
+        batch("walk").addTexture(new Texture(context, "textures/christina.png", 1));
 
         shader("walk").setUniform1iv("u_Textures", 2, new int[] {0, 1}, 0);
     }
 
     @Override
     public void update(double dt) {
-        shader("walk").bind();
-        shader("walk").setUniformMatrix4fv("mvpmatrix", camera.getMVPMatrix());
-
         //update sun
         lightRotation++;
         lightPosition.z = (float) (Math.cos(Math.toRadians(lightRotation)) * lightMaxHeight);
@@ -95,34 +90,33 @@ public class WalkingRenderer extends Renderer{
         //update background
         background.update(dt / 1000, width, height);
         batch("background").updateVertices("Background", background.getVertices());
+
+        //update player rotation
+        batch("walk").updateVertices("Player", MobMeshBuilder.generateMesh(world.renderedWorld, world.renderedWorldSize, world.worldMaxHeight, camera, false));
+
+        //move world
+        if(world.hasMoved())
+            batch("walk").updateVertices("World" , WorldMeshBuilder.generateMesh(world.renderedWorld, world.renderedWorldSize, world.worldMaxHeight));
     }
 
     @Override
     public void render(double dt) {
-        //calculate sun
+        //calculate sun shadow
         lightManager("walk").calculateShadow(new Batch[]{batch("walk")}, width, height);
-
 
         glClearColor(0.4f, 0.6f, 1.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         //render background
-        background.bind();
         shader("background").bind();
         batch("background").bind();
         batch("background").draw();
 
-
         glClear(GL_DEPTH_BUFFER_BIT);
         //render world
-        textureAtlas.bind();
         shader("walk").bind();
+        shader("walk").setUniformMatrix4fv("mvpmatrix", camera.getMVPMatrix());
         batch("walk").bind();
         batch("walk").draw();
-
-        //move world
-        world.movePlayerPosition(1, 0);
-        batch("walk").updateVertices("Player", MobMeshBuilder.generateMesh(world.renderedWorld, world.renderedWorldSize, world.worldMaxHeight, camera, false));
-        batch("walk").updateVertices("World" , WorldMeshBuilder.generateMesh(world.renderedWorld, world.renderedWorldSize, world.worldMaxHeight));
     }
 }

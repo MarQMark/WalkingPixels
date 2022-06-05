@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.game.walkingpixels.controller.DrawingGLSurfaceView;
 import com.game.walkingpixels.model.Attack;
+import com.game.walkingpixels.model.Block;
 import com.game.walkingpixels.model.Enemy;
 import com.game.walkingpixels.model.GameState;
 import com.game.walkingpixels.model.Player;
@@ -48,14 +49,14 @@ public class Drawing extends AppCompatActivity {
         player.spells.add(new Spell("Flame", "This is a fire spell", "shapes/fire.png", 5.0, 40));
         player.spells.add(new Spell("Flame", "This is a long fire spell", "shapes/fire.png", 7.0, 40));
 
-        Enemy enemy = new Enemy(World.Block.SLIME, 100);
+        Enemy enemy = new Enemy(Block.SLIME, 100);
         enemy.addAttack(new Attack(20, 10, 3));
         enemy.addAttack(new Attack(30, 20, 1));
         enemy.addAttack(new Attack(30, 0, 2));
 
 
-        DrawingGLSurfaceView cw = findViewById(R.id.myGLSurfaceViewDrawing);
-        cw.init(enemy);
+        DrawingGLSurfaceView sv = findViewById(R.id.myGLSurfaceViewDrawing);
+        sv.init(enemy);
 
 
         //Time & Healthbar init
@@ -80,7 +81,7 @@ public class Drawing extends AppCompatActivity {
             builderSingle.setAdapter(spellAdapter, (dialog, which) -> {
                 Spell spell = spellAdapter.getItem(which);
                 barTimeRemaining.setMax((int) (spell.getCastTime() * 10));
-                cw.getRenderer().loadSpell(spell);
+                sv.getRenderer().loadSpell(spell);
                 GameState.setDrawTime(spell.getCastTime());
             });
 
@@ -141,7 +142,7 @@ public class Drawing extends AppCompatActivity {
                 }
             }
         };
-        handler.postDelayed(r, 0000);
+        handler.postDelayed(r, 0);
     }
 
 }

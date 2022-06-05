@@ -5,14 +5,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Matrix;
-import android.renderscript.Matrix4f;
 
 import com.game.walkingpixels.util.EventHandler;
 import com.game.walkingpixels.util.vector.Vector2;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,7 +68,7 @@ public class DrawGrid {
                     for (Vector2 p: findLine(x0, y0, lastX, lastY)){
                         for (int py = 0; py < size; py++) {
                             for (int px = 0; px < size; px++) {
-                                if (inside_circle(new Vector2(p.x, p.y), new Vector2(px, py), brushSize)) {
+                                if (insideCircle(new Vector2(p.x, p.y), new Vector2(px, py), brushSize)) {
                                     grid[px][py] = 1;
                                 }
                             }
@@ -196,7 +194,7 @@ public class DrawGrid {
         return img;
     }
 
-    private Boolean inside_circle(Vector2 center, Vector2 tile, float radius) {
+    private Boolean insideCircle(Vector2 center, Vector2 tile, float radius) {
         float dx = center.x - tile.x,
                 dy = center.y - tile.y;
         float distance = (float)Math.sqrt(dx*dx + dy*dy);
