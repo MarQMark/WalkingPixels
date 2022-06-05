@@ -32,9 +32,8 @@ public class Walking extends AppCompatActivity {
         Button btnStats = findViewById(R.id.btn_walking_stats);
         Button btnMap = findViewById(R.id.btn_walking_map);
 
-
         Button btnMoveForward = findViewById(R.id.btn_walking_forward);
-        btnMoveForward.setOnClickListener(e -> WalkingRenderer.world.move(1, 0));
+        btnMoveForward.setOnClickListener(e -> WalkingRenderer.world.forward());
 
         int[] rotationLeft = new int[] {0};
         Button btnTurnLeft = findViewById(R.id.btn_walking_turn_left);
@@ -65,6 +64,7 @@ public class Walking extends AppCompatActivity {
                     }
 
                     if(rotationLeft[0] == 0){
+                        WalkingRenderer.world.setDirection((int) sv.getRenderer().camera.rotationY);
                         btnMoveForward.setEnabled(true);
                         btnTurnLeft.setEnabled(true);
                         btnTurnRight.setEnabled(true);

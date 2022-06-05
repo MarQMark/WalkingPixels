@@ -18,7 +18,7 @@ import com.game.walkingpixels.model.Enemy;
 import com.game.walkingpixels.model.GameState;
 import com.game.walkingpixels.model.Player;
 import com.game.walkingpixels.model.Spell;
-import com.game.walkingpixels.view.Healthbar;
+import com.game.walkingpixels.view.Iconbar;
 import com.game.walkingpixels.view.SpellAdapter;
 import com.game.walkingpixels.view.Timebar;
 
@@ -52,9 +52,9 @@ public class Drawing extends AppCompatActivity {
 
         //Time & Healthbar init
         Timebar barTimeRemaining = findViewById(R.id.timebar_drawing_time_remaining);
-        Healthbar barEnemyHealth = findViewById(R.id.healthbar_drawing_enemy_health);
+        Iconbar barEnemyHealth = findViewById(R.id.healthbar_drawing_enemy_health);
         barEnemyHealth.setMax(enemy.getHealth());
-        Healthbar barPlayerHealth = findViewById(R.id.healthbar_drawing_player_health);
+        Iconbar barPlayerHealth = findViewById(R.id.healthbar_drawing_player_health);
         barPlayerHealth.setMax(player.getHealth());
 
 
@@ -121,8 +121,8 @@ public class Drawing extends AppCompatActivity {
                 barTimeRemaining.setTime((int)(GameState.getDrawTime() * 10));
 
                 //update healthbar
-                barEnemyHealth.setHealth(enemy.getHealth());
-                barPlayerHealth.setHealth(player.getHealth());
+                barEnemyHealth.setProgress(enemy.getHealth());
+                barPlayerHealth.setProgress(player.getHealth());
 
 
                 //enemy attack

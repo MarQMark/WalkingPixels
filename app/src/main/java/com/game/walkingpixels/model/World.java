@@ -2,6 +2,7 @@ package com.game.walkingpixels.model;
 
 import com.game.walkingpixels.util.NoiseGenerator;
 import com.game.walkingpixels.util.vector.Vector2;
+import com.game.walkingpixels.util.vector.Vector3;
 
 public class World {
 
@@ -12,12 +13,57 @@ public class World {
     private boolean hasMoved = false;
 
     private final Vector2 position = new Vector2(0,0);
+    private final Vector2 direction = new Vector2(1, 0);
 
     private final NoiseGenerator noiseGenerator;
 
 
     public World(double seed){
         noiseGenerator = new NoiseGenerator(seed);
+        generateRenderedWorld();
+    }
+
+    public void setDirection(int degree){
+        int normalizedDegree = (degree - 45) % 360;
+
+        if(normalizedDegree < -270){
+            direction.x = 1;
+            direction.y = 0;
+        }
+        else if(normalizedDegree < -180){
+            direction.x = 0;
+            direction.y = 1;
+        }
+        else if(normalizedDegree < -90){
+            direction.x = -1;
+            direction.y = 0;
+        }
+        else if(normalizedDegree < 0){
+            direction.x = 0;
+            direction.y = -1;
+        }
+        else if(normalizedDegree < 90){
+            direction.x = 1;
+            direction.y = 0;
+        }
+        else if(normalizedDegree < 180){
+            direction.x = 0;
+            direction.y = 1;
+        }
+        else if(normalizedDegree < 270){
+            direction.x = -1;
+            direction.y = 0;
+        }
+        else{
+            direction.x = 0;
+            direction.y = -1;
+        }
+    }
+
+    public void forward(){
+        hasMoved = true;
+        position.x += direction.x;
+        position.y += direction.y;
         generateRenderedWorld();
     }
 
