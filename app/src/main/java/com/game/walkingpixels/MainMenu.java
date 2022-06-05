@@ -24,13 +24,11 @@ public class MainMenu extends AppCompatActivity {
 
         Button btnPlay = findViewById(R.id.btn_main_menu_play);
         btnPlay.setOnClickListener(e -> {
-            GameState.scene = Scene.WALKING;
             Intent intent = new Intent(this, Walking.class);
             startActivity(intent);
         });
         Button btnOptions = findViewById(R.id.btn_main_menu_options);
         btnOptions.setOnClickListener(e -> {
-            GameState.scene = Scene.DRAWING;
             Intent intent = new Intent(this, Drawing.class);
             startActivity(intent);
         });

@@ -14,7 +14,7 @@ import com.game.walkingpixels.model.World;
 import com.game.walkingpixels.openGL.Batch;
 import com.game.walkingpixels.openGL.Shader;
 import com.game.walkingpixels.openGL.Texture;
-import com.game.walkingpixels.openGL.vertices.BackgroundVertex;
+import com.game.walkingpixels.openGL.vertices.PlaneVertex;
 import com.game.walkingpixels.openGL.vertices.DrawGridVertex;
 import com.game.walkingpixels.openGL.vertices.WorldVertex;
 import com.game.walkingpixels.util.meshbuilder.DrawGridMeshBuilder;
@@ -56,14 +56,21 @@ public class DrawingRenderer extends Renderer {
         registerShader("draw", new Shader(context, "Shaders/DrawGrid.shaders"));
         registerShader("world", new Shader(context, "Shaders/Basic.shaders"));
         registerShader("background", new Shader(context, "Shaders/Background.shaders"));
+        registerShader("spell", new Shader(context, "Shaders/Spell.shaders"));
 
 
         //init background
         background = new Background(new Texture(context, "textures/clouds.png", 0), 20);
         shader("background").bind();
         shader("background").setUniform1iv("u_Textures", 1, new int[] {0}, 0);
-        registerBatch("background", new Batch(shader("background").getID(), 1, BackgroundVertex.size, BackgroundVertex.getLayout()));
+        registerBatch("background", new Batch(shader("background").getID(), 1, PlaneVertex.size, PlaneVertex.getLayout()));
         batch("background").addVertices("Background", background.getVertices());
+
+
+        //init spell
+        registerBatch("spell", new Batch(shader("spell").getID(), 1, PlaneVertex.size, PlaneVertex.getLayout()));
+        shader("spell").bind();
+        shader("spell").setUniform1iv("u_Textures", 4, new int[] {0, 1, 2, 3}, 0);
 
 
         //init draw grid
@@ -104,25 +111,31 @@ public class DrawingRenderer extends Renderer {
         batch("background").updateVertices("Background", background.getVertices());
 
 
+        //update enemy
+        if(enemy.isEnemyTurn())
+            enemy.update(dt / 1000);
+
         //lower time while drawing
         if(drawGrid.isDrawing())
             GameState.updateDrawTime(dt / 1000);
 
-        //finished spell
+        //finished drawing spell
         if(GameState.getDrawTime() == 0.0 && drawGrid.isEnabled()){
             drawGrid.disable();
             renderedSpell = new RenderedSpell(drawGrid.getDrawnAsBitmap(), 1.0, (int) ((Math.max(drawGrid.calculateScore(), 0.0) / 100.0) * spell.getMaxDamage()));
             drawGrid.clear();
         }
 
+        //update cast spell
         if(renderedSpell != null && renderedSpell.isEnabled()){
             if(renderedSpell.isFinished()){
-                batch("world").removePart("spell");
+                batch("spell").removePart("spell");
                 enemy.damage(renderedSpell.getDamage());
+                enemy.setEnemyTurn(true);
             }
             else {
                 renderedSpell.update(dt / 1000);
-                batch("world").updateVertices("spell", renderedSpell.getVertices(new Vector3(1.0f - 2.0f, 1.0f, 4.0f - 2.0f) , camera));
+                batch("spell").updateVertices("spell", renderedSpell.getVertices(new Vector3(1.0f - 2.0f, 1.0f, 4.0f - 2.0f) , camera));
             }
         }
     }
@@ -153,6 +166,15 @@ public class DrawingRenderer extends Renderer {
         shader("world").setUniformMatrix4fv("mvpmatrix", camera.getMVPMatrix());
         batch("world").bind();
         batch("world").draw();
+
+        //render spell
+        if(renderedSpell != null && renderedSpell.isEnabled()) {
+            shader("spell").bind();
+            shader("spell").setUniformMatrix4fv("mvpmatrix", camera.getMVPMatrix());
+            shader("spell").setUniform1f("alpha", renderedSpell.getAlpha());
+            batch("spell").bind();
+            batch("spell").draw();
+        }
     }
 
 

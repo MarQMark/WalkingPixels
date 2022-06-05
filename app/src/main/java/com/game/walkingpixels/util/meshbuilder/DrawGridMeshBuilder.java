@@ -20,7 +20,7 @@ public class DrawGridMeshBuilder {
                     getVertices(pixels, new Vector2(x, y), new Vector4(0.0f, 0.0f, 0.0f, 1.0f));
                 }
                 if(drawGrid.getGrid()[x][y] == 2){
-                    getVertices(pixels, new Vector2(x, y), new Vector4(0.33f, 0.33f, 0.33f, 1.0f));
+                    getVertices(pixels, new Vector2(x, y), new Vector4(1.0f, 0.827f, 0.427f, 1.0f));
                 }
 
             }
@@ -51,7 +51,7 @@ public class DrawGridMeshBuilder {
     }
 
     private static void getBackground(ArrayList<DrawGridVertex> pixels, DrawGrid drawGrid){
-        Vector4 color = new Vector4(0.9f, 0.9f, 0.9f, 1.0f);
+        Vector4 color = new Vector4(0.988f, 0.969f, 0.647f, 1.0f);
         pixels.add(new DrawGridVertex(
                 new float[]{ 0.0f, 0.0f, 0.0f },
                 new float[]{ color.x, color.y, color.z, color.w }));

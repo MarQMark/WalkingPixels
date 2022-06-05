@@ -1,11 +1,8 @@
 package com.game.walkingpixels.model;
 
-import android.graphics.Bitmap;
-
 import com.game.walkingpixels.openGL.Texture;
-import com.game.walkingpixels.openGL.vertices.BackgroundVertex;
+import com.game.walkingpixels.openGL.vertices.PlaneVertex;
 import com.game.walkingpixels.openGL.vertices.IVertex;
-import com.game.walkingpixels.openGL.vertices.WorldVertex;
 
 public class Background {
 
@@ -33,24 +30,24 @@ public class Background {
     }
 
     public IVertex[] getVertices(){
-        BackgroundVertex[] vertices = new BackgroundVertex[4];
+        PlaneVertex[] vertices = new PlaneVertex[4];
 
-        vertices[0] = new BackgroundVertex(
+        vertices[0] = new PlaneVertex(
                 new float[]{ -1.0f, -1.0f, 0.0f },
                 new float[]{ 0.0f + offset, 0.0f },
                 TEXTURE_SLOT);
 
-        vertices[1] = new BackgroundVertex(
+        vertices[1] = new PlaneVertex(
                 new float[]{ 1.0f, -1.0f, 0.0f },
                 new float[]{ deltaX + offset, 0.0f },
                 TEXTURE_SLOT);
 
-        vertices[2] = new BackgroundVertex(
+        vertices[2] = new PlaneVertex(
                 new float[]{-1.0f, 1.0f, 0.0f },
                 new float[]{ 0.0f + offset, 1.0f },
                 TEXTURE_SLOT);
 
-        vertices[3] = new BackgroundVertex(
+        vertices[3] = new PlaneVertex(
                 new float[]{ 1.0f, 1.0f, 0.0f },
                 new float[]{ deltaX + offset, 1.0f },
                 TEXTURE_SLOT);

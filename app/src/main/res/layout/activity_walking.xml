@@ -70,8 +70,54 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Shadow"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/seekRotZBar" />
+
+    <Button
+        android:id="@+id/btn_walking_stats"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toStartOf="@+id/btn_walking_turn_left"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btn_walking_turn_right"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        app:layout_constraintEnd_toStartOf="@+id/btn_walking_map"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btn_walking_turn_left"
+        app:layout_constraintTop_toTopOf="@+id/btn_walking_turn_left" />
+
+    <Button
+        android:id="@+id/btn_walking_turn_left"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        app:layout_constraintEnd_toStartOf="@+id/btn_walking_turn_right"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btn_walking_stats"
+        app:layout_constraintTop_toTopOf="@+id/btn_walking_stats" />
+
+    <Button
+        android:id="@+id/btn_walking_forward"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/btn_walking_turn_left"
+        app:layout_constraintEnd_toEndOf="@+id/btn_walking_turn_right"
+        app:layout_constraintStart_toStartOf="@+id/btn_walking_turn_left" />
+
+    <Button
+        android:id="@+id/btn_walking_map"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btn_walking_turn_right"
+        app:layout_constraintTop_toTopOf="@+id/btn_walking_turn_right" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

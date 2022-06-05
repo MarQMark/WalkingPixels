@@ -7,7 +7,7 @@ import java.nio.FloatBuffer;
 
 import static android.opengl.GLES20.GL_FLOAT;
 
-public class BackgroundVertex implements IVertex{
+public class PlaneVertex implements IVertex{
 
     public static final int size = DataType.FloatBYTES * (3 + 2 + 1);
 
@@ -15,7 +15,7 @@ public class BackgroundVertex implements IVertex{
     public float[] texPosition;
     public float textureSlot;
 
-    public BackgroundVertex(float[] position, float[] texPosition, float textureSlot){
+    public PlaneVertex(float[] position, float[] texPosition, float textureSlot){
         this.position = position;
         this.texPosition = texPosition;
         this.textureSlot = textureSlot;

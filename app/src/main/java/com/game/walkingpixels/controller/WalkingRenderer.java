@@ -10,7 +10,7 @@ import com.game.walkingpixels.openGL.Batch;
 import com.game.walkingpixels.openGL.LightManager;
 import com.game.walkingpixels.openGL.Shader;
 import com.game.walkingpixels.openGL.Texture;
-import com.game.walkingpixels.openGL.vertices.BackgroundVertex;
+import com.game.walkingpixels.openGL.vertices.PlaneVertex;
 import com.game.walkingpixels.openGL.vertices.WorldVertex;
 import com.game.walkingpixels.util.meshbuilder.MobMeshBuilder;
 import com.game.walkingpixels.util.meshbuilder.WorldMeshBuilder;
@@ -42,8 +42,8 @@ public class WalkingRenderer extends Renderer{
         camera = new Camera(new Vector3(0.0f, 0.0f, 20.0f), new Vector3(0.0f, 0.0f, -1.0f));
 
         //init shaders
-        SharedPreferences sharedPref = context.getSharedPreferences("Test", Context.MODE_PRIVATE);
-        if(sharedPref.getBoolean("shadowOn", true))
+        SharedPreferences sharedPref = context.getSharedPreferences("Settings", Context.MODE_PRIVATE);
+        if(sharedPref.getBoolean("shadowEnabled", true))
             registerShader("walk", new Shader(context, "Shaders/BasicShadow.shaders"));
         else
             registerShader("walk", new Shader(context, "Shaders/Basic.shaders"));
@@ -54,7 +54,7 @@ public class WalkingRenderer extends Renderer{
         background = new Background(new Texture(context, "textures/clouds.png", 0), 20);
         shader("background").bind();
         shader("background").setUniform1iv("u_Textures", 1, new int[] {0}, 0);
-        registerBatch("background", new Batch(shader("background").getID(), 1, BackgroundVertex.size, BackgroundVertex.getLayout()));
+        registerBatch("background", new Batch(shader("background").getID(), 1, PlaneVertex.size, PlaneVertex.getLayout()));
         batch("background").addVertices("Background", background.getVertices());
 
 

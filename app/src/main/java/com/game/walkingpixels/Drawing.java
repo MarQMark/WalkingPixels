@@ -7,8 +7,10 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.LayoutInflater;
 import android.view.SoundEffectConstants;
 import android.view.View;
 import android.widget.Button;
@@ -16,6 +18,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.game.walkingpixels.controller.DrawingGLSurfaceView;
+import com.game.walkingpixels.model.Attack;
 import com.game.walkingpixels.model.Enemy;
 import com.game.walkingpixels.model.GameState;
 import com.game.walkingpixels.model.Player;
@@ -36,31 +39,34 @@ public class Drawing extends AppCompatActivity {
         setContentView(R.layout.activity_drawing);
 
 
-        Player player = new Player();
-        player.spells.add(new Spell("Circle", "This is a circle", "shapes/circle.png", 5.0, 20));
-        player.spells.add(new Spell("Triangle", "This is a triangle", "shapes/triangle.png", 5.0, 20));
-        player.spells.add(new Spell("Flame", "This is a fire spell", "shapes/fire.png", 7.0, 40));
-        player.spells.add(new Spell("Flame", "This is a fire spell", "shapes/fire.png", 7.0, 40));
-        player.spells.add(new Spell("Flame", "This is a fire spell", "shapes/fire.png", 7.0, 40));
-        player.spells.add(new Spell("Flame", "This is a fire spell", "shapes/fire.png", 7.0, 40));
-        player.spells.add(new Spell("Flame", "This is a fire spell", "shapes/fire.png", 7.0, 40));
+        Player player = new Player(Drawing.this);
+        player.spells.add(new Spell("Circle", "This is a circle", "shapes/circle.png", 4.0, 20));
+        player.spells.add(new Spell("Triangle", "This is a triangle", "shapes/triangle.png", 4.0, 20));
+        player.spells.add(new Spell("Flame", "This is a fire spell", "shapes/fire.png", 5.0, 40));
+        player.spells.add(new Spell("Flame", "This is a fire spell", "shapes/fire.png", 5.0, 40));
+        player.spells.add(new Spell("Flame", "This is a fire spell", "shapes/fire.png", 5.0, 40));
+        player.spells.add(new Spell("Flame", "This is a fire spell", "shapes/fire.png", 5.0, 40));
+        player.spells.add(new Spell("Flame", "This is a long fire spell", "shapes/fire.png", 7.0, 40));
 
         Enemy enemy = new Enemy(World.Block.SLIME, 100);
+        enemy.addAttack(new Attack(20, 10, 3));
+        enemy.addAttack(new Attack(30, 20, 1));
+        enemy.addAttack(new Attack(30, 0, 2));
 
 
         DrawingGLSurfaceView cw = findViewById(R.id.myGLSurfaceViewDrawing);
         cw.init(enemy);
 
 
-
+        //Time & Healthbar init
         Timebar barTimeRemaining = findViewById(R.id.timebar_drawing_time_remaining);
-
         Healthbar barEnemyHealth = findViewById(R.id.healthbar_drawing_enemy_health);
         barEnemyHealth.setMax(enemy.getHealth());
         Healthbar barPlayerHealth = findViewById(R.id.healthbar_drawing_player_health);
-        barPlayerHealth.setMax(player.health);
+        barPlayerHealth.setMax(player.getHealth());
 
 
+        //open spell menu
         Button btnAttackSelector = findViewById(R.id.btn_drawing_attack_selector);
         btnAttackSelector.setOnClickListener(e -> {
             GameState.setDrawTime(1.0f);
@@ -85,17 +91,54 @@ public class Drawing extends AppCompatActivity {
         });
 
 
+        //damage numbers init
+        TextView lblEnemyDamageTaken = findViewById(R.id.lbl_drawing_enemy_damage_taken);
+        TextView lblPlayerDamageTaken = findViewById(R.id.lbl_drawing_player_damage_taken);
+        int[] oldHealth = new int[]{
+            enemy.getHealth(),
+            player.getHealth()
+        };
+        int[] numberLoopsDamageTakenVisible = new int[]{0};
 
+        //2nd Game loop
         Handler handler = new Handler();
         final Runnable r = new Runnable() {
             public void run() {
                 handler.postDelayed(this, 10);
+
+                //update damage taken labels
+                if(oldHealth[0] != enemy.getHealth()) {
+                    lblEnemyDamageTaken.setText(Integer.toString(enemy.getHealth() - oldHealth[0]));
+                    numberLoopsDamageTakenVisible[0] = 50;
+                }
+                if(oldHealth[1] != player.getHealth()){
+                    lblPlayerDamageTaken.setText(Integer.toString(player.getHealth() - oldHealth[1]));
+                    numberLoopsDamageTakenVisible[0] = 50;
+                }
+                if(numberLoopsDamageTakenVisible[0] > 0)
+                    numberLoopsDamageTakenVisible[0]--;
+                else if(numberLoopsDamageTakenVisible[0] == 0){
+                    lblEnemyDamageTaken.setText("");
+                    lblPlayerDamageTaken.setText("");
+                }
+                oldHealth[0] = enemy.getHealth();
+                oldHealth[1] = player.getHealth();
+
+
+                //update drawing timebar
                 barTimeRemaining.setTime((int)(GameState.getDrawTime() * 10));
 
+                //update healthbar
                 barEnemyHealth.setHealth(enemy.getHealth());
+                barPlayerHealth.setHealth(player.getHealth());
 
-                if(GameState.getDrawTime() == 0.0)
+
+                //enemy attack
+                if(enemy.isEnemyTurn() && enemy.getAttackDelay() == 0){
+                    player.damage(enemy.attack());
+                    enemy.setEnemyTurn(false);
                     btnAttackSelector.setVisibility(View.VISIBLE);
+                }
             }
         };
         handler.postDelayed(r, 0000);

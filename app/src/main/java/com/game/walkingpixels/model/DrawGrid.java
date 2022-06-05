@@ -106,7 +106,7 @@ public class DrawGrid {
         for (int y = 0; y < size; y++){
             for (int x = 0; x < size; x++) {
                 if(grid[x][y] == 1)
-                    drawing.setPixel(x, y, Color.argb(255, 0,0,0));
+                    drawing.setPixel(x, y, Color.argb(255, 255,170,0));
                 else
                     drawing.setPixel(x, y, Color.argb(0, 0,0,0));
             }
