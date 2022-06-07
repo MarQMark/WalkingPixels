@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 
 import com.game.walkingpixels.Camera;
 import com.game.walkingpixels.model.Background;
+import com.game.walkingpixels.model.Enemy;
 import com.game.walkingpixels.model.World;
 import com.game.walkingpixels.openGL.Batch;
 import com.game.walkingpixels.openGL.LightManager;
@@ -13,7 +14,7 @@ import com.game.walkingpixels.openGL.Texture;
 import com.game.walkingpixels.openGL.vertices.PlaneVertex;
 import com.game.walkingpixels.openGL.vertices.WorldVertex;
 import com.game.walkingpixels.util.meshbuilder.MobMeshBuilder;
-import com.game.walkingpixels.util.meshbuilder.WorldMeshBuilder;
+import com.game.walkingpixels.util.meshbuilder.BlockMeshBuilder;
 import com.game.walkingpixels.util.vector.Vector3;
 import com.game.walkingpixels.util.vector.Vector4;
 
@@ -24,7 +25,7 @@ import static android.opengl.GLES20.glClearColor;
 
 public class WalkingRenderer extends Renderer{
 
-    public static World world = new World(54216.709022936559375);
+    private World world = new World(54216.709022936559375);
 
     private final float lightMaxHeight = 50.0f;
     private float lightRotation = 0;
@@ -72,7 +73,7 @@ public class WalkingRenderer extends Renderer{
         shader("walk").bind();
         registerBatch("walk", new Batch(shader("walk").getID(), 2000, WorldVertex.size, WorldVertex.getLayout()));
         batch("walk").addVertices("Player", MobMeshBuilder.generateMesh(world, camera, false));
-        batch("walk").addVertices("World", WorldMeshBuilder.generateMesh(world.getBlockGrid(), world.getBlockGridSize(), world.getWorldMaxHeight()));
+        batch("walk").addVertices("World", BlockMeshBuilder.generateMesh(world));
         batch("walk").addTexture(new Texture(context, "textures/texture_atlas.png", 0));
         batch("walk").addTexture(new Texture(context, "textures/christina.png", 1));
         batch("walk").addTexture(new Texture(context, "textures/slime.png", 2));
@@ -82,6 +83,9 @@ public class WalkingRenderer extends Renderer{
 
     @Override
     public void update(double dt) {
+        //update camera rotation
+        world.setDirection((int) camera.rotationY);
+
         //update sun
         lightRotation++;
         lightPosition.z = (float) (Math.cos(Math.toRadians(lightRotation)) * lightMaxHeight);
@@ -97,7 +101,7 @@ public class WalkingRenderer extends Renderer{
 
         //move world
         if(world.hasMoved())
-            batch("walk").updateVertices("World" , WorldMeshBuilder.generateMesh(world.getBlockGrid(), world.getBlockGridSize(), world.getWorldMaxHeight()));
+            batch("walk").updateVertices("World" , BlockMeshBuilder.generateMesh(world));
     }
 
     @Override
@@ -119,5 +123,12 @@ public class WalkingRenderer extends Renderer{
         shader("walk").setUniformMatrix4fv("mvpmatrix", camera.getMVPMatrix());
         batch("walk").bind();
         batch("walk").draw();
+    }
+
+    public boolean moveForward(){
+        return world.forward();
+    }
+    public Enemy checkForEnemy(){
+        return world.checkForEnemy();
     }
 }

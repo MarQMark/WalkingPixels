@@ -58,4 +58,7 @@ public class Player {
     public int getMaxHealth() {
         return maxHealth;
     }
+    public int getMaxStamina(){
+        return maxStamina;
+    }
 }

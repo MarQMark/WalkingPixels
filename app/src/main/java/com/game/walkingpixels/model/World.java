@@ -8,7 +8,7 @@ import java.util.Random;
 public class World {
 
     public final int worldMaxHeight = 5;
-    public int blockGridSize = 17;
+    public int blockGridSize = 15;
 
     private int despawnRadius = 5;
     private int enemyGridSize = blockGridSize + despawnRadius;
@@ -28,6 +28,20 @@ public class World {
         noiseGenerator = new NoiseGenerator(seed);
         generateBlockGrid();
         generateEnemyGrid();
+    }
+
+    public Enemy checkForEnemy(){
+        final int enemyAttackRadius = 1;
+        final int middle = enemyGridSize / 2 + 2; //why do I have to add two there???
+
+        for (int x = middle - enemyAttackRadius; x <= middle + enemyAttackRadius; x++){
+            for (int y = middle - enemyAttackRadius; y <= middle + enemyAttackRadius; y++) {
+                if(enemyGrid[x][y] != null)
+                    return enemyGrid[x][y];
+            }
+        }
+
+        return null;
     }
 
     public void setDirection(int degree){
@@ -67,12 +81,14 @@ public class World {
         }
     }
 
-    public void forward(){
+    public boolean forward(){
         hasMoved = true;
         position.x += direction.x;
         position.y += direction.y;
         generateBlockGrid();
         moveEnemyGrid();
+
+        return true;
     }
 
     public void setPosition(int x, int y){
@@ -194,9 +210,9 @@ public class World {
         }
     }
 
-    private boolean insideCircle(int x, int y, float radius){
-        float dx = blockGridSize / 2.0f - x,
-                dy = blockGridSize / 2.0f - y;
+    public boolean insideCircle(int x, int y, float radius){
+        float dx = (int)(blockGridSize / 2.0f) - x,
+                dy = (int)(blockGridSize / 2.0f) - y;
         float distance = (float)Math.sqrt(dx*dx + dy*dy);
         return distance <= radius;
     }

@@ -20,7 +20,7 @@ import com.game.walkingpixels.openGL.vertices.DrawGridVertex;
 import com.game.walkingpixels.openGL.vertices.WorldVertex;
 import com.game.walkingpixels.util.meshbuilder.DrawGridMeshBuilder;
 import com.game.walkingpixels.util.meshbuilder.MobMeshBuilder;
-import com.game.walkingpixels.util.meshbuilder.WorldMeshBuilder;
+import com.game.walkingpixels.util.meshbuilder.BlockMeshBuilder;
 import com.game.walkingpixels.util.vector.Vector2;
 import com.game.walkingpixels.util.vector.Vector3;
 
@@ -84,7 +84,7 @@ public class DrawingRenderer extends Renderer {
         World world = new World(0);
         generateWorld(world);
         registerBatch("world", new Batch(shader("world").getID(), 2000, WorldVertex.size, WorldVertex.getLayout()));
-        batch("world").addVertices("ground", WorldMeshBuilder.generateMesh(world.getBlockGrid(), world.getBlockGridSize(), 2));
+        batch("world").addVertices("ground", BlockMeshBuilder.generateMesh(world));
         batch("world").addVertices("mobs", MobMeshBuilder.generateMesh(world, camera, true));
         batch("world").addTexture(new Texture(context, "textures/texture_atlas.png", 0));
         batch("world").addTexture(new Texture(context, "textures/christina.png", 1));
@@ -194,7 +194,7 @@ public class DrawingRenderer extends Renderer {
         world.clear();
         for (int x = 0; x < 5; x++){
             for (int y = 0; y < 5; y++) {
-                for (int z = 0; z < 2; z++) {
+                for (int z = 0; z < world.getWorldMaxHeight(); z++) {
                     world.getBlockGrid()[x][y][z] = Block.AIR;
                 }
             }

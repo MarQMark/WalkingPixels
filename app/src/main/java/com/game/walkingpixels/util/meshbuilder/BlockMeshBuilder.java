@@ -8,7 +8,7 @@ import com.game.walkingpixels.util.vector.Vector3;
 
 import java.util.ArrayList;
 
-public class WorldMeshBuilder {
+public class BlockMeshBuilder {
 
     private static final int textureAtlasWidth = 64;
     private static final int textureAtlasHeight = 64;
@@ -24,37 +24,37 @@ public class WorldMeshBuilder {
         BACK
     }
 
-    public static WorldVertex[] generateMesh(Block[][][] renderedWorld, int renderedWorldSize, int worldMaxHeight){
+    public static WorldVertex[] generateMesh(World world){
         ArrayList<WorldVertex> mesh = new ArrayList<>();
 
-        for(int x = 0; x < renderedWorldSize; x ++){
-            for(int y = 0; y < renderedWorldSize; y ++) {
-                for(int z = 0; z < worldMaxHeight; z ++) {
+        for(int x = 0; x < world.getBlockGridSize(); x ++){
+            for(int y = 0; y < world.getBlockGridSize(); y ++) {
+                for(int z = 0; z < world.getWorldMaxHeight(); z ++) {
 
-                    if(renderedWorld[x][y][z].ordinal() < Block.AIR.ordinal()){
+                    if(world.getBlockGrid()[x][y][z].ordinal() < Block.AIR.ordinal()){
 
-                        if(z == 0 || renderedWorld[x][y][z - 1].ordinal() >= Block.AIR.ordinal()){
-                            addSideToMesh(mesh, x, y, z, Side.BOTTOM, renderedWorld[x][y][z], renderedWorldSize);
+                        if(z == 0 || world.getBlockGrid()[x][y][z - 1].ordinal() >= Block.AIR.ordinal()){
+                            addSideToMesh(mesh, x, y, z, Side.BOTTOM, world.getBlockGrid()[x][y][z], world.getBlockGridSize());
                         }
 
-                        if(z == worldMaxHeight - 1 || renderedWorld[x][y][z + 1].ordinal() >= Block.AIR.ordinal()){
-                            addSideToMesh(mesh, x, y, z, Side.TOP, renderedWorld[x][y][z], renderedWorldSize);
+                        if(z == world.getWorldMaxHeight() - 1 || world.getBlockGrid()[x][y][z + 1].ordinal() >= Block.AIR.ordinal()){
+                            addSideToMesh(mesh, x, y, z, Side.TOP, world.getBlockGrid()[x][y][z], world.getBlockGridSize());
                         }
 
-                        if(x == 0 || renderedWorld[x - 1][y][z].ordinal() >= Block.AIR.ordinal()){
-                            addSideToMesh(mesh, x, y, z, Side.LEFT, renderedWorld[x][y][z], renderedWorldSize);
+                        if(x == 0 || world.getBlockGrid()[x - 1][y][z].ordinal() >= Block.AIR.ordinal()){
+                            addSideToMesh(mesh, x, y, z, Side.LEFT, world.getBlockGrid()[x][y][z], world.getBlockGridSize());
                         }
 
-                        if(x == renderedWorldSize - 1 || renderedWorld[x + 1][y][z].ordinal() >= Block.AIR.ordinal()){
-                            addSideToMesh(mesh, x, y, z, Side.RIGHT, renderedWorld[x][y][z], renderedWorldSize);
+                        if(x == world.getBlockGridSize() - 1 || world.getBlockGrid()[x + 1][y][z].ordinal() >= Block.AIR.ordinal()){
+                            addSideToMesh(mesh, x, y, z, Side.RIGHT, world.getBlockGrid()[x][y][z], world.getBlockGridSize());
                         }
 
-                        if(y == 0 || renderedWorld[x][y - 1][z].ordinal() >= Block.AIR.ordinal()){
-                            addSideToMesh(mesh, x, y, z, Side.BACK, renderedWorld[x][y][z], renderedWorldSize);
+                        if(y == 0 || world.getBlockGrid()[x][y - 1][z].ordinal() >= Block.AIR.ordinal()){
+                            addSideToMesh(mesh, x, y, z, Side.BACK, world.getBlockGrid()[x][y][z], world.getBlockGridSize());
                         }
 
-                        if(y == renderedWorldSize - 1 || renderedWorld[x][y + 1][z].ordinal() >= Block.AIR.ordinal()){
-                            addSideToMesh(mesh, x, y, z, Side.FRONT, renderedWorld[x][y][z], renderedWorldSize);
+                        if(y == world.getBlockGridSize() - 1 || world.getBlockGrid()[x][y + 1][z].ordinal() >= Block.AIR.ordinal()){
+                            addSideToMesh(mesh, x, y, z, Side.FRONT, world.getBlockGrid()[x][y][z], world.getBlockGridSize());
                         }
                     }
                 }
@@ -69,9 +69,9 @@ public class WorldMeshBuilder {
         return finishedMesh;
     }
 
-    private static void addSideToMesh(ArrayList<WorldVertex> mesh, int x, int z, int y, Side side, Block block, int renderedWorldSize){
+    private static void addSideToMesh(ArrayList<WorldVertex> mesh, int x, int z, int y, Side side, Block block, int blockGridSize){
 
-        Vector3[] corners = getCorners(x, y, z, side, renderedWorldSize);
+        Vector3[] corners = getCorners(x, y, z, side, blockGridSize);
         Vector2[] texture = getTextureCoords(side, block);
         Vector3 normal = getNormal(side);
 
@@ -142,8 +142,8 @@ public class WorldMeshBuilder {
         return location;
     }
 
-    private static Vector3[] getCorners(int x, int y, int z, Side side, int renderedWorldSize){
-        Vector3 toOrigin = new Vector3(renderedWorldSize / 2.0f, 0, renderedWorldSize / 2.0f);
+    private static Vector3[] getCorners(int x, int y, int z, Side side, int blockGridSize){
+        Vector3 toOrigin = new Vector3(blockGridSize / 2.0f, 0, blockGridSize / 2.0f);
         Vector3[] allCorners = new Vector3[8];
         allCorners[0] = new Vector3(x, y, z).sub(toOrigin);
         allCorners[1] = new Vector3(x + 1, y, z).sub(toOrigin);

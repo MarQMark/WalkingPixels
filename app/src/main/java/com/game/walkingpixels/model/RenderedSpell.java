@@ -86,8 +86,8 @@ public class RenderedSpell {
         float width = 1.0f;
         float height = 1.0f;
 
-        float deltaX = (float) Math.cos(Math.toRadians(2.0 * camera.rotationY) * (width / 2.0f)) / 2.0f;
-        float deltaZ = (float) Math.sin(Math.toRadians(2.0 * camera.rotationY) * (width / 2.0f)) / 2.0f;
+        float deltaX = (float) Math.cos(Math.toRadians(camera.rotationY)) * (width / 2.0f);
+        float deltaZ = (float) Math.sin(Math.toRadians(camera.rotationY)) * (width / 2.0f);
 
         Vector3 normals = new Vector3(-deltaZ, 0.0f, deltaX);
         normals.normalize();

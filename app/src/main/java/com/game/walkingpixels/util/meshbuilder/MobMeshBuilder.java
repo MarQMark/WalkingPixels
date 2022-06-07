@@ -8,6 +8,8 @@ import com.game.walkingpixels.util.vector.Vector3;
 
 import java.util.ArrayList;
 
+import javax.xml.transform.Source;
+
 public class MobMeshBuilder {
 
     public static WorldVertex[] generateMesh(World world, Camera camera, boolean adjust){
@@ -32,7 +34,7 @@ public class MobMeshBuilder {
         //Add Enemies
         for(int x = 0; x < world.getEnemyGridSize(); x++){
             for(int y = 0; y <  world.getEnemyGridSize(); y++) {
-                if(world.getEnemyGrid()[x][y] != null){
+                if(world.getEnemyGrid()[x][y] != null && world.insideCircle(x - 5, y - 5,  world.getBlockGridSize() / 2.0f)){
 
                     int mobX = x - 5;
                     int mobY = y - 5;
@@ -79,8 +81,8 @@ public class MobMeshBuilder {
                 break;
         }
 
-        float deltaX = (float) Math.cos(Math.toRadians(2.0 * camera.rotationY) * (mobWidth / 2.0f)) / 2.0f;
-        float deltaZ = (float) Math.sin(Math.toRadians(2.0 * camera.rotationY) * (mobWidth / 2.0f)) / 2.0f;
+        float deltaX = (float) Math.cos(Math.toRadians(camera.rotationY)) * (mobWidth / 2.0f);
+        float deltaZ = (float) Math.sin(Math.toRadians(camera.rotationY)) * (mobWidth / 2.0f);
 
         Vector3 normals = new Vector3(-deltaZ, 0.0f, deltaX);
         normals.normalize();
