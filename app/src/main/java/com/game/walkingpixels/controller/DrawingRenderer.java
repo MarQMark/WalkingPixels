@@ -81,10 +81,11 @@ public class DrawingRenderer extends Renderer {
 
 
         //init world
-        Block[][][] world = generateWorld();
+        World world = new World(0);
+        generateWorld(world);
         registerBatch("world", new Batch(shader("world").getID(), 2000, WorldVertex.size, WorldVertex.getLayout()));
-        batch("world").addVertices("ground", WorldMeshBuilder.generateMesh(world, 5, 2));
-        batch("world").addVertices("mobs", MobMeshBuilder.generateMesh(world, 5, 2, camera, true));
+        batch("world").addVertices("ground", WorldMeshBuilder.generateMesh(world.getBlockGrid(), world.getBlockGridSize(), 2));
+        batch("world").addVertices("mobs", MobMeshBuilder.generateMesh(world, camera, true));
         batch("world").addTexture(new Texture(context, "textures/texture_atlas.png", 0));
         batch("world").addTexture(new Texture(context, "textures/christina.png", 1));
         batch("world").addTexture(new Texture(context, enemy.getSpritePath(), 2));
@@ -188,32 +189,31 @@ public class DrawingRenderer extends Renderer {
         return view;
     }
 
-    private Block[][][] generateWorld(){
-        Block[][][] world = new Block[5][5][2];
+    private void generateWorld(World world){
+        world.setWorldSize(5);
+        world.clear();
         for (int x = 0; x < 5; x++){
             for (int y = 0; y < 5; y++) {
                 for (int z = 0; z < 2; z++) {
-                    world[x][y][z] = Block.AIR;
+                    world.getBlockGrid()[x][y][z] = Block.AIR;
                 }
             }
         }
-        world[1][0][0] = Block.GRASS;
-        world[1][0][1] = Block.PLAYER;
-        world[1][4][1] = Block.SLIME;
+        world.getBlockGrid()[1][0][0] = Block.GRASS;
+        world.getBlockGrid()[1][0][1] = Block.PLAYER;
+        world.getEnemyGrid()[1 + world.getDespawnRadius()][4 + world.getDespawnRadius()] = enemy;
 
-        world[1][1][0] = Block.GRASS;
-        world[1][2][0] = Block.GRASS;
-        world[1][3][0] = Block.GRASS;
-        world[1][4][0] = Block.GRASS;
+        world.getBlockGrid()[1][1][0] = Block.GRASS;
+        world.getBlockGrid()[1][2][0] = Block.GRASS;
+        world.getBlockGrid()[1][3][0] = Block.GRASS;
+        world.getBlockGrid()[1][4][0] = Block.GRASS;
 
-        world[2][1][0] = Block.GRASS;
-        world[2][2][0] = Block.GRASS;
-        world[2][3][0] = Block.GRASS;
+        world.getBlockGrid()[2][1][0] = Block.GRASS;
+        world.getBlockGrid()[2][2][0] = Block.GRASS;
+        world.getBlockGrid()[2][3][0] = Block.GRASS;
 
-        world[0][1][0] = Block.GRASS;
-        world[0][2][0] = Block.GRASS;
-        world[0][3][0] = Block.GRASS;
-
-        return world;
+        world.getBlockGrid()[0][1][0] = Block.GRASS;
+        world.getBlockGrid()[0][2][0] = Block.GRASS;
+        world.getBlockGrid()[0][3][0] = Block.GRASS;
     }
 }

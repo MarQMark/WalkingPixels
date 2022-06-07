@@ -10,20 +10,44 @@ import java.util.ArrayList;
 
 public class MobMeshBuilder {
 
-    public static WorldVertex[] generateMesh(Block[][][] renderedWorld, int renderedWorldSize, int worldMaxHeight, Camera camera, boolean adjust){
+    public static WorldVertex[] generateMesh(World world, Camera camera, boolean adjust){
         ArrayList<WorldVertex> mobs = new ArrayList<>();
 
-        for(int x = 0; x < renderedWorldSize; x ++){
-            for(int y = 0; y < renderedWorldSize; y ++) {
-                for (int z = 0; z < worldMaxHeight; z++) {
+        //Add "Blocks"
+        for(int x = 0; x < world.getBlockGridSize(); x ++){
+            for(int y = 0; y < world.getBlockGridSize(); y ++) {
+                for (int z = 0; z < world.getWorldMaxHeight(); z++) {
 
-                    if(renderedWorld[x][y][z] == Block.PLAYER){
-                        getMobVertices(mobs, new Vector3(x, z, y).sub(new Vector3(renderedWorldSize / 2.0f, 0, renderedWorldSize / 2.0f)), renderedWorld[x][y][z], camera, adjust);
+                    if(world.getBlockGrid()[x][y][z] == Block.PLAYER){
+                        getMobVertices(mobs, new Vector3(x, z, y).sub(new Vector3(world.getBlockGridSize() / 2.0f, 0, world.getBlockGridSize() / 2.0f)), world.getBlockGrid()[x][y][z], camera, adjust);
                     }
-                    if(renderedWorld[x][y][z] == Block.SLIME){
-                        getMobVertices(mobs, new Vector3(x, z, y).sub(new Vector3(renderedWorldSize / 2.0f, 0, renderedWorldSize / 2.0f)), renderedWorld[x][y][z], camera, adjust);
+                    if(world.getBlockGrid()[x][y][z] == Block.SLIME){
+                        getMobVertices(mobs, new Vector3(x, z, y).sub(new Vector3(world.getBlockGridSize() / 2.0f, 0, world.getBlockGridSize() / 2.0f)), world.getBlockGrid()[x][y][z], camera, adjust);
                     }
 
+                }
+            }
+        }
+
+        //Add Enemies
+        for(int x = 0; x < world.getEnemyGridSize(); x++){
+            for(int y = 0; y <  world.getEnemyGridSize(); y++) {
+                if(world.getEnemyGrid()[x][y] != null){
+
+                    int mobX = x - 5;
+                    int mobY = y - 5;
+
+                    if(mobX > 0 && mobY > 0){
+                        int height = 0;
+                        for (int z = 0; z < world.getWorldMaxHeight(); z++) {
+                            if(world.getBlockGrid()[mobX][mobY][z] == Block.AIR){
+                                height = z;
+                                break;
+                            }
+                        }
+
+                        getMobVertices(mobs,new Vector3(mobX, height, mobY).sub(new Vector3(world.getBlockGridSize() / 2.0f, 0, world.getBlockGridSize() / 2.0f)), Block.SLIME, camera, adjust);
+                    }
                 }
             }
         }

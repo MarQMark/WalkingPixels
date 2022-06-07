@@ -71,12 +71,13 @@ public class WalkingRenderer extends Renderer{
         //init world
         shader("walk").bind();
         registerBatch("walk", new Batch(shader("walk").getID(), 2000, WorldVertex.size, WorldVertex.getLayout()));
-        batch("walk").addVertices("Player", MobMeshBuilder.generateMesh(world.renderedWorld, world.renderedWorldSize, world.worldMaxHeight, camera, false));
-        batch("walk").addVertices("World", WorldMeshBuilder.generateMesh(world.renderedWorld, world.renderedWorldSize, world.worldMaxHeight));
+        batch("walk").addVertices("Player", MobMeshBuilder.generateMesh(world, camera, false));
+        batch("walk").addVertices("World", WorldMeshBuilder.generateMesh(world.getBlockGrid(), world.getBlockGridSize(), world.getWorldMaxHeight()));
         batch("walk").addTexture(new Texture(context, "textures/texture_atlas.png", 0));
         batch("walk").addTexture(new Texture(context, "textures/christina.png", 1));
+        batch("walk").addTexture(new Texture(context, "textures/slime.png", 2));
 
-        shader("walk").setUniform1iv("u_Textures", 2, new int[] {0, 1}, 0);
+        shader("walk").setUniform1iv("u_Textures", 3, new int[] {0, 1, 2}, 0);
     }
 
     @Override
@@ -92,11 +93,11 @@ public class WalkingRenderer extends Renderer{
         batch("background").updateVertices("Background", background.getVertices());
 
         //update player rotation
-        batch("walk").updateVertices("Player", MobMeshBuilder.generateMesh(world.renderedWorld, world.renderedWorldSize, world.worldMaxHeight, camera, false));
+        batch("walk").updateVertices("Player", MobMeshBuilder.generateMesh(world, camera, false));
 
         //move world
         if(world.hasMoved())
-            batch("walk").updateVertices("World" , WorldMeshBuilder.generateMesh(world.renderedWorld, world.renderedWorldSize, world.worldMaxHeight));
+            batch("walk").updateVertices("World" , WorldMeshBuilder.generateMesh(world.getBlockGrid(), world.getBlockGridSize(), world.getWorldMaxHeight()));
     }
 
     @Override

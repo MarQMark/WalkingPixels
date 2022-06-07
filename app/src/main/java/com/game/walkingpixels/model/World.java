@@ -2,13 +2,18 @@ package com.game.walkingpixels.model;
 
 import com.game.walkingpixels.util.NoiseGenerator;
 import com.game.walkingpixels.util.vector.Vector2;
-import com.game.walkingpixels.util.vector.Vector3;
+
+import java.util.Random;
 
 public class World {
 
     public final int worldMaxHeight = 5;
-    public int renderedWorldSize = 17;
-    public Block[][][] renderedWorld = new Block[renderedWorldSize][renderedWorldSize][worldMaxHeight];
+    public int blockGridSize = 17;
+
+    private int despawnRadius = 5;
+    private int enemyGridSize = blockGridSize + despawnRadius;
+    public Block[][][] blockGrid = new Block[blockGridSize][blockGridSize][worldMaxHeight];
+    public Enemy[][] enemyGrid = new Enemy[enemyGridSize][enemyGridSize];
 
     private boolean hasMoved = false;
 
@@ -16,11 +21,13 @@ public class World {
     private final Vector2 direction = new Vector2(1, 0);
 
     private final NoiseGenerator noiseGenerator;
+    private final Random random = new Random();
 
 
     public World(double seed){
         noiseGenerator = new NoiseGenerator(seed);
-        generateRenderedWorld();
+        generateBlockGrid();
+        generateEnemyGrid();
     }
 
     public void setDirection(int degree){
@@ -64,58 +71,134 @@ public class World {
         hasMoved = true;
         position.x += direction.x;
         position.y += direction.y;
-        generateRenderedWorld();
+        generateBlockGrid();
+        moveEnemyGrid();
     }
 
-    public void move(int dx, int dy){
+    public void setPosition(int x, int y){
         hasMoved = true;
-        position.x += dx;
-        position.y += dy;
-        generateRenderedWorld();
+        position.x = x;
+        position.y = y;
+        generateBlockGrid();
+        generateEnemyGrid();
     }
 
-    public void SetRenderedSize(int renderedWorldSize){
-        this.renderedWorldSize = renderedWorldSize;
-        renderedWorld = new Block[renderedWorldSize][renderedWorldSize][worldMaxHeight];
-        generateRenderedWorld();
+    public void setWorldSize(int WorldSize){
+        this.blockGridSize = WorldSize;
+        enemyGridSize = WorldSize + despawnRadius;
+        blockGrid = new Block[WorldSize][WorldSize][worldMaxHeight];
+        enemyGrid = new Enemy[enemyGridSize][enemyGridSize];
+        generateBlockGrid();
+        generateEnemyGrid();
     }
 
-    private void generateRenderedWorld(){
-        for (int x = 0; x < renderedWorldSize; x++){
-            for (int y = 0; y < renderedWorldSize; y++) {
+    public void clear(){
+        blockGrid = new Block[blockGridSize][blockGridSize][worldMaxHeight];
+        enemyGrid = new Enemy[enemyGridSize][enemyGridSize];
+    }
 
-                if(insideCircle(x, y)){
+    private void moveEnemyGrid(){
+        if(direction.x == 1){
+            for(int x = 0; x < enemyGridSize - 1; x++)
+                System.arraycopy(enemyGrid[x + 1], 0, enemyGrid[x], 0, enemyGridSize);
+
+            for(int y = 0; y < enemyGridSize; y++){
+                if(random.nextInt() % (100 * blockGridSize) == 0)
+                    enemyGrid[blockGridSize + despawnRadius - 1][y] = new Enemy(Block.SLIME, 100);
+                else
+                    enemyGrid[enemyGridSize - 1][y] = null;
+            }
+        }
+        else if(direction.x == -1){
+            for(int x = enemyGridSize - 1; x > 0; x--){
+                    System.arraycopy(enemyGrid[x - 1], 0, enemyGrid[x], 0, enemyGridSize);
+            }
+
+            for(int y = 0; y < enemyGridSize; y++){
+                if(random.nextInt() % (100 * blockGridSize) == 0)
+                    enemyGrid[0][y] = new Enemy(Block.SLIME, 100);
+                else
+                    enemyGrid[0][y] = null;
+            }
+        }
+        else if(direction.y == 1){
+            for(int y = 0; y < enemyGridSize - 1; y++){
+                for(int x = 0; x < enemyGridSize; x++)
+                    enemyGrid[x][y] = enemyGrid[x][y + 1];
+            }
+
+            for(int x = 0; x < enemyGridSize; x++){
+                if(random.nextInt() % (100 * blockGridSize) == 0)
+                    enemyGrid[x][enemyGridSize - 1] = new Enemy(Block.SLIME, 100);
+                else
+                    enemyGrid[x][enemyGridSize - 1] = null;
+            }
+        }
+        else {
+            for(int y = enemyGridSize - 1; y > 0 ; y--){
+                for(int x = 0; x < enemyGridSize; x++)
+                    enemyGrid[x][y] = enemyGrid[x][y - 1];
+            }
+
+            for(int x = 0; x < enemyGridSize; x++){
+                if(random.nextInt() % (100 * blockGridSize) == 0)
+                    enemyGrid[x][0] = new Enemy(Block.SLIME, 100);
+                else
+                    enemyGrid[x][0] = null;
+            }
+        }
+    }
+
+    private void generateEnemyGrid(){
+        for (int x = 0; x < enemyGridSize; x++) {
+            for (int y = 0; y < enemyGridSize; y++) {
+                //if(random.nextInt() % (100 * renderedWorldSize) == 0 && !insideCircle(x, y, renderedWorldSize * 0.6f))
+                if(random.nextInt() % (4) == 0 && !insideCircle(x-despawnRadius, y-despawnRadius, (blockGridSize / 2.0f) * 0.8f)){
+                    enemyGrid[x][y] = new Enemy(Block.SLIME, 100);
+                }
+                else {
+                    enemyGrid[x][y] = null;
+                }
+            }
+        }
+    }
+
+    private void generateBlockGrid(){
+        for (int x = 0; x < blockGridSize; x++){
+            for (int y = 0; y < blockGridSize; y++) {
+
+                if(insideCircle(x, y, blockGridSize / 2.0f)){
 
                     int height = generateHeight((int) (x + position.x), (int) (y + position.y));
 
                     for(int z = 0; z < worldMaxHeight; z++){
                         if(z < height){
-                            renderedWorld[x][y][z] = Block.DIRT;
+                            blockGrid[x][y][z] = Block.DIRT;
                         } else if(z == height){
-                            renderedWorld[x][y][z] = heightToBlock(height);
+                            blockGrid[x][y][z] = heightToBlock(height);
                         } else {
-                            renderedWorld[x][y][z] = Block.AIR;
+                            blockGrid[x][y][z] = Block.AIR;
                         }
                     }
 
-                    if(x == renderedWorldSize / 2 && y == renderedWorldSize / 2)
-                        renderedWorld[x][y][height + 1]  = Block.PLAYER;
+                    if(x == blockGridSize / 2 && y == blockGridSize / 2)
+                        blockGrid[x][y][height + 1]  = Block.PLAYER;
 
                 }
                 else {
                     for(int z = 0; z < worldMaxHeight; z++)
-                        renderedWorld[x][y][z] = Block.AIR;
+                        blockGrid[x][y][z] = Block.AIR;
                 }
 
             }
         }
     }
 
-    private boolean insideCircle(int x, int y){
-        float dx = renderedWorldSize / 2.0f - x,
-                dy = renderedWorldSize / 2.0f - y;
+    private boolean insideCircle(int x, int y, float radius){
+        float dx = blockGridSize / 2.0f - x,
+                dy = blockGridSize / 2.0f - y;
         float distance = (float)Math.sqrt(dx*dx + dy*dy);
-        return distance <= renderedWorldSize / 2.0f;
+        return distance <= radius;
     }
 
     private Block heightToBlock(int height){
@@ -139,6 +222,25 @@ public class World {
         else if(perlinNoise > 0.15) return 2;
         else if(perlinNoise > -0.3) return 1;
         else return 0; //water level
+    }
+
+    public Block[][][] getBlockGrid(){
+        return blockGrid;
+    }
+    public Enemy[][] getEnemyGrid(){
+        return enemyGrid;
+    }
+    public int getBlockGridSize(){
+        return blockGridSize;
+    }
+    public int getWorldMaxHeight(){
+        return worldMaxHeight;
+    }
+    public int getEnemyGridSize(){
+        return enemyGridSize;
+    }
+    public int getDespawnRadius(){
+        return despawnRadius;
     }
 
     public boolean hasMoved() {
