@@ -48,35 +48,39 @@ public class World {
         int normalizedDegree = (degree - 45) % 360;
 
         if(normalizedDegree < -270){
+            System.out.println("4444");
             direction.x = 1;
-            direction.y = 0;
+            direction.y = -1;
         }
         else if(normalizedDegree < -180){
-            direction.x = 0;
+            System.out.println("3333");
+            direction.x = 1;
             direction.y = 1;
         }
         else if(normalizedDegree < -90){
+            System.out.println("2222");
             direction.x = -1;
-            direction.y = 0;
+            direction.y = 1;
         }
         else if(normalizedDegree < 0){
-            direction.x = 0;
+            System.out.println("1111");
+            direction.x = -1;
             direction.y = -1;
         }
         else if(normalizedDegree < 90){
             direction.x = 1;
-            direction.y = 0;
+            direction.y = -1;
         }
         else if(normalizedDegree < 180){
-            direction.x = 0;
+            direction.x = 1;
             direction.y = 1;
         }
         else if(normalizedDegree < 270){
             direction.x = -1;
-            direction.y = 0;
+            direction.y = 1;
         }
         else{
-            direction.x = 0;
+            direction.x = -1;
             direction.y = -1;
         }
     }
@@ -125,7 +129,7 @@ public class World {
                     enemyGrid[enemyGridSize - 1][y] = null;
             }
         }
-        else if(direction.x == -1){
+        if(direction.x == -1){
             for(int x = enemyGridSize - 1; x > 0; x--){
                     System.arraycopy(enemyGrid[x - 1], 0, enemyGrid[x], 0, enemyGridSize);
             }
@@ -137,7 +141,7 @@ public class World {
                     enemyGrid[0][y] = null;
             }
         }
-        else if(direction.y == 1){
+        if(direction.y == 1){
             for(int y = 0; y < enemyGridSize - 1; y++){
                 for(int x = 0; x < enemyGridSize; x++)
                     enemyGrid[x][y] = enemyGrid[x][y + 1];
@@ -150,7 +154,7 @@ public class World {
                     enemyGrid[x][enemyGridSize - 1] = null;
             }
         }
-        else {
+        if(direction.y == -1){
             for(int y = enemyGridSize - 1; y > 0 ; y--){
                 for(int x = 0; x < enemyGridSize; x++)
                     enemyGrid[x][y] = enemyGrid[x][y - 1];
