@@ -48,22 +48,18 @@ public class World {
         int normalizedDegree = (degree - 45) % 360;
 
         if(normalizedDegree < -270){
-            System.out.println("4444");
             direction.x = 1;
             direction.y = -1;
         }
         else if(normalizedDegree < -180){
-            System.out.println("3333");
             direction.x = 1;
             direction.y = 1;
         }
         else if(normalizedDegree < -90){
-            System.out.println("2222");
             direction.x = -1;
             direction.y = 1;
         }
         else if(normalizedDegree < 0){
-            System.out.println("1111");
             direction.x = -1;
             direction.y = -1;
         }
