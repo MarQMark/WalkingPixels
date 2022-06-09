@@ -1,0 +1,38 @@
+#shader vertex
+
+attribute vec4 a_Position;
+attribute vec2 a_TexCoord;
+attribute float a_TextureSlot;
+
+varying vec2 v_TexCoord;
+varying float v_TextureSlot;
+
+uniform mat4 mvpmatrix;
+
+void main()
+{
+    gl_Position =  a_Position;
+    v_TexCoord = a_TexCoord;
+    v_TextureSlot =  a_TextureSlot;
+}
+
+
+#shader fragment
+
+precision mediump float;
+
+varying vec2 v_TexCoord;
+varying float v_TextureSlot;
+
+uniform sampler2D u_Textures[4];
+
+void main()
+{
+        int index = int(v_TextureSlot);
+        vec4 texColor = texture2D(u_Textures[index], v_TexCoord);
+
+        if(texColor.a == 0.0)
+            discard;
+
+        gl_FragColor = texColor;
+}

@@ -2,10 +2,12 @@ package com.game.walkingpixels.controller;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 
 import com.game.walkingpixels.Camera;
 import com.game.walkingpixels.model.Background;
 import com.game.walkingpixels.model.Enemy;
+import com.game.walkingpixels.model.GameState;
 import com.game.walkingpixels.model.World;
 import com.game.walkingpixels.openGL.Batch;
 import com.game.walkingpixels.openGL.LightManager;
@@ -25,8 +27,6 @@ import static android.opengl.GLES20.glClear;
 import static android.opengl.GLES20.glClearColor;
 
 public class WalkingRenderer extends Renderer{
-
-    private World world = new World(54216.709022936559375);
 
     private Background background;
 
@@ -74,8 +74,8 @@ public class WalkingRenderer extends Renderer{
         //init world
         shader("walk").bind();
         registerBatch("walk", new Batch(shader("walk").getID(), 2000, WorldVertex.size, WorldVertex.getLayout()));
-        batch("walk").addVertices("Player", MobMeshBuilder.generateMesh(world, camera, false));
-        batch("walk").addVertices("World", BlockMeshBuilder.generateMesh(world));
+        batch("walk").addVertices("Player", MobMeshBuilder.generateMesh(GameState.world, camera, false));
+        batch("walk").addVertices("World", BlockMeshBuilder.generateMesh(GameState.world));
         batch("walk").addTexture(new Texture(context, "textures/texture_atlas.png", 0));
         batch("walk").addTexture(new Texture(context, "textures/christina.png", 1));
         batch("walk").addTexture(new Texture(context, "textures/slime.png", 2));
@@ -90,7 +90,7 @@ public class WalkingRenderer extends Renderer{
         float sunRotation = (float) (System.currentTimeMillis() / 4000.0) % 360;
 
         //update camera rotation
-        world.setDirection((int) camera.rotationY);
+        GameState.world.setDirection((int) camera.rotationY);
 
         //update sun
         sunPosition.z = (float) (Math.cos(Math.toRadians(sunRotation)) * sunMaxHeight);
@@ -102,11 +102,11 @@ public class WalkingRenderer extends Renderer{
         batch("background").updateVertices("Background", background.getVertices());
 
         //update player rotation
-        batch("walk").updateVertices("Player", MobMeshBuilder.generateMesh(world, camera, false));
+        batch("walk").updateVertices("Player", MobMeshBuilder.generateMesh(GameState.world, camera, false));
 
         //move world
-        if(world.hasMoved())
-            batch("walk").updateVertices("World" , BlockMeshBuilder.generateMesh(world));
+        if(GameState.world.hasMoved())
+            batch("walk").updateVertices("World" , BlockMeshBuilder.generateMesh(GameState.world));
     }
 
     @Override
@@ -139,21 +139,5 @@ public class WalkingRenderer extends Renderer{
         shader("walk").setUniformMatrix4fv("mvpmatrix", camera.getMVPMatrix());
         batch("walk").bind();
         batch("walk").draw();
-    }
-
-    public boolean moveForward(){
-        return world.forward();
-    }
-    public void removeEnemy(){
-        world.removeEnemy();
-    }
-    public Enemy checkForEnemy(){
-        return world.checkForEnemy();
-    }
-    public boolean checkForBonfire(){
-        return world.checkForBonfire();
-    }
-    public void respawn(Vector2 bonfire){
-        world.setPosition((int)bonfire.x, (int)bonfire.y);
     }
 }

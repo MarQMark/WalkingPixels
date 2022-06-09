@@ -1,6 +1,7 @@
 package com.game.walkingpixels.util.meshbuilder;
 
 import com.game.walkingpixels.model.Block;
+import com.game.walkingpixels.model.TextureAtlas;
 import com.game.walkingpixels.model.World;
 import com.game.walkingpixels.openGL.vertices.WorldVertex;
 import com.game.walkingpixels.util.vector.Vector2;
@@ -10,10 +11,7 @@ import java.util.ArrayList;
 
 public class BlockMeshBuilder {
 
-    private static final int textureAtlasWidth = 64;
-    private static final int textureAtlasHeight = 64;
-    private static final int textureAtlasBlock = 16;
-    private static final int textureAtlasBlocksPerRow = textureAtlasWidth / textureAtlasBlock;
+    private static final TextureAtlas textureAtlas = new TextureAtlas(64, 64, 16);
 
     private enum Side{
         TOP,
@@ -121,25 +119,17 @@ public class BlockMeshBuilder {
                 break;
         }
 
-        float textureSize = 1.0f / (float) textureAtlasBlocksPerRow;
-        Vector2 location = getTextureLocation(id);
+        float textureSize = 1.0f / (float) textureAtlas.getTexturesPerRow();
+        Vector2 location = textureAtlas.getTextureLocation(id);
         location.scale(textureSize);
 
         Vector2[] textures = new Vector2[4];
         textures[0] = new Vector2(location.x, 1 - location.y - textureSize);
         textures[1] = new Vector2(location.x + textureSize, 1 - location.y - textureSize);
-        textures[3] = new Vector2(location.x + textureSize, 1 - location.y);
         textures[2] = new Vector2(location.x, 1 - location.y);
+        textures[3] = new Vector2(location.x + textureSize, 1 - location.y);
 
         return textures;
-    }
-
-    private static Vector2 getTextureLocation(int id){
-        Vector2 location = new Vector2();
-        location.x = id % textureAtlasBlocksPerRow;
-        location.y = id / textureAtlasBlocksPerRow;
-
-        return location;
     }
 
     private static Vector3[] getCorners(int x, int y, int z, Side side, int blockGridSize){

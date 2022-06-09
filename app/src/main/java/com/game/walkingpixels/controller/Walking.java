@@ -1,38 +1,40 @@
 package com.game.walkingpixels.controller;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
+
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Paint;
-import android.net.Uri;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
-import android.widget.SeekBar;
 import android.widget.Switch;
 
 import com.game.walkingpixels.R;
-import com.game.walkingpixels.controller.WalkingGLSurfaceView;
-import com.game.walkingpixels.controller.WalkingRenderer;
 import com.game.walkingpixels.model.Enemy;
 import com.game.walkingpixels.model.GameState;
 import com.game.walkingpixels.model.Player;
+import com.game.walkingpixels.util.vector.Vector2;
 import com.game.walkingpixels.view.Iconbar;
 
-public class Walking extends AppCompatActivity {
+public class Walking extends AppCompatActivity implements SensorEventListener {
 
     private Player player;
     private WalkingGLSurfaceView sv;
 
     private Iconbar barHealth;
+
+    private int[] stamina;
 
 
     @Override
@@ -40,11 +42,17 @@ public class Walking extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_walking);
 
+        //init step sensor
+        SensorManager sensorManager = (SensorManager) this.getSystemService(Context.SENSOR_SERVICE);
+        Sensor stepCounterSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+        sensorManager.registerListener(this, stepCounterSensor, SensorManager.SENSOR_DELAY_FASTEST);
+
         sv = findViewById(R.id.myGLSurfaceViewWalking);
         sv.init();
 
+        //init player
         player = new Player(Walking.this);
-        int[] stamina = new int[]{5000};
+        stamina = new int[]{5000};
 
         //stamina and health bar
         Iconbar barStamina = findViewById(R.id.bar_walking_stamina);
@@ -57,17 +65,21 @@ public class Walking extends AppCompatActivity {
         //buttons
         Button btnStats = findViewById(R.id.btn_walking_stats);
         Button btnMap = findViewById(R.id.btn_walking_map);
+        btnMap.setOnClickListener(e -> {
+            Intent intent = new Intent(this, Map.class);
+            startActivity(intent);
+        });
         Button btnBonfire = findViewById(R.id.btn_walking_bonfire);
 
         //move forward
         Button btnMoveForward = findViewById(R.id.btn_walking_forward);
         btnMoveForward.setOnClickListener(e -> {
-            if(sv.getRenderer().moveForward())
+            if(GameState.world.forward())
             {
                 stamina[0] -= 100;
                 barStamina.setProgress(stamina[0]);
 
-                Enemy enemy = sv.getRenderer().checkForEnemy();
+                Enemy enemy = GameState.world.checkForEnemy();
                 if(enemy != null){
                     Intent intent = new Intent(this, Drawing.class);
                     intent.putExtra("ENEMY", enemy);
@@ -75,7 +87,7 @@ public class Walking extends AppCompatActivity {
                 }
             }
 
-            if(sv.getRenderer().checkForBonfire())
+            if(GameState.world.checkForBonfire())
                 btnBonfire.setVisibility(View.VISIBLE);
             else
                 btnBonfire.setVisibility(View.INVISIBLE);
@@ -157,10 +169,11 @@ public class Walking extends AppCompatActivity {
                 if(health == 0){
                     player.kill();
                     barHealth.setProgress(player.getHealth());
-                    sv.getRenderer().respawn(player.getLastSavePosition());
+                    Vector2 lastPosition = player.getLastSavePosition();
+                    GameState.world.setPosition((int) lastPosition.x, (int) lastPosition.y);
                 }
                 else {
-                    sv.getRenderer().removeEnemy();
+                    GameState.world.removeEnemy();
                     player.setHealth(health);
                     player.addXp(data.getIntExtra("xp", 0));
                     barHealth.setProgress(player.getHealth());
@@ -169,4 +182,13 @@ public class Walking extends AppCompatActivity {
             }
         }
     });
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        stamina[0]++;
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+    }
 }

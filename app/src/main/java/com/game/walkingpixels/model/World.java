@@ -4,6 +4,7 @@ import com.game.walkingpixels.controller.Walking;
 import com.game.walkingpixels.util.NoiseGenerator;
 import com.game.walkingpixels.util.vector.Vector2;
 
+import java.io.Serializable;
 import java.util.Random;
 
 public class World {
@@ -290,7 +291,7 @@ public class World {
         return distance <= radius;
     }
 
-    private Block heightToBlock(int height){
+    public Block heightToBlock(int height){
         switch (height){
             case 0: return Block.WATER;
             case 1:
@@ -302,7 +303,7 @@ public class World {
         return Block.AIR;
     }
 
-    private int generateHeight(int x, int y)
+    public int generateHeight(int x, int y)
     {
         double perlinScale = 1f;
         double perlinNoise = noiseGenerator.noise(x * perlinScale, y * perlinScale);
@@ -345,6 +346,9 @@ public class World {
     }
     public int getDespawnRadius(){
         return despawnRadius;
+    }
+    public Vector2 getPosition() {
+        return position;
     }
 
     public boolean hasMoved() {
