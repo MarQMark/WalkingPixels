@@ -1,5 +1,6 @@
 package com.game.walkingpixels.model;
 
+import com.game.walkingpixels.controller.Walking;
 import com.game.walkingpixels.util.NoiseGenerator;
 import com.game.walkingpixels.util.vector.Vector2;
 
@@ -30,6 +31,18 @@ public class World {
         generateEnemyGrid();
     }
 
+    public void removeEnemy(){
+        final int enemyAttackRadius = 1;
+        final int middle = enemyGridSize / 2 + 2; //why do I have to add two there???
+
+        for (int x = middle - enemyAttackRadius; x <= middle + enemyAttackRadius; x++){
+            for (int y = middle - enemyAttackRadius; y <= middle + enemyAttackRadius; y++) {
+                if(enemyGrid[x][y] != null)
+                    enemyGrid[x][y] = null;
+            }
+        }
+    }
+
     public Enemy checkForEnemy(){
         final int enemyAttackRadius = 1;
         final int middle = enemyGridSize / 2 + 2; //why do I have to add two there???
@@ -42,6 +55,22 @@ public class World {
         }
 
         return null;
+    }
+
+    public boolean checkForBonfire(){
+        final int enemyAttackRadius = 1;
+        final int middle = blockGridSize / 2; //why do I have to add two there???
+
+        for (int x = middle - enemyAttackRadius; x <= middle + enemyAttackRadius; x++){
+            for (int y = middle - enemyAttackRadius; y <= middle + enemyAttackRadius; y++) {
+                for (int z = 0; z < worldMaxHeight; z++) {
+                    if (blockGrid[x][y][z] == Block.BONFIRE)
+                        return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     public void setDirection(int degree){
@@ -82,6 +111,15 @@ public class World {
     }
 
     public boolean forward(){
+        //check if can move forward
+        int x = (int) (blockGridSize / 2 + direction.x);
+        int y = (int) (blockGridSize / 2 + direction.y);
+        for (int z = 0; z < worldMaxHeight; z++){
+            if(blockGrid[x][y][z] == Block.WATER || blockGrid[x][y][z].ordinal() > Block.AIR.ordinal())
+                return false;
+        }
+
+
         hasMoved = true;
         position.x += direction.x;
         position.y += direction.y;
@@ -170,12 +208,22 @@ public class World {
             for (int y = 0; y < enemyGridSize; y++) {
                 //if(random.nextInt() % (100 * renderedWorldSize) == 0 && !insideCircle(x, y, renderedWorldSize * 0.6f))
                 if(random.nextInt() % (4) == 0 && !insideCircle(x-despawnRadius, y-despawnRadius, (blockGridSize / 2.0f) * 0.8f)){
-                    enemyGrid[x][y] = new Enemy(Block.SLIME, 100);
+                    spawnEnemy(x, y);
                 }
                 else {
                     enemyGrid[x][y] = null;
                 }
             }
+        }
+    }
+
+    private void spawnEnemy(int x, int y){
+        //make sure enemy doesn't spawn in something
+        int worldX = (int) (x + position.x - despawnRadius);
+        int worldY = (int) (y + position.y - despawnRadius);
+        int height = generateHeight(worldX, worldY);
+        if(generateBlock(worldX, worldY, height) != Block.WATER && generateBlock(worldX, worldY, height + 1) == Block.AIR){
+            enemyGrid[x][y] = new Enemy(Block.SLIME, 100);
         }
     }
 
@@ -185,20 +233,17 @@ public class World {
 
                 if(insideCircle(x, y, blockGridSize / 2.0f)){
 
-                    int height = generateHeight((int) (x + position.x), (int) (y + position.y));
+                    int worldX = x + (int)position.x;
+                    int worldY = y + (int)position.y;
 
+                    //generate block pillar
                     for(int z = 0; z < worldMaxHeight; z++){
-                        if(z < height){
-                            blockGrid[x][y][z] = Block.DIRT;
-                        } else if(z == height){
-                            blockGrid[x][y][z] = heightToBlock(height);
-                        } else {
-                            blockGrid[x][y][z] = Block.AIR;
-                        }
+                        blockGrid[x][y][z] = generateBlock(worldX, worldY, z);
                     }
 
+                    //set player
                     if(x == blockGridSize / 2 && y == blockGridSize / 2)
-                        blockGrid[x][y][height + 1]  = Block.PLAYER;
+                        blockGrid[x][y][generateHeight(worldX, worldY) + 1]  = Block.PLAYER;
 
                 }
                 else {
@@ -208,6 +253,34 @@ public class World {
 
             }
         }
+    }
+
+    public Block generateBlock(int x, int y, int z){
+        int height = generateHeight(x, y);
+        Block block = Block.AIR;
+
+        //fill everything below height with dirt
+        if(z < height){
+            block = Block.DIRT;
+        }
+        else if(z == height){
+            block = heightToBlock(height);
+        }
+        else if(z == height + 1){
+            //spawn bonfire at spawn (only hardcoded bonfire)
+            if(x == 0 && y == 0)
+                block = Block.BONFIRE;
+            //set bonfires
+            else if(generateBonfire(x, y) && heightToBlock(height) != Block.WATER)
+                block = Block.BONFIRE;
+            //set trees
+            else if(generateTree(x, y) && heightToBlock(height) != Block.WATER)
+                block = Block.TREE;
+            else
+                block = Block.AIR;
+        }
+
+        return block;
     }
 
     public boolean insideCircle(int x, int y, float radius){
@@ -238,6 +311,21 @@ public class World {
         else if(perlinNoise > 0.15) return 2;
         else if(perlinNoise > -0.3) return 1;
         else return 0; //water level
+    }
+
+    private boolean generateTree(int x, int y)
+    {
+        double perlinScale = 100f;
+        double perlinNoise = noiseGenerator.noise(x * perlinScale, y * perlinScale);
+
+        return perlinNoise > 0.7f;
+    }
+    private boolean generateBonfire(int x, int y)
+    {
+        double perlinScale = 1000f;
+        double perlinNoise = noiseGenerator.noise(x * perlinScale, y * perlinScale);
+
+        return perlinNoise > 0.9f;
     }
 
     public Block[][][] getBlockGrid(){

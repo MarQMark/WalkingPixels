@@ -2,10 +2,11 @@ package com.game.walkingpixels.model;
 
 import android.util.Log;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Enemy {
+public class Enemy implements Serializable {
 
     private int health;
     private final String spritePath;
@@ -73,5 +74,9 @@ public class Enemy {
         attackDelay -= dt;
         if(attackDelay < 0.0)
             attackDelay = 0.0;
+    }
+
+    public int getXp(){
+        return 10;
     }
 }

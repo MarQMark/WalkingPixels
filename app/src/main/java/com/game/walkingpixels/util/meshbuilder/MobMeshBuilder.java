@@ -20,12 +20,10 @@ public class MobMeshBuilder {
             for(int y = 0; y < world.getBlockGridSize(); y ++) {
                 for (int z = 0; z < world.getWorldMaxHeight(); z++) {
 
-                    if(world.getBlockGrid()[x][y][z] == Block.PLAYER){
+                    if(world.getBlockGrid()[x][y][z].ordinal() > Block.AIR.ordinal()){
                         getMobVertices(mobs, new Vector3(x, z, y).sub(new Vector3(world.getBlockGridSize() / 2.0f, 0, world.getBlockGridSize() / 2.0f)), world.getBlockGrid()[x][y][z], camera, adjust);
                     }
-                    if(world.getBlockGrid()[x][y][z] == Block.SLIME){
-                        getMobVertices(mobs, new Vector3(x, z, y).sub(new Vector3(world.getBlockGridSize() / 2.0f, 0, world.getBlockGridSize() / 2.0f)), world.getBlockGrid()[x][y][z], camera, adjust);
-                    }
+
 
                 }
             }
@@ -78,6 +76,16 @@ public class MobMeshBuilder {
                 mobWidth = 1.0f;
                 mobHeight = 1.0f;
                 textureSlot = 2.0f;
+                break;
+            case TREE:
+                mobWidth = 3.0f;
+                mobHeight = 5.0f;
+                textureSlot = 2.0f;
+                break;
+            case BONFIRE:
+                mobWidth = 1.0f;
+                mobHeight = 1.0f;
+                textureSlot = 3.0f;
                 break;
         }
 

@@ -23,6 +23,7 @@ import com.game.walkingpixels.util.meshbuilder.MobMeshBuilder;
 import com.game.walkingpixels.util.meshbuilder.BlockMeshBuilder;
 import com.game.walkingpixels.util.vector.Vector2;
 import com.game.walkingpixels.util.vector.Vector3;
+import com.game.walkingpixels.util.vector.Vector4;
 
 import static android.opengl.GLES20.GL_COLOR_BUFFER_BIT;
 import static android.opengl.GLES20.GL_DEPTH_BUFFER_BIT;
@@ -38,6 +39,10 @@ public class DrawingRenderer extends Renderer {
     private RenderedSpell renderedSpell;
 
     private Background background;
+
+    private final float sunMaxHeight = 50.0f;
+    private final Vector3 sunPosition = new Vector3(0.0f, sunMaxHeight, 0.0f);
+    private final Vector4 clearColor = new Vector4(0.4f, 0.6f, 1.0f, 1.0f);
 
     public DrawingRenderer(Context context, Enemy enemy) {
         super(context);
@@ -98,6 +103,14 @@ public class DrawingRenderer extends Renderer {
 
     @Override
     public void update(double dt) {
+        //update in-game time (1 day = 24 min)
+        float sunRotation = (float) (System.currentTimeMillis() / 4000.0) % 360;
+
+        //update sun
+        sunPosition.z = (float) (Math.cos(Math.toRadians(sunRotation)) * sunMaxHeight);
+        sunPosition.y = (float) (Math.sin(Math.toRadians(sunRotation)) * sunMaxHeight);
+
+
         //update DrawGrid
         drawGrid.update(width, height);
         batch("draw").updateVertices("Grid", DrawGridMeshBuilder.generateMesh(drawGrid));
@@ -140,7 +153,18 @@ public class DrawingRenderer extends Renderer {
 
     @Override
     public void render(double dt) {
-        glClearColor(0.4f, 0.6f, 1.0f, 1.0f);
+        //set background color according to the time
+        float diffuse = 0.0f;
+        Vector4 timeClearColor = new Vector4(clearColor);
+        if(sunPosition.y > 0){
+            Vector3 nLightPosition = new Vector3(sunPosition);
+            nLightPosition.normalize();
+            diffuse = nLightPosition.dot(new Vector3(0.0f, 1.0f, 0.0f));
+            diffuse = Math.max(diffuse, 0.0f);
+        }
+        timeClearColor.scale(diffuse + 0.2f);
+
+        glClearColor(timeClearColor.x, timeClearColor.y, timeClearColor.z, timeClearColor.w);
         glClear(GL_COLOR_BUFFER_BIT);
 
         //render background

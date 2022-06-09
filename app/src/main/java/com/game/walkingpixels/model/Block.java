@@ -6,6 +6,8 @@ public enum Block {
     GRASS,
     SNOW,
     AIR,
+    TREE,
+    BONFIRE,
     PLAYER,
     SLIME
 }
