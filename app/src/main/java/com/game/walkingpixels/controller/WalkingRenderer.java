@@ -41,6 +41,9 @@ public class WalkingRenderer extends Renderer{
 
     @Override
     public void init() {
+        MobMeshBuilder.textureAtlas.addAnimation(400, 800, 1);
+        MobMeshBuilder.textureAtlas.addAnimation(32, 32, 1);
+
         camera = new Camera(new Vector3(0.0f, 0.0f, 12.8f), new Vector3(0.0f, 0.0f, -1.0f));
         camera.rotationX = 50;
         camera.rotationY = 45;
@@ -77,8 +80,8 @@ public class WalkingRenderer extends Renderer{
         batch("walk").addVertices("Player", MobMeshBuilder.generateMesh(GameState.world, camera, false));
         batch("walk").addVertices("World", BlockMeshBuilder.generateMesh(GameState.world));
         batch("walk").addTexture(new Texture(context, "textures/texture_atlas.png", 0));
-        batch("walk").addTexture(new Texture(context, "textures/christina.png", 1));
-        batch("walk").addTexture(new Texture(context, "textures/slime.png", 2));
+        batch("walk").addTexture(new Texture(context, "textures/mob_texture_atlas.png", 1));
+        batch("walk").addTexture(new Texture(context, "textures/tree.png", 2));
         batch("walk").addTexture(new Texture(context, "textures/bonfire.png", 3));
 
         shader("walk").setUniform1iv("u_Textures", 4, new int[] {0, 1, 2, 3}, 0);

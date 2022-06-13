@@ -1,7 +1,7 @@
 package com.game.walkingpixels.util.meshbuilder;
 
 import com.game.walkingpixels.model.Block;
-import com.game.walkingpixels.model.TextureAtlas;
+import com.game.walkingpixels.model.atlas.GridTextureAtlas;
 import com.game.walkingpixels.model.World;
 import com.game.walkingpixels.openGL.vertices.MapVertex;
 import com.game.walkingpixels.util.vector.Vector2;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class MapMeshBuilder {
 
-    private static final TextureAtlas textureAtlas = new TextureAtlas(64, 64, 16);
+    private static final GridTextureAtlas textureAtlas = new GridTextureAtlas(64, 32, 16);
 
     public static MapVertex[] generateMesh(World world, int countX, int countY){
         ArrayList<MapVertex> mesh = new ArrayList<>();
@@ -44,27 +44,22 @@ public class MapMeshBuilder {
     }
 
     private static void addVertices(ArrayList<MapVertex> mesh, int id, int x, int y, int countX, int countY){
-
-        //determine texture coords
-        float textureSize = 1.0f / (float) textureAtlas.getTexturesPerRow();
-        Vector2 location = textureAtlas.getTextureLocation(id);
-        location.scale(textureSize);
-
+        Vector2[] textureCoordinates = textureAtlas.getTextureCoordinates(id);
         mesh.add(new MapVertex(
                 new float[]{ (2.0f * (x) / countX) - 1.0f, (2.0f * (y) / countY) - 1.0f },
-                new float[]{ location.x, 1 - location.y - textureSize },
+                new float[]{ textureCoordinates[0].x , textureCoordinates[0].y },
                 0.0f));
         mesh.add(new MapVertex(
                 new float[]{ (2.0f * (x + 1) / countX) - 1.0f, (2.0f * (y) / countY) - 1.0f },
-                new float[]{ location.x + textureSize, 1 - location.y - textureSize },
+                new float[]{ textureCoordinates[1].x , textureCoordinates[1].y },
                 0.0f));
         mesh.add(new MapVertex(
                 new float[]{ (2.0f * (x) / countX) - 1.0f, (2.0f * (y + 1) / countY) - 1.0f },
-                new float[]{ location.x, 1 - location.y },
+                new float[]{ textureCoordinates[2].x , textureCoordinates[2].y },
                 0.0f));
         mesh.add(new MapVertex(
                 new float[]{ (2.0f * (x + 1) / countX) - 1.0f, (2.0f * (y + 1) / countY) - 1.0f },
-                new float[]{ location.x + textureSize, 1 - location.y },
+                new float[]{ textureCoordinates[3].x , textureCoordinates[3].y },
                 0.0f));
 
     }
