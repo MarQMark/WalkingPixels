@@ -40,9 +40,7 @@ public class DrawingRenderer extends Renderer {
 
     private Background background;
 
-    private final float sunMaxHeight = 50.0f;
-    private final Vector3 sunPosition = new Vector3(0.0f, sunMaxHeight, 0.0f);
-    private final Vector4 clearColor = new Vector4(0.4f, 0.6f, 1.0f, 1.0f);
+    private final Sun sun = new Sun();
 
     private final DrawGridMeshBuilder drawGridMeshBuilder = new DrawGridMeshBuilder();
     private final BlockMeshBuilder blockMeshBuilder = new BlockMeshBuilder();
@@ -110,11 +108,6 @@ public class DrawingRenderer extends Renderer {
         //update in-game time (1 day = 24 min)
         float sunRotation = (float) (System.currentTimeMillis() / 4000.0) % 360;
 
-        //update sun
-        sunPosition.z = (float) (Math.cos(Math.toRadians(sunRotation)) * sunMaxHeight);
-        sunPosition.y = (float) (Math.sin(Math.toRadians(sunRotation)) * sunMaxHeight);
-
-
         //update DrawGrid
         drawGrid.update(width, height);
         batch("draw").updateVertices("Grid", drawGridMeshBuilder.generateMesh(drawGrid));
@@ -158,17 +151,8 @@ public class DrawingRenderer extends Renderer {
     @Override
     public void render(double dt) {
         //set background color according to the time
-        float diffuse = 0.0f;
-        Vector4 timeClearColor = new Vector4(clearColor);
-        if(sunPosition.y > 0){
-            Vector3 nLightPosition = new Vector3(sunPosition);
-            nLightPosition.normalize();
-            diffuse = nLightPosition.dot(new Vector3(0.0f, 1.0f, 0.0f));
-            diffuse = Math.max(diffuse, 0.0f);
-        }
-        timeClearColor.scale(diffuse + 0.2f);
-
-        glClearColor(timeClearColor.x, timeClearColor.y, timeClearColor.z, timeClearColor.w);
+        Vector4 clearColor = sun.getColor();
+        glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.w);
         glClear(GL_COLOR_BUFFER_BIT);
 
         //render background
