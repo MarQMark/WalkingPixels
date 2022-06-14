@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">WalkingPixels</string>
+    <string name="lbl_stats_level">"LEVEL %1$d"</string>
+    <string name="lbl_stats_xp">"XP: %1$d / %2$d"</string>
+    <string name="lbl_stats_spells">"SPELLS"</string>
+    <string name="lbl_stats_stamina">"Stamina: %1$d – %2$d"</string>
+    <string name="lbl_stats_health">"Health: %1$d – %2$d"</string>
+    <string name="lbl_stats_time">"Time: %1$d – %2$.2f"</string>
+    <string name="lbl_stats_strength">"Strength: %1$d – %2$.2f"</string>
 </resources>

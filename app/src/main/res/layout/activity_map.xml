@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.game.walkingpixels.controller.MapBackgroundGLSurfaceView
+    <com.game.walkingpixels.controller.BackgroundGLSurfaceView
         android:id="@+id/myGLSurfaceViewMapBackground"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -22,7 +22,8 @@
         android:adjustViewBounds="true"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/map_top" />
+        app:srcCompat="@drawable/map_top"
+        tools:ignore="ContentDescription" />
 
     <ImageView
         android:id="@+id/imageView4"
@@ -31,7 +32,8 @@
         android:adjustViewBounds="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/map_bottom" />
+        app:srcCompat="@drawable/map_bottom"
+        tools:ignore="ContentDescription"/>
 
     <ImageView
         android:layout_width="match_parent"
@@ -42,7 +44,8 @@
         app:layout_constraintBottom_toTopOf="@+id/imageView4"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView5"
-        app:srcCompat="@drawable/map_middle" />
+        app:srcCompat="@drawable/map_middle"
+        tools:ignore="ContentDescription"/>
 
     <com.game.walkingpixels.controller.MapGLSurfaceView
         android:id="@+id/myGLSurfaceViewMap"

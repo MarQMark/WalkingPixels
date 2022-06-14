@@ -9,7 +9,6 @@ import java.util.Random;
 public class Enemy implements Serializable {
 
     private int health;
-    private final String spritePath;
     private final Block type;
     private final ArrayList<Attack> attacks = new ArrayList<>();
 
@@ -20,25 +19,11 @@ public class Enemy implements Serializable {
     public Enemy(Block type, int health){
         this.type = type;
         this.health = health;
-        this.spritePath = lookupSpritePath();
     }
 
     public void addAttack(Attack attack){
         for(int i = 0; i < attack.getWeight(); i++)
             attacks.add(attack);
-    }
-
-    private String lookupSpritePath(){
-        switch (type){
-            case SLIME:
-                return "textures/slime.png";
-        }
-
-        return "textures/slime.png";
-    }
-
-    public String getSpritePath(){
-        return spritePath;
     }
 
     public int getHealth() {
@@ -77,6 +62,6 @@ public class Enemy implements Serializable {
     }
 
     public int getXp(){
-        return 10;
+        return 1;
     }
 }

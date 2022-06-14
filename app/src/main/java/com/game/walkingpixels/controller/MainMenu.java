@@ -10,6 +10,10 @@ import com.game.walkingpixels.R;
 
 public class MainMenu extends AppCompatActivity {
 
+    /*
+        Font by Hewett Tsoi - https://www.dafont.com/alagard.font
+     */
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

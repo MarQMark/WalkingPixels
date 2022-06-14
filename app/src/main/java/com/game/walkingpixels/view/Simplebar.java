@@ -3,59 +3,50 @@ package com.game.walkingpixels.view;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.ClipDrawable;
-import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.content.res.AppCompatResources;
-import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.game.walkingpixels.R;
 
-public class Iconbar extends ConstraintLayout {
+public class Simplebar extends RelativeLayout {
 
     private int max = 100;
     private int progress = 0;
 
     private ImageView imageProgress;
-    private ImageView icon;
 
-    public Iconbar(@NonNull Context context) {
+    public Simplebar(Context context) {
         super(context);
         init(context);
     }
 
-    public Iconbar(@NonNull Context context, @Nullable AttributeSet attrs) {
+    public Simplebar(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
 
-        TypedArray attributes = context.obtainStyledAttributes(attrs, R.styleable.Iconbar);
+        TypedArray attributes = context.obtainStyledAttributes(attrs, R.styleable.Simplebar);
 
-        int iconID = attributes.getResourceId(R.styleable.Iconbar_icon, -1);
-        if(iconID != -1)
-            icon.setImageDrawable(AppCompatResources.getDrawable(context, iconID));
-
-        int progressID = attributes.getResourceId(R.styleable.Iconbar_icon_bar_progress, -1);
+        int progressID = attributes.getResourceId(R.styleable.Simplebar_simple_bar_progress, -1);
         if(progressID != -1)
             imageProgress.setImageDrawable(AppCompatResources.getDrawable(context, progressID));
 
         attributes.recycle();
     }
 
-    public Iconbar(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public Simplebar(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context);
     }
 
     private void init(Context context){
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        inflater.inflate(R.layout.iconbar, this);
+        inflater.inflate(R.layout.simplebar, this);
 
-        imageProgress = findViewById(R.id.image_iconbar_health);
-        icon = findViewById(R.id.image_iconbar_icon);
+        imageProgress = findViewById(R.id.image_timebar_time);
     }
 
 
@@ -67,9 +58,7 @@ public class Iconbar extends ConstraintLayout {
         ClipDrawable mImageDrawable = (ClipDrawable) imageProgress.getDrawable();
         mImageDrawable.setLevel((int) ((progress / (float)max) * 10000.0f));
     }
-
     public int getProgress() {
         return progress;
     }
-
 }

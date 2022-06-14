@@ -14,14 +14,13 @@ import android.widget.TextView;
 
 import com.game.walkingpixels.R;
 import com.game.walkingpixels.model.Attack;
-import com.game.walkingpixels.model.Block;
 import com.game.walkingpixels.model.Enemy;
 import com.game.walkingpixels.model.GameState;
 import com.game.walkingpixels.model.Player;
 import com.game.walkingpixels.model.Spell;
 import com.game.walkingpixels.view.Iconbar;
 import com.game.walkingpixels.view.SpellAdapter;
-import com.game.walkingpixels.view.Timebar;
+import com.game.walkingpixels.view.Simplebar;
 
 public class Drawing extends AppCompatActivity {
 
@@ -55,7 +54,7 @@ public class Drawing extends AppCompatActivity {
 
 
             //Time & Healthbar init
-            Timebar barTimeRemaining = findViewById(R.id.timebar_drawing_time_remaining);
+            Simplebar barTimeRemaining = findViewById(R.id.timebar_drawing_time_remaining);
             Iconbar barEnemyHealth = findViewById(R.id.healthbar_drawing_enemy_health);
             barEnemyHealth.setMax(enemy.getHealth());
             Iconbar barPlayerHealth = findViewById(R.id.healthbar_drawing_player_health);
@@ -104,7 +103,10 @@ public class Drawing extends AppCompatActivity {
 
                     //check if enemy dead
                     if(enemy.getHealth() == 0){
-                        setResult(RESULT_OK, new Intent().putExtra("health", player.getHealth()));
+                        Intent intent = new Intent();
+                        intent.putExtra("health", player.getHealth());
+                        intent.putExtra("xp", enemy.getXp());
+                        setResult(RESULT_OK, intent);
                         finish();
                     }
 
@@ -136,7 +138,7 @@ public class Drawing extends AppCompatActivity {
 
 
                     //update drawing timebar
-                    barTimeRemaining.setTime((int) (GameState.getDrawTime() * 10));
+                    barTimeRemaining.setProgress((int) (GameState.getDrawTime() * 10));
 
                     //update healthbar
                     barEnemyHealth.setProgress(enemy.getHealth());

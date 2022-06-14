@@ -2,13 +2,11 @@ package com.game.walkingpixels.controller;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 
 import com.game.walkingpixels.Camera;
 import com.game.walkingpixels.model.Background;
-import com.game.walkingpixels.model.Enemy;
 import com.game.walkingpixels.model.GameState;
-import com.game.walkingpixels.model.World;
+import com.game.walkingpixels.model.Sun;
 import com.game.walkingpixels.openGL.Batch;
 import com.game.walkingpixels.openGL.LightManager;
 import com.game.walkingpixels.openGL.Shader;
@@ -17,7 +15,6 @@ import com.game.walkingpixels.openGL.vertices.PlaneVertex;
 import com.game.walkingpixels.openGL.vertices.WorldVertex;
 import com.game.walkingpixels.util.meshbuilder.MobMeshBuilder;
 import com.game.walkingpixels.util.meshbuilder.BlockMeshBuilder;
-import com.game.walkingpixels.util.vector.Vector2;
 import com.game.walkingpixels.util.vector.Vector3;
 import com.game.walkingpixels.util.vector.Vector4;
 

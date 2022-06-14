@@ -14,7 +14,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.WalkingPixels">
-        <activity android:name=".controller.Map"></activity>
+        <activity android:name=".controller.Stats" />
+        <activity android:name=".controller.Map" />
         <activity android:name=".controller.Drawing" />
         <activity android:name=".controller.Walking" />
         <activity android:name=".controller.MainMenu">

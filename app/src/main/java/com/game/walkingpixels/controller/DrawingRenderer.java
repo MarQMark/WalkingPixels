@@ -11,6 +11,7 @@ import com.game.walkingpixels.model.Enemy;
 import com.game.walkingpixels.model.GameState;
 import com.game.walkingpixels.model.RenderedSpell;
 import com.game.walkingpixels.model.Spell;
+import com.game.walkingpixels.model.Sun;
 import com.game.walkingpixels.model.World;
 import com.game.walkingpixels.openGL.Batch;
 import com.game.walkingpixels.openGL.Shader;
@@ -94,8 +95,7 @@ public class DrawingRenderer extends Renderer {
         batch("world").addVertices("ground", blockMeshBuilder.generateMesh(world));
         batch("world").addVertices("mobs", mobMeshBuilder.generateMesh(world, camera, true));
         batch("world").addTexture(new Texture(context, "textures/texture_atlas.png", 0));
-        batch("world").addTexture(new Texture(context, "textures/christina.png", 1));
-        batch("world").addTexture(new Texture(context, enemy.getSpritePath(), 2));
+        batch("world").addTexture(new Texture(context, "textures/mob_texture_atlas.png", 1));
 
         shader("world").bind();
         shader("world").setUniform1f("u_LightCount", 0);

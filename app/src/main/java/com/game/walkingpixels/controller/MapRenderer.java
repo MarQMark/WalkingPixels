@@ -26,8 +26,6 @@ public class MapRenderer extends Renderer{
 
     @Override
     public void init() {
-        camera = new Camera(new Vector3(0.0f, 0.0f, 0.0f), new Vector3(0.0f, 0.0f, -1.0f));
-
         registerShader("map", new Shader(context, "Shaders/Map.shaders"));
         registerBatch("map", new Batch(shader("map").getID(), 20000, MapVertex.size, MapVertex.getLayout()));
         batch("map").addVertices("Grid", mapMeshBuilder.generateMesh(GameState.world,32, 64));

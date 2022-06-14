@@ -5,23 +5,23 @@ import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 
 
-public class MapBackgroundGLSurfaceView extends GLSurfaceView {
+public class BackgroundGLSurfaceView extends GLSurfaceView {
 
     Context context;
-    MapBackgroundRenderer renderer;
+    BackgroundRenderer renderer;
 
-    public MapBackgroundGLSurfaceView(Context context, AttributeSet attrs) {
+    public BackgroundGLSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.context = context;
         setEGLContextClientVersion(3);
     }
 
     public void init(){
-        renderer = new MapBackgroundRenderer(context);
+        renderer = new BackgroundRenderer(context);
         setRenderer(renderer);
     }
 
-    public MapBackgroundRenderer getRenderer(){
+    public BackgroundRenderer getRenderer(){
         return renderer;
     }
 }

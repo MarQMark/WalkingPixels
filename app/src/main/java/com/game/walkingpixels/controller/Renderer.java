@@ -92,7 +92,9 @@ public abstract class Renderer implements GLSurfaceView.Renderer {
     public void onSurfaceChanged(GL10 gl, int width, int height) {
         this.width = width;
         this.height = height;
-        camera.setAspectRatio((float) width / (float)height);
+
+        if(camera != null)
+            camera.setAspectRatio((float) width / (float)height);
     }
 
     private void printOpenGLInfo(GL10 gl){

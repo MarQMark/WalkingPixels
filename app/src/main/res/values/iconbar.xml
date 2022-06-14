@@ -2,6 +2,6 @@
 <resources>
     <declare-styleable name="Iconbar">
         <attr name="icon" format="reference"/>
-        <attr name="progress" format="reference"/>
+        <attr name="icon_bar_progress" format="reference"/>
     </declare-styleable>
 </resources>

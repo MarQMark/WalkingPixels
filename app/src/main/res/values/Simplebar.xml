@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="Simplebar">
+        <attr name="simple_bar_progress" format="reference"/>
+    </declare-styleable>
+</resources>

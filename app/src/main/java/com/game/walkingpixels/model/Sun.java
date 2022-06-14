@@ -1,4 +1,4 @@
-package com.game.walkingpixels.controller;
+package com.game.walkingpixels.model;
 
 import com.game.walkingpixels.model.GameState;
 import com.game.walkingpixels.util.vector.Vector3;

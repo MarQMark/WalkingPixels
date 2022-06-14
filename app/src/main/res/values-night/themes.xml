@@ -13,5 +13,9 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
         <item name="android:navigationBarColor">@color/bronze</item>
+        <item name= "android:textViewStyle" > @style/AlagardTextViewStyle </item>
+    </style>
+    <style name= "AlagardTextViewStyle" parent= "android:Widget.TextView" >
+        <item name= "android:fontFamily" > @font/alagard </item>
     </style>
 </resources>

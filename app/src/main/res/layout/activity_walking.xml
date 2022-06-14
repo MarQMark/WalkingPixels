@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:bar="http://schemas.android.com/apk/res-auto"
+    xmlns:iconbar="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -96,8 +96,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintWidth_percent="0.8"
-        bar:icon="@drawable/stamina_icon"
-        bar:progress="@drawable/bar_stamina_clip" />
+        iconbar:icon="@drawable/stamina_icon"
+        iconbar:icon_bar_progress="@drawable/bar_stamina_clip" />
 
     <com.game.walkingpixels.view.Iconbar
         android:id="@+id/bar_walking_health"
@@ -109,8 +109,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/bar_walking_stamina"
-        bar:icon="@drawable/health_icon"
-        bar:progress="@drawable/bar_health_clip" />
+        iconbar:icon="@drawable/health_icon"
+        iconbar:icon_bar_progress="@drawable/bar_health_clip" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

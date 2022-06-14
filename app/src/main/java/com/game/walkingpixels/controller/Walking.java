@@ -64,11 +64,9 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
 
         //buttons
         Button btnStats = findViewById(R.id.btn_walking_stats);
+        btnStats.setOnClickListener(e -> startActivity(new Intent(this, Stats.class)));
         Button btnMap = findViewById(R.id.btn_walking_map);
-        btnMap.setOnClickListener(e -> {
-            Intent intent = new Intent(this, Map.class);
-            startActivity(intent);
-        });
+        btnMap.setOnClickListener(e -> startActivity(new Intent(this, Map.class)));
         Button btnBonfire = findViewById(R.id.btn_walking_bonfire);
 
         //move forward
