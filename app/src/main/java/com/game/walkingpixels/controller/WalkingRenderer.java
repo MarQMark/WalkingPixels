@@ -34,6 +34,9 @@ public class WalkingRenderer extends Renderer{
     private final Vector3 sunPosition = new Vector3(0.0f, sunMaxHeight, 0.0f);
     private final Vector4 clearColor = new Vector4(0.4f, 0.6f, 1.0f, 1.0f);
 
+    private final MobMeshBuilder mobMeshBuilder = new MobMeshBuilder();
+    private final BlockMeshBuilder blockMeshBuilder = new BlockMeshBuilder();
+
 
     public WalkingRenderer(Context context) {
         super(context);
@@ -41,9 +44,6 @@ public class WalkingRenderer extends Renderer{
 
     @Override
     public void init() {
-        MobMeshBuilder.textureAtlas.addAnimation(400, 800, 1);
-        MobMeshBuilder.textureAtlas.addAnimation(32, 32, 1);
-
         camera = new Camera(new Vector3(0.0f, 0.0f, 12.8f), new Vector3(0.0f, 0.0f, -1.0f));
         camera.rotationX = 50;
         camera.rotationY = 45;
@@ -77,8 +77,8 @@ public class WalkingRenderer extends Renderer{
         //init world
         shader("walk").bind();
         registerBatch("walk", new Batch(shader("walk").getID(), 2000, WorldVertex.size, WorldVertex.getLayout()));
-        batch("walk").addVertices("Player", MobMeshBuilder.generateMesh(GameState.world, camera, false));
-        batch("walk").addVertices("World", BlockMeshBuilder.generateMesh(GameState.world));
+        batch("walk").addVertices("Player", mobMeshBuilder.generateMesh(GameState.world, camera, false));
+        batch("walk").addVertices("World", blockMeshBuilder.generateMesh(GameState.world));
         batch("walk").addTexture(new Texture(context, "textures/texture_atlas.png", 0));
         batch("walk").addTexture(new Texture(context, "textures/mob_texture_atlas.png", 1));
         batch("walk").addTexture(new Texture(context, "textures/tree.png", 2));
@@ -105,11 +105,11 @@ public class WalkingRenderer extends Renderer{
         batch("background").updateVertices("Background", background.getVertices());
 
         //update player rotation
-        batch("walk").updateVertices("Player", MobMeshBuilder.generateMesh(GameState.world, camera, false));
+        batch("walk").updateVertices("Player", mobMeshBuilder.generateMesh(GameState.world, camera, false));
 
         //move world
         if(GameState.world.hasMoved())
-            batch("walk").updateVertices("World" , BlockMeshBuilder.generateMesh(GameState.world));
+            batch("walk").updateVertices("World" , blockMeshBuilder.generateMesh(GameState.world));
     }
 
     @Override

@@ -9,9 +9,11 @@ import com.game.walkingpixels.util.vector.Vector3;
 
 import java.util.ArrayList;
 
-public class BlockMeshBuilder {
+public class BlockMeshBuilder extends MeshBuilder{
 
-    private static final GridTextureAtlas textureAtlas = new GridTextureAtlas(64, 64, 16);
+    public BlockMeshBuilder(){
+        registerGridTextureAtlas("blocks", new GridTextureAtlas(64, 64, 16));
+    }
 
     private enum Side{
         TOP,
@@ -22,7 +24,7 @@ public class BlockMeshBuilder {
         BACK
     }
 
-    public static WorldVertex[] generateMesh(World world){
+    public WorldVertex[] generateMesh(World world){
         ArrayList<WorldVertex> mesh = new ArrayList<>();
 
         for(int x = 0; x < world.getBlockGridSize(); x ++){
@@ -67,7 +69,7 @@ public class BlockMeshBuilder {
         return finishedMesh;
     }
 
-    private static void addSideToMesh(ArrayList<WorldVertex> mesh, int x, int z, int y, Side side, Block block, int blockGridSize){
+    private void addSideToMesh(ArrayList<WorldVertex> mesh, int x, int z, int y, Side side, Block block, int blockGridSize){
 
         Vector3[] corners = getCorners(x, y, z, side, blockGridSize);
         Vector2[] texture = getTextureCoords(side, block);
@@ -83,7 +85,7 @@ public class BlockMeshBuilder {
         }
     }
 
-    private static Vector3 getNormal(Side side){
+    private Vector3 getNormal(Side side){
         switch (side){
             case BOTTOM:
                 return new Vector3(0.0f, -1.0f, 0.0f);
@@ -102,7 +104,7 @@ public class BlockMeshBuilder {
         return new Vector3(0.0f, 0.0f, 0.0f);
     }
 
-    private static Vector2[] getTextureCoords(Side side, Block block){
+    private Vector2[] getTextureCoords(Side side, Block block){
 
         int id = 0;
 
@@ -119,10 +121,10 @@ public class BlockMeshBuilder {
                 break;
         }
 
-        return textureAtlas.getTextureCoordinates(id);
+        return gridTextureAtlas("blocks").getTextureCoordinates(id);
     }
 
-    private static Vector3[] getCorners(int x, int y, int z, Side side, int blockGridSize){
+    private Vector3[] getCorners(int x, int y, int z, Side side, int blockGridSize){
         Vector3 toOrigin = new Vector3(blockGridSize / 2.0f, 0, blockGridSize / 2.0f);
         Vector3[] allCorners = new Vector3[8];
         allCorners[0] = new Vector3(x, y, z).sub(toOrigin);

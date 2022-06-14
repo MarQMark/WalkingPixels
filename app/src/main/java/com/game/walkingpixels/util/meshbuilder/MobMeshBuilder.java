@@ -12,23 +12,24 @@ import java.util.ArrayList;
 
 import javax.xml.transform.Source;
 
-public class MobMeshBuilder {
+public class MobMeshBuilder extends MeshBuilder{
 
-    public static final AnimationTextureAtlas textureAtlas = new AnimationTextureAtlas(400, 832);
+    public MobMeshBuilder(){
+        registerAnimationTextureAtlas("mob", new AnimationTextureAtlas(400, 832));
+        animationTextureAtlas("mob").addAnimation(400, 800, 1);
+        animationTextureAtlas("mob").addAnimation(32, 32, 1);
+    }
 
-    public static WorldVertex[] generateMesh(World world, Camera camera, boolean adjust){
+    public WorldVertex[] generateMesh(World world, Camera camera, boolean adjust){
         ArrayList<WorldVertex> mobs = new ArrayList<>();
 
         //Add "Blocks"
         for(int x = 0; x < world.getBlockGridSize(); x ++){
             for(int y = 0; y < world.getBlockGridSize(); y ++) {
                 for (int z = 0; z < world.getWorldMaxHeight(); z++) {
-
                     if(world.getBlockGrid()[x][y][z].ordinal() > Block.AIR.ordinal()){
                         getMobVertices(mobs, new Vector3(x, z, y).sub(new Vector3(world.getBlockGridSize() / 2.0f, 0, world.getBlockGridSize() / 2.0f)), world.getBlockGrid()[x][y][z], camera, adjust);
                     }
-
-
                 }
             }
         }
@@ -63,7 +64,7 @@ public class MobMeshBuilder {
         return finishedMesh;
     }
 
-    public static void getMobVertices(ArrayList<WorldVertex> mobs, Vector3 position, Block type, Camera camera, boolean adjust){
+    public void getMobVertices(ArrayList<WorldVertex> mobs, Vector3 position, Block type, Camera camera, boolean adjust){
         Vector3 center = new Vector3(position.x + 0.5f, position.y, position.z + 0.5f);
 
 
@@ -81,13 +82,13 @@ public class MobMeshBuilder {
                 mobWidth = 1.0f;
                 mobHeight = 2.0f;
                 textureSlot = 1.0f;
-                textureCoordinates = textureAtlas.getTextureCoordinates(0, 0);
+                textureCoordinates = animationTextureAtlas("mob").getTextureCoordinates(0, 0);
                 break;
             case SLIME:
                 mobWidth = 1.0f;
                 mobHeight = 1.0f;
                 textureSlot = 1.0f;
-                textureCoordinates = textureAtlas.getTextureCoordinates(1, 0);
+                textureCoordinates = animationTextureAtlas("mob").getTextureCoordinates(1, 0);
                 break;
             case TREE:
                 mobWidth = 3.0f;

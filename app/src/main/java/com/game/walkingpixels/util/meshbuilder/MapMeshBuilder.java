@@ -8,11 +8,13 @@ import com.game.walkingpixels.util.vector.Vector2;
 
 import java.util.ArrayList;
 
-public class MapMeshBuilder {
+public class MapMeshBuilder extends MeshBuilder{
 
-    private static final GridTextureAtlas textureAtlas = new GridTextureAtlas(64, 32, 16);
+    public MapMeshBuilder(){
+        registerGridTextureAtlas("map", new GridTextureAtlas(64, 32, 16));
+    }
 
-    public static MapVertex[] generateMesh(World world, int countX, int countY){
+    public MapVertex[] generateMesh(World world, int countX, int countY){
         ArrayList<MapVertex> mesh = new ArrayList<>();
 
         for(int x = 0; x < countX; x++){
@@ -43,8 +45,8 @@ public class MapMeshBuilder {
         return finishedMesh;
     }
 
-    private static void addVertices(ArrayList<MapVertex> mesh, int id, int x, int y, int countX, int countY){
-        Vector2[] textureCoordinates = textureAtlas.getTextureCoordinates(id);
+    private void addVertices(ArrayList<MapVertex> mesh, int id, int x, int y, int countX, int countY){
+        Vector2[] textureCoordinates = gridTextureAtlas("map").getTextureCoordinates(id);
         mesh.add(new MapVertex(
                 new float[]{ (2.0f * (x) / countX) - 1.0f, (2.0f * (y) / countY) - 1.0f },
                 new float[]{ textureCoordinates[0].x , textureCoordinates[0].y },

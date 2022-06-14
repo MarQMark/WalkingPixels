@@ -18,6 +18,7 @@ import static android.opengl.GLES20.glClearColor;
 
 public class MapRenderer extends Renderer{
 
+    private final MapMeshBuilder mapMeshBuilder = new MapMeshBuilder();
 
     public MapRenderer(Context context) {
         super(context);
@@ -29,7 +30,7 @@ public class MapRenderer extends Renderer{
 
         registerShader("map", new Shader(context, "Shaders/Map.shaders"));
         registerBatch("map", new Batch(shader("map").getID(), 20000, MapVertex.size, MapVertex.getLayout()));
-        batch("map").addVertices("Grid", MapMeshBuilder.generateMesh(GameState.world,32, 64));
+        batch("map").addVertices("Grid", mapMeshBuilder.generateMesh(GameState.world,32, 64));
         batch("map").addTexture(new Texture(context, "textures/map_texture_atlas.png", 0));
 
         shader("map").bind();
@@ -38,7 +39,6 @@ public class MapRenderer extends Renderer{
 
     @Override
     public void update(double dt) {
-
     }
 
     @Override

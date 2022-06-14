@@ -44,6 +44,10 @@ public class DrawingRenderer extends Renderer {
     private final Vector3 sunPosition = new Vector3(0.0f, sunMaxHeight, 0.0f);
     private final Vector4 clearColor = new Vector4(0.4f, 0.6f, 1.0f, 1.0f);
 
+    private final DrawGridMeshBuilder drawGridMeshBuilder = new DrawGridMeshBuilder();
+    private final BlockMeshBuilder blockMeshBuilder = new BlockMeshBuilder();
+    private final MobMeshBuilder mobMeshBuilder = new MobMeshBuilder();
+
     public DrawingRenderer(Context context, Enemy enemy) {
         super(context);
         this.enemy = enemy;
@@ -82,15 +86,15 @@ public class DrawingRenderer extends Renderer {
         drawGrid = new DrawGrid(64, 0.8f, new Vector2(0.1f, 0.1f));
         shader("draw").bind();
         registerBatch("draw", new Batch(shader("draw").getID(), drawGrid.getSize() * drawGrid.getSize(), DrawGridVertex.size, DrawGridVertex.getLayout()));
-        batch("draw").addVertices("Grid", DrawGridMeshBuilder.generateMesh(drawGrid));
+        batch("draw").addVertices("Grid", drawGridMeshBuilder.generateMesh(drawGrid));
 
 
         //init world
         World world = new World(0);
         generateWorld(world);
         registerBatch("world", new Batch(shader("world").getID(), 2000, WorldVertex.size, WorldVertex.getLayout()));
-        batch("world").addVertices("ground", BlockMeshBuilder.generateMesh(world));
-        batch("world").addVertices("mobs", MobMeshBuilder.generateMesh(world, camera, true));
+        batch("world").addVertices("ground", blockMeshBuilder.generateMesh(world));
+        batch("world").addVertices("mobs", mobMeshBuilder.generateMesh(world, camera, true));
         batch("world").addTexture(new Texture(context, "textures/texture_atlas.png", 0));
         batch("world").addTexture(new Texture(context, "textures/christina.png", 1));
         batch("world").addTexture(new Texture(context, enemy.getSpritePath(), 2));
@@ -113,7 +117,7 @@ public class DrawingRenderer extends Renderer {
 
         //update DrawGrid
         drawGrid.update(width, height);
-        batch("draw").updateVertices("Grid", DrawGridMeshBuilder.generateMesh(drawGrid));
+        batch("draw").updateVertices("Grid", drawGridMeshBuilder.generateMesh(drawGrid));
 
 
         //update background

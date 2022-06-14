@@ -8,9 +8,12 @@ import com.game.walkingpixels.util.vector.Vector4;
 
 import java.util.ArrayList;
 
-public class DrawGridMeshBuilder {
+public class DrawGridMeshBuilder extends MeshBuilder{
 
-    public static IVertex[] generateMesh(DrawGrid drawGrid){
+    public DrawGridMeshBuilder(){
+    }
+
+    public IVertex[] generateMesh(DrawGrid drawGrid){
         ArrayList<DrawGridVertex> pixels = new ArrayList<>();
 
         for (int x = 0; x < drawGrid.getSize(); x++){
@@ -35,7 +38,7 @@ public class DrawGridMeshBuilder {
         return finishedMesh;
     }
 
-    private static void getVertices(ArrayList<DrawGridVertex> pixels, Vector2 position, Vector4 color){
+    private void getVertices(ArrayList<DrawGridVertex> pixels, Vector2 position, Vector4 color){
         pixels.add(new DrawGridVertex(
                 new float[]{ position.x, position.y, 0.0f },
                 new float[]{ color.x, color.y, color.z, color.w }));
@@ -50,7 +53,7 @@ public class DrawGridMeshBuilder {
                 new float[]{ color.x, color.y, color.z, color.w }));
     }
 
-    private static void getBackground(ArrayList<DrawGridVertex> pixels, DrawGrid drawGrid){
+    private void getBackground(ArrayList<DrawGridVertex> pixels, DrawGrid drawGrid){
         Vector4 color = new Vector4(0.988f, 0.969f, 0.647f, 1.0f);
         pixels.add(new DrawGridVertex(
                 new float[]{ 0.0f, 0.0f, 0.0f },
