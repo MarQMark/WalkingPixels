@@ -14,11 +14,13 @@ import android.widget.TextView;
 
 import com.game.walkingpixels.R;
 import com.game.walkingpixels.model.Attack;
+import com.game.walkingpixels.model.Constants;
 import com.game.walkingpixels.model.Enemy;
 import com.game.walkingpixels.model.GameState;
 import com.game.walkingpixels.model.Player;
 import com.game.walkingpixels.model.Spell;
 import com.game.walkingpixels.view.Iconbar;
+import com.game.walkingpixels.view.NewSpell;
 import com.game.walkingpixels.view.SpellAdapter;
 import com.game.walkingpixels.view.Simplebar;
 
@@ -40,14 +42,6 @@ public class Drawing extends AppCompatActivity {
             setContentView(R.layout.activity_drawing);
 
             Player player = new Player(Drawing.this);
-            player.spells.add(new Spell("Circle", "This is a circle", "shapes/circle.png", 4.0, 100));
-            player.spells.add(new Spell("Triangle", "This is a triangle", "shapes/triangle.png", 4.0, 20));
-            player.spells.add(new Spell("Flame", "This is a fire spell", "shapes/fire.png", 5.0, 40));
-            player.spells.add(new Spell("Flame", "This is a fire spell", "shapes/fire.png", 5.0, 40));
-            player.spells.add(new Spell("Flame", "This is a fire spell", "shapes/fire.png", 5.0, 40));
-            player.spells.add(new Spell("Flame", "This is a fire spell", "shapes/fire.png", 5.0, 40));
-            player.spells.add(new Spell("Flame", "This is a long fire spell", "shapes/fire.png", 7.0, 40));
-
 
             DrawingGLSurfaceView sv = findViewById(R.id.myGLSurfaceViewDrawing);
             sv.init(enemy);
@@ -70,13 +64,16 @@ public class Drawing extends AppCompatActivity {
                 AlertDialog.Builder builderSingle = new AlertDialog.Builder(Drawing.this);
                 builderSingle.setCancelable(false);
 
-                final SpellAdapter spellAdapter = new SpellAdapter(Drawing.this, player.spells);
+                final SpellAdapter spellAdapter = new SpellAdapter(Drawing.this, player.getSpells());
 
                 builderSingle.setAdapter(spellAdapter, (dialog, which) -> {
                     Spell spell = spellAdapter.getItem(which);
+                    spell.addUsages();
                     barTimeRemaining.setMax((int) (spell.getCastTime() * 10));
                     sv.getRenderer().loadSpell(spell);
                     GameState.setDrawTime(spell.getCastTime());
+
+                    player.saveStats();
                 });
 
 

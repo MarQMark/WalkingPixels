@@ -6,9 +6,11 @@ import androidx.appcompat.widget.SwitchCompat;
 import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.Switch;
 
 import com.game.walkingpixels.R;
+import com.game.walkingpixels.model.Player;
 
 public class Settings extends AppCompatActivity {
 
@@ -23,11 +25,17 @@ public class Settings extends AppCompatActivity {
         SharedPreferences preferences = getSharedPreferences("Settings", MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
 
-        @SuppressLint("UseSwitchCompatOrMaterialCode") SwitchCompat sw = findViewById(R.id.switch_settings_shadow);
+        SwitchCompat sw = findViewById(R.id.switch_settings_shadow);
         sw.setChecked(preferences.getBoolean("shadowEnabled",false));
         sw.setOnCheckedChangeListener((buttonView, isChecked) -> {
             editor.putBoolean("shadowEnabled", isChecked);
             editor.apply();
+        });
+
+        Button btnReset = findViewById(R.id.btn_settings_reset);
+        btnReset.setOnClickListener(e -> {
+            Player player = new Player(Settings.this);
+            player.reset();
         });
     }
 }

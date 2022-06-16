@@ -121,12 +121,7 @@ public class LevelUp extends AppCompatActivity {
         });
         Button btnCancel = findViewById(R.id.btn_level_up_cancel);
         btnCancel.setOnClickListener(e -> {
-            //player.setHealth(player.getMaxHealth());
-            player.setStaminaLevel(1);
-            player.setHealthLevel(1);
-            player.setTimeLevel(1);
-            player.setStrengthLevel(1);
-            player.setLevel(1);
+            player.setHealth(player.getMaxHealth());
             player.saveStats();
             finish();
         });
@@ -164,5 +159,12 @@ public class LevelUp extends AppCompatActivity {
             btnTimeAdd.getForeground().setColorFilter(null);
             btnStrengthAdd.getForeground().setColorFilter(null);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        player.setHealth(player.getMaxHealth());
+        player.saveStats();
+        super.onBackPressed();
     }
 }

@@ -23,11 +23,16 @@ import android.widget.Button;
 import android.widget.Switch;
 
 import com.game.walkingpixels.R;
+import com.game.walkingpixels.model.Constants;
 import com.game.walkingpixels.model.Enemy;
 import com.game.walkingpixels.model.GameState;
 import com.game.walkingpixels.model.Player;
+import com.game.walkingpixels.model.Spell;
 import com.game.walkingpixels.util.vector.Vector2;
 import com.game.walkingpixels.view.Iconbar;
+import com.game.walkingpixels.view.NewSpell;
+
+import java.util.ArrayList;
 
 public class Walking extends AppCompatActivity implements SensorEventListener {
 
@@ -153,6 +158,8 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
         if (result.getResultCode() == Activity.RESULT_OK) {
             Intent data = result.getData();
             if(data != null){
+                player.loadStats();
+
                 int health = data.getIntExtra("health", 0);
                 if(health == 0){
                     player.kill();
@@ -166,6 +173,24 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
                     player.addXp(data.getIntExtra("xp", 0));
                     barHealth.setProgress(player.getHealth());
                 }
+
+                //add spells
+                ArrayList<Integer> newSpells = new ArrayList<>();
+                for (Spell spell : player.getSpells()){
+                    if(spell.getId() < 16 && spell.getId() % 4 < 3 && spell.getUsages() >= Constants.tierSpellUsages[spell.getId() % 4]){
+                        new NewSpell(Walking.this, new Spell(spell.getId() + 1, 0));
+                        spell.setMastered();
+                        newSpells.add(spell.getId() + 1);
+                    }
+                }
+                for (int id : newSpells){
+                    player.addSpell(id);
+
+                    //Meggido
+                    if(player.hasSpell(3) && player.hasSpell(7) && player.hasSpell(11) && player.hasSpell(15))
+                        player.addSpell(16);
+                }
+
                 player.saveStats();
             }
         }

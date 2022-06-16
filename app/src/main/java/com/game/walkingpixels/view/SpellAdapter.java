@@ -16,7 +16,6 @@ import com.game.walkingpixels.R;
 import com.game.walkingpixels.model.Spell;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 
 public class SpellAdapter extends ArrayAdapter<Spell> {
@@ -37,9 +36,9 @@ public class SpellAdapter extends ArrayAdapter<Spell> {
         LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if(convertView == null) convertView = inflater.inflate(R.layout.spell_list_view, parent, false);
 
-        TextView title = convertView.findViewById(R.id.spell_list_view_name);
-        TextView description = convertView.findViewById(R.id.spell_list_view_description);
-        ImageView image = convertView.findViewById(R.id.spell_list_view_image);
+        TextView title = convertView.findViewById(R.id.lbl_spell_list_name);
+        TextView description = convertView.findViewById(R.id.lbl_spell_list_description);
+        ImageView image = convertView.findViewById(R.id.image_spell_list_image);
 
         Spell spell = spells.get(position);
         title.setText(spell.getName());

@@ -9,11 +9,11 @@ import java.util.ArrayList;
 
 public class Player {
 
-    public ArrayList<Spell> spells = new ArrayList<>();
+    private final ArrayList<Spell> spells = new ArrayList<>();
     private int health;
 
     //stats
-    SharedPreferences sharedPreferences;
+    private final SharedPreferences sharedPreferences;
     private int level;
     private int xp;
     private int maxXp;
@@ -35,15 +35,41 @@ public class Player {
         loadStats();
     }
 
-    private void loadStats(){
+    public void reset(){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt("level", 1);
+        editor.putInt("xp", 0);
+        editor.putInt("maxXp", (int) Constants.xpFunction(1));
+
+        editor.putInt("maxStamina", Constants.baseStamina);
+        editor.putInt("maxHealth", Constants.baseHealth);
+        editor.putFloat("time", Constants.baseTime);
+        editor.putFloat("strength", Constants.baseStrength);
+
+        editor.putInt("staminaLevel", 1);
+        editor.putInt("healthLevel", 1);
+        editor.putInt("timeLevel", 1);
+        editor.putInt("strengthLevel", 1);
+
+        editor.putInt("health", Constants.baseHealth);
+        editor.putFloat("lastSavePositionX", 0.0f);
+        editor.putFloat("lastSavePositionY", 0.0f);
+
+        for (Spell spell : spells)
+            editor.putInt("spell_" + spell.getId(), -2);
+
+        editor.apply();
+    }
+
+    public void loadStats(){
         level = sharedPreferences.getInt("level", 1);
         xp = sharedPreferences.getInt("xp", 0);
-        maxXp = sharedPreferences.getInt("maxXp", 10);
+        maxXp = sharedPreferences.getInt("maxXp", (int) Constants.xpFunction(1));
 
-        maxStamina = sharedPreferences.getInt("maxStamina", 10000);
-        maxHealth = sharedPreferences.getInt("maxHealth", 100);
-        time = sharedPreferences.getFloat("time", 1.0f);
-        strength = sharedPreferences.getFloat("strength", 1.0f);
+        maxStamina = sharedPreferences.getInt("maxStamina", Constants.baseStamina);
+        maxHealth = sharedPreferences.getInt("maxHealth", Constants.baseHealth);
+        time = sharedPreferences.getFloat("time", Constants.baseTime);
+        strength = sharedPreferences.getFloat("strength", Constants.baseStrength);
 
         staminaLevel = sharedPreferences.getInt("staminaLevel", 1);
         healthLevel = sharedPreferences.getInt("healthLevel", 1);
@@ -54,6 +80,18 @@ public class Player {
         lastSavePosition= new Vector2(
                 sharedPreferences.getFloat("lastSavePositionX", 0.0f),
                 sharedPreferences.getFloat("lastSavePositionY", 0.0f));
+
+        spells.clear();
+        for (int i = 0; i <= Spell.maxID; i++){
+            int usages = sharedPreferences.getInt("spell_" + i, -2);
+            if(usages != -2)
+                spells.add(new Spell(i, usages));
+        }
+
+        addSpell(0);
+        addSpell(4);
+        addSpell(8);
+        addSpell(12);
     }
     public void saveStats(){
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -74,9 +112,34 @@ public class Player {
         editor.putInt("health", health);
         editor.putFloat("lastSavePositionX", lastSavePosition.x);
         editor.putFloat("lastSavePositionY", lastSavePosition.x);
+
+        for (Spell spell : spells)
+            editor.putInt("spell_" + spell.getId(), spell.getUsages());
+
         editor.apply();
     }
 
+
+    public void addSpell(int id){
+        for (Spell spell : spells){
+            if(id == spell.getId())
+                return;
+        }
+
+        spells.add(new Spell(id, 0));
+    }
+
+    public boolean hasSpell(int id){
+        for (Spell spell : spells){
+            if(id == spell.getId())
+                return true;
+        }
+        return false;
+    }
+
+    public ArrayList<Spell> getSpells(){
+        return spells;
+    }
 
     public int getLevel() {
         return level;
@@ -146,11 +209,11 @@ public class Player {
     }
     public void setTimeLevel(int level){
         timeLevel = level;
-        time = (int) (Constants.baseTime * Constants.levelFunction(level));
+        time = Constants.baseTime * Constants.levelFunction(level);
     }
     public void setStrengthLevel(int level){
         strengthLevel = level;
-        strength = (int) (Constants.baseStrength * Constants.levelFunction(level));
+        strength = Constants.baseStrength * Constants.levelFunction(level);
     }
 
     public Vector2 getLastSavePosition() {

@@ -3,6 +3,9 @@ package com.game.walkingpixels.model;
 import com.game.walkingpixels.controller.Map;
 
 public class Constants {
+
+    public static final int[] tierSpellUsages = new int[]{2, 30, 50};
+
     public static final int baseStamina = 5000;
     public static final int baseHealth = 100;
     public static final float baseTime = 1.0f;
