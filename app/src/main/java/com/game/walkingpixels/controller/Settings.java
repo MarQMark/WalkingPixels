@@ -1,6 +1,7 @@
 package com.game.walkingpixels.controller;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 
 import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
@@ -22,7 +23,7 @@ public class Settings extends AppCompatActivity {
         SharedPreferences preferences = getSharedPreferences("Settings", MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
 
-        @SuppressLint("UseSwitchCompatOrMaterialCode") Switch sw = findViewById(R.id.switch_settings_shadow);
+        @SuppressLint("UseSwitchCompatOrMaterialCode") SwitchCompat sw = findViewById(R.id.switch_settings_shadow);
         sw.setChecked(preferences.getBoolean("shadowEnabled",false));
         sw.setOnCheckedChangeListener((buttonView, isChecked) -> {
             editor.putBoolean("shadowEnabled", isChecked);

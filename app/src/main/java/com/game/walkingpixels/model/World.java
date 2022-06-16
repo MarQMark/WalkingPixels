@@ -75,79 +75,24 @@ public class World {
     }
 
     public void setDirection(int degree){
-        int normalizedDegree = (degree - 45) % 360;
+        int normalizedDegree = ((degree - 45) % 360) / 45;
+        double rad = ((normalizedDegree + 0.6f) * 2.0f * Math.PI) / 8.0f;
 
-        if(normalizedDegree < -315){
+        double xLimit = Math.sin(rad);
+        if(xLimit > 0.382683432365)
             direction.x = 1;
-            direction.y = -1;
-        }
-        else if(normalizedDegree < -270){
-            direction.x = 1;
-            direction.y = 0;
-        }
-
-        else if (normalizedDegree < -225){
-            direction.x = 1;
-            direction.y = 1;
-        }
-        else if(normalizedDegree < -180){
+        else if(xLimit < -0.382683432365)
+            direction.x = -1;
+        else
             direction.x = 0;
-            direction.y = 1;
-        }
 
-        else if(normalizedDegree < -135){
-            direction.x = -1;
+        double yLimit = -Math.cos(rad);
+        if(yLimit > 0.4)
             direction.y = 1;
-        }
-        else if(normalizedDegree < -90){
-            direction.x = -1;
+        else if(yLimit < -0.382683432365)
+            direction.y = -1;
+        else
             direction.y = 0;
-        }
-
-        else if(normalizedDegree < -45){
-            direction.x = -1;
-            direction.y = -1;
-        }
-        else if(normalizedDegree < 0){
-            direction.x = 0;
-            direction.y = -1;
-        }
-
-        else if(normalizedDegree < 45){
-            direction.x = 1;
-            direction.y = -1;
-        }
-        else if(normalizedDegree < 90){
-            direction.x = 1;
-            direction.y = 0;
-        }
-
-        else if(normalizedDegree < 135){
-            direction.x = 1;
-            direction.y = 1;
-        }
-        else if(normalizedDegree < 180){
-            direction.x = 0;
-            direction.y = 1;
-        }
-
-        else if(normalizedDegree < 225){
-            direction.x = -1;
-            direction.y = 1;
-        }
-        else if(normalizedDegree < 270){
-            direction.x = -1;
-            direction.y = 0;
-        }
-
-        else if(normalizedDegree < 315){
-            direction.x = -1;
-            direction.y = -1;
-        }
-        else{
-            direction.x = 0;
-            direction.y = -1;
-        }
     }
 
     public boolean forward(){
