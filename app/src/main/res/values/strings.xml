@@ -14,4 +14,5 @@
     <string name="lbl_level_up_level">%1$d</string>
     <string name="lbl_level_up_stats_int">%1$d - %2$d</string>
     <string name="lbl_level_up_stats_float">%1$.2f - %2$.2f</string>
+    <string name="lbl_new_spell_text">NEW SPELL GAINED</string>
 </resources>
