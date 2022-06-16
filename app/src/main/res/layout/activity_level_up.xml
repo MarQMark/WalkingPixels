@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:level_up_stat="http://schemas.android.com/apk/res-auto"
+    xmlns:simplebar="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".controller.LevelUp">
+
+    <com.game.walkingpixels.controller.BackgroundGLSurfaceView
+        android:id="@+id/myGLSurfaceViewLevelUpBackground"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:adjustViewBounds="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/map_top"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:adjustViewBounds="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/map_bottom"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:adjustViewBounds="true"
+        android:cropToPadding="false"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toTopOf="@+id/imageView4"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView5"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/map_middle"
+        tools:ignore="ContentDescription" />
+
+    <com.game.walkingpixels.view.Simplebar
+        android:id="@+id/bar_level_up_level"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lbl_level_up_xp"
+        app:layout_constraintWidth_percent="0.75"
+        simplebar:simple_bar_progress="@drawable/simplebar_xp_clip" />
+
+    <TextView
+        android:id="@+id/lbl_level_up_level"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/lbl_stats_level"
+        android:textColor="@color/scroll_foreground"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView5" />
+
+    <TextView
+        android:id="@+id/lbl_level_up_xp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/lbl_stats_xp"
+        android:textColor="@color/scroll_foreground"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lbl_level_up_level" />
+
+
+    <com.game.walkingpixels.view.LevelUpStat
+        android:id="@+id/stat_level_up_stamina"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/stat_level_up_health"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bar_level_up_level"
+        level_up_stat:name="@string/lbl_level_up_stamina"
+        level_up_stat:stat="@string/lbl_level_up_stats_int" />
+
+
+    <com.game.walkingpixels.view.LevelUpStat
+        android:id="@+id/stat_level_up_health"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/stat_level_up_time"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/stat_level_up_stamina"
+        level_up_stat:name="@string/lbl_level_up_health"
+        level_up_stat:stat="@string/lbl_level_up_stats_int" />
+
+    <com.game.walkingpixels.view.LevelUpStat
+        android:id="@+id/stat_level_up_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/stat_level_up_strength"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintTop_toBottomOf="@+id/stat_level_up_health"
+        level_up_stat:layout_constraintEnd_toEndOf="parent"
+        level_up_stat:layout_constraintStart_toStartOf="parent"
+        level_up_stat:name="@string/lbl_level_up_time"
+        level_up_stat:stat="@string/lbl_level_up_stats_float" />
+
+    <com.game.walkingpixels.view.LevelUpStat
+        android:id="@+id/stat_level_up_strength"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/btn_level_up_level_up"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintTop_toBottomOf="@+id/stat_level_up_time"
+        level_up_stat:layout_constraintEnd_toEndOf="parent"
+        level_up_stat:layout_constraintStart_toStartOf="parent"
+        level_up_stat:name="@string/lbl_level_up_strength"
+        level_up_stat:stat="@string/lbl_level_up_stats_float" />
+
+    <Button
+        android:id="@+id/btn_level_up_level_up"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:layout_marginBottom="16dp"
+        android:foreground="@drawable/level_up"
+        app:layout_constraintBottom_toTopOf="@+id/imageView4"
+        app:layout_constraintDimensionRatio="4"
+        app:layout_constraintEnd_toStartOf="@+id/btn_level_up_cancel"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btn_level_up_cancel"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginBottom="16dp"
+        android:foreground="@drawable/level_up_cancel"
+        app:layout_constraintBottom_toTopOf="@+id/imageView4"
+        app:layout_constraintDimensionRatio="4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btn_level_up_level_up" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

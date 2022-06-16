@@ -62,6 +62,6 @@ public class Enemy implements Serializable {
     }
 
     public int getXp(){
-        return 1;
+        return 100;
     }
 }

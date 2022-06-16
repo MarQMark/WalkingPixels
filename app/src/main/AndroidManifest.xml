@@ -14,6 +14,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.WalkingPixels">
+        <activity android:name=".controller.LevelUp" />
         <activity android:name=".controller.Stats" />
         <activity android:name=".controller.Map" />
         <activity android:name=".controller.Drawing" />

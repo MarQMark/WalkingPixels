@@ -81,6 +81,7 @@
         android:id="@+id/btn_walking_bonfire"
         android:layout_width="60dp"
         android:layout_height="60dp"
+        android:foreground="@drawable/controls_bonfire"
         app:layout_constraintBottom_toBottomOf="@+id/btn_walking_forward"
         app:layout_constraintEnd_toEndOf="@+id/btn_walking_map"
         app:layout_constraintStart_toStartOf="@+id/btn_walking_map"

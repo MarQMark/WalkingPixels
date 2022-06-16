@@ -10,6 +10,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -32,6 +34,7 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
     private Player player;
     private WalkingGLSurfaceView sv;
 
+    private Iconbar barStamina;
     private Iconbar barHealth;
 
     private int[] stamina;
@@ -52,10 +55,10 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
 
         //init player
         player = new Player(Walking.this);
-        stamina = new int[]{5000};
+        stamina = new int[]{3000};
 
         //stamina and health bar
-        Iconbar barStamina = findViewById(R.id.bar_walking_stamina);
+        barStamina = findViewById(R.id.bar_walking_stamina);
         barStamina.setMax(player.getMaxStamina());
         barStamina.setProgress(stamina[0]);
         barHealth = findViewById(R.id.bar_walking_health);
@@ -68,6 +71,7 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
         Button btnMap = findViewById(R.id.btn_walking_map);
         btnMap.setOnClickListener(e -> startActivity(new Intent(this, Map.class)));
         Button btnBonfire = findViewById(R.id.btn_walking_bonfire);
+        btnBonfire.setOnClickListener(e -> levelUpActivityLauncher.launch(new Intent(this, LevelUp.class)));
 
         //move forward
         Button btnMoveForward = findViewById(R.id.btn_walking_forward);
@@ -94,9 +98,9 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
         //rotate map
         int[] rotationLeft = new int[] {0};
         Button btnTurnLeft = findViewById(R.id.btn_walking_turn_left);
-        btnTurnLeft.setOnClickListener(e -> rotationLeft[0] += 90);
+        btnTurnLeft.setOnClickListener(e -> rotationLeft[0] += 45);
         Button btnTurnRight = findViewById(R.id.btn_walking_turn_right);
-        btnTurnRight.setOnClickListener(e -> rotationLeft[0] += -90);
+        btnTurnRight.setOnClickListener(e -> rotationLeft[0] += -45);
 
         //2nd Game loop
         Handler handler = new Handler();
@@ -106,11 +110,15 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
                 if(rotationLeft[0] != 0){
 
                     btnMoveForward.setEnabled(false);
+                    btnMoveForward.getForeground().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
                     //btnTurnLeft.setEnabled(false);
                     //btnTurnRight.setEnabled(false);
                     btnStats.setEnabled(false);
+                    btnStats.getForeground().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
                     btnMap.setEnabled(false);
+                    btnMap.getForeground().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
                     btnBonfire.setEnabled(false);
+                    btnBonfire.getForeground().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
 
                     if(rotationLeft[0] > 0){
                         sv.getRenderer().camera.rotationY++;
@@ -123,11 +131,15 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
 
                     if(rotationLeft[0] == 0){
                         btnMoveForward.setEnabled(true);
+                        btnMoveForward.getForeground().setColorFilter(null);
                         //btnTurnLeft.setEnabled(true);
                         //btnTurnRight.setEnabled(true);
                         btnStats.setEnabled(true);
+                        btnStats.getForeground().setColorFilter(null);
                         btnMap.setEnabled(true);
+                        btnMap.getForeground().setColorFilter(null);
                         btnBonfire.setEnabled(true);
+                        btnBonfire.getForeground().setColorFilter(null);
                     }
                 }
 
@@ -159,7 +171,7 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
     }
 
 
-    ActivityResultLauncher<Intent> drawingActivityLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+    private final ActivityResultLauncher<Intent> drawingActivityLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
         if (result.getResultCode() == Activity.RESULT_OK) {
             Intent data = result.getData();
             if(data != null){
@@ -179,6 +191,14 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
                 player.saveStats();
             }
         }
+    });
+
+    private final ActivityResultLauncher<Intent> levelUpActivityLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+        player = new Player(Walking.this);
+        barHealth.setMax(player.getMaxHealth());
+        barHealth.setProgress(player.getHealth());
+        barStamina.setMax(player.getMaxStamina());
+        barStamina.setProgress(stamina[0]);
     });
 
     @Override

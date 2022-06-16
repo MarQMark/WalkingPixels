@@ -129,6 +129,30 @@ public class Player {
         return strengthLevel;
     }
 
+    public void setLevel(int level){
+        for (int i = this.level; i < level; i++)
+            xp -= Constants.baseMaxXp * Constants.xpFunction(i);
+
+        this.level = level;
+        maxXp = (int) (Constants.baseMaxXp * Constants.xpFunction(level));
+    }
+    public void setStaminaLevel(int level){
+        staminaLevel = level;
+        maxStamina = (int) (Constants.baseStamina * Constants.levelFunction(level));
+    }
+    public void setHealthLevel(int level){
+        healthLevel = level;
+        maxHealth = (int) (Constants.baseHealth * Constants.levelFunction(level));
+    }
+    public void setTimeLevel(int level){
+        timeLevel = level;
+        time = (int) (Constants.baseTime * Constants.levelFunction(level));
+    }
+    public void setStrengthLevel(int level){
+        strengthLevel = level;
+        strength = (int) (Constants.baseStrength * Constants.levelFunction(level));
+    }
+
     public Vector2 getLastSavePosition() {
         return lastSavePosition;
     }

@@ -7,4 +7,11 @@
     <string name="lbl_stats_health">"Health: %1$d – %2$d"</string>
     <string name="lbl_stats_time">"Time: %1$d – %2$.2f"</string>
     <string name="lbl_stats_strength">"Strength: %1$d – %2$.2f"</string>
+    <string name="lbl_level_up_stamina">Stamina</string>
+    <string name="lbl_level_up_health">Health</string>
+    <string name="lbl_level_up_time">Time</string>
+    <string name="lbl_level_up_strength">Strength</string>
+    <string name="lbl_level_up_level">%1$d</string>
+    <string name="lbl_level_up_stats_int">%1$d - %2$d</string>
+    <string name="lbl_level_up_stats_float">%1$.2f - %2$.2f</string>
 </resources>
