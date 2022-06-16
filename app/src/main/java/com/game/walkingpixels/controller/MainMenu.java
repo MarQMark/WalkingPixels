@@ -30,7 +30,7 @@ public class MainMenu extends AppCompatActivity {
         });
         Button btnOptions = findViewById(R.id.btn_main_menu_options);
         btnOptions.setOnClickListener(e -> {
-            Intent intent = new Intent(this, Drawing.class);
+            Intent intent = new Intent(this, Settings.class);
             startActivity(intent);
         });
         Button btnExit = findViewById(R.id.btn_main_menu_exit);

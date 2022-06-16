@@ -146,28 +146,6 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
             }
         };
         handler.postDelayed(r, 0);
-
-
-
-
-
-
-
-
-
-
-
-
-
-        SharedPreferences preferences = getSharedPreferences("Settings", MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-
-        @SuppressLint("UseSwitchCompatOrMaterialCode") Switch sw = findViewById(R.id.switch1);
-        sw.setChecked(preferences.getBoolean("shadowEnabled",false));
-        sw.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            editor.putBoolean("shadowEnabled", isChecked);
-            editor.apply();
-        });
     }
 
 
