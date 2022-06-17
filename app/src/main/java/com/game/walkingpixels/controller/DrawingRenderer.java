@@ -9,6 +9,7 @@ import com.game.walkingpixels.model.Block;
 import com.game.walkingpixels.model.DrawGrid;
 import com.game.walkingpixels.model.Enemy;
 import com.game.walkingpixels.model.GameState;
+import com.game.walkingpixels.model.Player;
 import com.game.walkingpixels.model.RenderedSpell;
 import com.game.walkingpixels.model.Spell;
 import com.game.walkingpixels.model.Sun;
@@ -31,13 +32,16 @@ import static android.opengl.GLES20.GL_DEPTH_BUFFER_BIT;
 import static android.opengl.GLES20.glClear;
 import static android.opengl.GLES20.glClearColor;
 
+
 public class DrawingRenderer extends Renderer {
 
     private DrawGrid drawGrid;
     private final Enemy enemy;
+    private World world;
 
     private Spell spell;
     private RenderedSpell renderedSpell;
+    private Player player;
 
     private Background background;
 
@@ -58,6 +62,7 @@ public class DrawingRenderer extends Renderer {
         camera.rotationY = 135;
         camera.rotationX = 55;
 
+        player = new Player(context);
 
         //init shader
         registerShader("draw", new Shader(context, "Shaders/DrawGrid.shaders"));
@@ -89,7 +94,7 @@ public class DrawingRenderer extends Renderer {
 
 
         //init world
-        World world = new World(0);
+        world = new World(0);
         generateWorld(world);
         registerBatch("world", new Batch(shader("world").getID(), 2000, WorldVertex.size, WorldVertex.getLayout()));
         batch("world").addVertices("ground", blockMeshBuilder.generateMesh(world));
@@ -138,7 +143,7 @@ public class DrawingRenderer extends Renderer {
         if(renderedSpell != null && renderedSpell.isEnabled()){
             if(renderedSpell.isFinished()){
                 batch("spell").removePart("spell");
-                enemy.damage(renderedSpell.getDamage());
+                enemy.damage((int) (renderedSpell.getDamage() * player.getStrength()));
                 enemy.setEnemyTurn(true);
             }
             else {
@@ -171,6 +176,7 @@ public class DrawingRenderer extends Renderer {
 
         //render World
         shader("world").bind();
+        batch("world").updateVertices("mobs", mobMeshBuilder.generateMesh(world, camera, true));
         shader("world").setUniformMatrix4fv("mvpmatrix", camera.getMVPMatrix());
         batch("world").bind();
         batch("world").draw();

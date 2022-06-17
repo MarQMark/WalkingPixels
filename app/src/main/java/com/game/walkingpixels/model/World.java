@@ -79,9 +79,9 @@ public class World {
         double rad = ((normalizedDegree + 0.6f) * 2.0f * Math.PI) / 8.0f;
 
         double xLimit = Math.sin(rad);
-        if(xLimit > 0.382683432365)
+        if(xLimit > 0.4)
             direction.x = 1;
-        else if(xLimit < -0.382683432365)
+        else if(xLimit < -0.4)
             direction.x = -1;
         else
             direction.x = 0;
@@ -89,7 +89,7 @@ public class World {
         double yLimit = -Math.cos(rad);
         if(yLimit > 0.4)
             direction.y = 1;
-        else if(yLimit < -0.382683432365)
+        else if(yLimit < -0.4)
             direction.y = -1;
         else
             direction.y = 0;
@@ -143,7 +143,7 @@ public class World {
 
             for(int y = 0; y < enemyGridSize; y++){
                 if(random.nextInt() % (100 * blockGridSize) == 0)
-                    enemyGrid[blockGridSize + despawnRadius - 1][y] = new Enemy(Block.SLIME, 100);
+                    spawnEnemy(blockGridSize + despawnRadius - 1,  y);
                 else
                     enemyGrid[enemyGridSize - 1][y] = null;
             }
@@ -155,7 +155,7 @@ public class World {
 
             for(int y = 0; y < enemyGridSize; y++){
                 if(random.nextInt() % (100 * blockGridSize) == 0)
-                    enemyGrid[0][y] = new Enemy(Block.SLIME, 100);
+                    spawnEnemy(0, y);
                 else
                     enemyGrid[0][y] = null;
             }
@@ -168,7 +168,7 @@ public class World {
 
             for(int x = 0; x < enemyGridSize; x++){
                 if(random.nextInt() % (100 * blockGridSize) == 0)
-                    enemyGrid[x][enemyGridSize - 1] = new Enemy(Block.SLIME, 100);
+                    spawnEnemy(x, enemyGridSize - 1);
                 else
                     enemyGrid[x][enemyGridSize - 1] = null;
             }
@@ -181,7 +181,7 @@ public class World {
 
             for(int x = 0; x < enemyGridSize; x++){
                 if(random.nextInt() % (100 * blockGridSize) == 0)
-                    enemyGrid[x][0] = new Enemy(Block.SLIME, 100);
+                    spawnEnemy(x, 0);
                 else
                     enemyGrid[x][0] = null;
             }
@@ -208,7 +208,20 @@ public class World {
         int worldY = (int) (y + position.y - despawnRadius);
         int height = generateHeight(worldX, worldY);
         if(generateBlock(worldX, worldY, height) != Block.WATER && generateBlock(worldX, worldY, height + 1) == Block.AIR){
-            enemyGrid[x][y] = new Enemy(Block.SLIME, 100);
+            Random random = new Random();
+            switch (random.nextInt(3)){
+                case 0:
+                    enemyGrid[x][y] = new Enemy(Block.BLUE_SLIME, 100, 1);
+                    break;
+                case 1:
+                    enemyGrid[x][y] = new Enemy(Block.GREEN_SLIME, 100, 2);
+                    break;
+                case 2:
+                    enemyGrid[x][y] = new Enemy(Block.PURPLE_SLIME, 100, 3);
+                    break;
+            }
+
+
         }
     }
 

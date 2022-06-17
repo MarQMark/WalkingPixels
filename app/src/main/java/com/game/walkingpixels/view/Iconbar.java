@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,6 +23,7 @@ public class Iconbar extends ConstraintLayout {
 
     private ImageView imageProgress;
     private ImageView icon;
+    private TextView text;
 
     public Iconbar(@NonNull Context context) {
         super(context);
@@ -37,6 +39,10 @@ public class Iconbar extends ConstraintLayout {
         int iconID = attributes.getResourceId(R.styleable.Iconbar_icon, -1);
         if(iconID != -1)
             icon.setImageDrawable(AppCompatResources.getDrawable(context, iconID));
+
+        int textID = attributes.getResourceId(R.styleable.Iconbar_text, -1);
+        if(textID != -1)
+            text.setText(textID);
 
         int progressID = attributes.getResourceId(R.styleable.Iconbar_icon_bar_progress, -1);
         if(progressID != -1)
@@ -56,6 +62,7 @@ public class Iconbar extends ConstraintLayout {
 
         imageProgress = findViewById(R.id.image_iconbar_health);
         icon = findViewById(R.id.image_iconbar_icon);
+        text = findViewById(R.id.lbl_iconbar_icon);
     }
 
 
@@ -72,4 +79,12 @@ public class Iconbar extends ConstraintLayout {
         return progress;
     }
 
+    public void setText(String text){
+        this.text.setText(text);
+    }
+
+    public void flip(){
+        icon.setScaleX(-1);
+        text.setScaleX(-1);
+    }
 }

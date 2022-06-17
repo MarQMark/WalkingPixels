@@ -9,6 +9,7 @@ import java.util.Random;
 public class Enemy implements Serializable {
 
     private int health;
+    private final int level;
     private final Block type;
     private final ArrayList<Attack> attacks = new ArrayList<>();
 
@@ -16,7 +17,13 @@ public class Enemy implements Serializable {
     private static final double maxAttackDelay = 1;
     private double attackDelay = maxAttackDelay;
 
-    public Enemy(Block type, int health){
+    public Enemy(int level){
+        this.level = level;
+        type = Block.BLUE_SLIME;
+    }
+
+    public Enemy(Block type, int health, int level){
+        this.level = level;
         this.type = type;
         this.health = health;
     }
@@ -33,6 +40,7 @@ public class Enemy implements Serializable {
     public boolean isEnemyTurn(){
         return isEnemyTurn;
     }
+
     public void setEnemyTurn(boolean isEnemyTurn){
         if(!isEnemyTurn)
             attackDelay = maxAttackDelay;
@@ -63,5 +71,13 @@ public class Enemy implements Serializable {
 
     public int getXp(){
         return 100;
+    }
+
+    public Block getType(){
+        return type;
+    }
+
+    public int getLevel(){
+        return level;
     }
 }

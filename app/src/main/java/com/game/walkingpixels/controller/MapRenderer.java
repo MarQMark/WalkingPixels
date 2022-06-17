@@ -18,6 +18,8 @@ import static android.opengl.GLES20.glClearColor;
 
 public class MapRenderer extends Renderer{
 
+    private boolean initialized = false;
+
     private final MapMeshBuilder mapMeshBuilder = new MapMeshBuilder();
 
     public MapRenderer(Context context) {
@@ -37,6 +39,10 @@ public class MapRenderer extends Renderer{
 
     @Override
     public void update(double dt) {
+        if(!initialized){
+            batch("map").updateVertices("Grid", mapMeshBuilder.generateMesh(GameState.world,32, (int) (32.0f * (height / width))));
+            initialized = true;
+        }
     }
 
     @Override

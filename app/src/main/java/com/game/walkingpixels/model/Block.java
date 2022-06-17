@@ -9,5 +9,7 @@ public enum Block {
     TREE,
     BONFIRE,
     PLAYER,
-    SLIME
+    BLUE_SLIME,
+    GREEN_SLIME,
+    PURPLE_SLIME,
 }

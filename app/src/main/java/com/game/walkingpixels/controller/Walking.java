@@ -29,6 +29,7 @@ import com.game.walkingpixels.model.GameState;
 import com.game.walkingpixels.model.Player;
 import com.game.walkingpixels.model.Spell;
 import com.game.walkingpixels.util.vector.Vector2;
+import com.game.walkingpixels.view.DeathScreen;
 import com.game.walkingpixels.view.Iconbar;
 import com.game.walkingpixels.view.NewSpell;
 
@@ -164,6 +165,7 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
                 if(health == 0){
                     player.kill();
                     barHealth.setProgress(player.getHealth());
+                    new DeathScreen(Walking.this);
                     Vector2 lastPosition = player.getLastSavePosition();
                     GameState.world.setPosition((int) lastPosition.x, (int) lastPosition.y);
                 }
@@ -187,8 +189,10 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
                     player.addSpell(id);
 
                     //Meggido
-                    if(player.hasSpell(3) && player.hasSpell(7) && player.hasSpell(11) && player.hasSpell(15))
+                    if(player.hasSpell(3) && player.hasSpell(7) && player.hasSpell(11) && player.hasSpell(15)){
+                        new NewSpell(Walking.this, new Spell(16, 0));
                         player.addSpell(16);
+                    }
                 }
 
                 player.saveStats();

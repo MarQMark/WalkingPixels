@@ -57,4 +57,26 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView5"
         app:layout_constraintWidth_percent="0.8125"/>
 
+    <TextView
+        android:id="@+id/lbl_map_x"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:text="@string/lbl_map_x"
+        android:textColor="#000000"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/lbl_map_y"
+        app:layout_constraintStart_toStartOf="@+id/myGLSurfaceViewMap" />
+
+    <TextView
+        android:id="@+id/lbl_map_y"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:text="@string/lbl_map_y"
+        android:textColor="#000000"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/imageView4"
+        app:layout_constraintStart_toStartOf="@+id/myGLSurfaceViewMap" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

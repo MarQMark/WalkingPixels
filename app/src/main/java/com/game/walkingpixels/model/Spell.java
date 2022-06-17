@@ -55,7 +55,7 @@ public class Spell {
                 path = "shapes/water_1.png";
                 name = "Drop";
                 description = "At most this will annoy your enemy.";
-                castTime = 3.0;
+                castTime = 1.0;
                 maxDamage = 20;
                 break;
 
@@ -63,15 +63,15 @@ public class Spell {
                 path = "shapes/water_2.png";
                 name = "Splash";
                 description = "Maybe if your enemy is wet, they will leave, but do not expect more out of this spell.";
-                castTime = 5.0;
+                castTime = 3.0;
                 maxDamage = 35;
                 break;
 
             case 6:
                 path = "shapes/water_3.png";
                 name = "Stream";
-                description = "With a fast stream of water, this could do some real damage.";
-                castTime = 7.0;
+                description = "A fast stream of water, which is quite dangerous.";
+                castTime = 6.0;
                 maxDamage = 60;
                 break;
 
@@ -87,7 +87,7 @@ public class Spell {
             case 8:
                 path = "shapes/earth_1.png";
                 name = "Pebble";
-                description = "Maybe if you throw enough pebbles at you enemy they will perish. Like the saying goes: many a mickle makes a muckle!";
+                description = "Maybe if you throw enough pebbles at your enemy they will perish. Like the saying goes: many a mickle makes a muckle!";
                 castTime = 5.0;
                 maxDamage = 10;
                 break;
@@ -95,7 +95,7 @@ public class Spell {
             case 9:
                 path = "shapes/earth_2.png";
                 name = "Stone";
-                description = "With this you can throw a stone at someone, you do not like. Maybe they end up with a scar and become the chosen one.";
+                description = "With this, you can throw a stone at someone, you do not like. Maybe they end up with a scar and become the chosen one.";
                 castTime = 7.0;
                 maxDamage = 25;
                 break;
@@ -120,7 +120,7 @@ public class Spell {
             case 12:
                 path = "shapes/air_1.png";
                 name = "Breeze";
-                description = "If it is how this will be quite pleasant";
+                description = "If it is hot, this will be quite pleasant";
                 castTime = 1.5;
                 maxDamage = 30;
                 break;
@@ -136,8 +136,8 @@ public class Spell {
             case 14:
                 path = "shapes/air_3.png";
                 name = "Tempest";
-                description = "Named after the Veldora the Storm Dragon, this will do some serious damage.";
-                castTime = 4.0;
+                description = "Named after one of the four true dragons, Veldora the Storm Dragon.";
+                castTime = 5.0;
                 maxDamage = 80;
                 break;
 
@@ -145,7 +145,7 @@ public class Spell {
                 path = "shapes/air_4.png";
                 name = "Thunderstorm";
                 description = "Rain down on earth with the power of wind and lightning.";
-                castTime = 5.5;
+                castTime = 7.5;
                 maxDamage = 150;
                 break;
 
@@ -154,7 +154,7 @@ public class Spell {
                 path = "shapes/meggido.png";
                 name = "Meggido";
                 description = "Unleash the Wrath of the Gods!";
-                castTime = 5.0;
+                castTime = 10.0;
                 maxDamage = 250;
                 break;
 

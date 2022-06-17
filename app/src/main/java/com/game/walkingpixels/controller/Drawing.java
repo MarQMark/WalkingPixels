@@ -51,8 +51,11 @@ public class Drawing extends AppCompatActivity {
             Simplebar barTimeRemaining = findViewById(R.id.timebar_drawing_time_remaining);
             Iconbar barEnemyHealth = findViewById(R.id.healthbar_drawing_enemy_health);
             barEnemyHealth.setMax(enemy.getHealth());
+            barEnemyHealth.setText(Integer.toString(enemy.getLevel()));
+            barEnemyHealth.flip();
             Iconbar barPlayerHealth = findViewById(R.id.healthbar_drawing_player_health);
             barPlayerHealth.setMax(player.getMaxHealth());
+            barPlayerHealth.setText(Integer.toString(player.getLevel()));
 
 
             //open spell menu
@@ -71,7 +74,7 @@ public class Drawing extends AppCompatActivity {
                     spell.addUsages();
                     barTimeRemaining.setMax((int) (spell.getCastTime() * 10));
                     sv.getRenderer().loadSpell(spell);
-                    GameState.setDrawTime(spell.getCastTime());
+                    GameState.setDrawTime(spell.getCastTime() * player.getTime());
 
                     player.saveStats();
                 });

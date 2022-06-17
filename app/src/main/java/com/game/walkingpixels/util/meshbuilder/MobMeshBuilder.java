@@ -9,15 +9,18 @@ import com.game.walkingpixels.util.vector.Vector2;
 import com.game.walkingpixels.util.vector.Vector3;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import javax.xml.transform.Source;
 
 public class MobMeshBuilder extends MeshBuilder{
 
     public MobMeshBuilder(){
-        registerAnimationTextureAtlas("mob", new AnimationTextureAtlas(400, 832));
-        animationTextureAtlas("mob").addAnimation(400, 800, 1);
-        animationTextureAtlas("mob").addAnimation(32, 32, 1);
+        registerAnimationTextureAtlas("mob", new AnimationTextureAtlas(416, 245));
+        animationTextureAtlas("mob").addAnimation(64, 128, 4);
+        animationTextureAtlas("mob").addAnimation(32, 39, 13);
+        animationTextureAtlas("mob").addAnimation(32, 39, 13);
+        animationTextureAtlas("mob").addAnimation(32, 39, 13);
     }
 
     public WorldVertex[] generateMesh(World world, Camera camera, boolean adjust){
@@ -51,7 +54,7 @@ public class MobMeshBuilder extends MeshBuilder{
                             }
                         }
 
-                        getMobVertices(mobs,new Vector3(mobX, height, mobY).sub(new Vector3(world.getBlockGridSize() / 2.0f, 0, world.getBlockGridSize() / 2.0f)), Block.SLIME, camera, adjust);
+                        getMobVertices(mobs,new Vector3(mobX, height, mobY).sub(new Vector3(world.getBlockGridSize() / 2.0f, 0, world.getBlockGridSize() / 2.0f)), world.getEnemyGrid()[x][y].getType(), camera, adjust);
                     }
                 }
             }
@@ -82,13 +85,25 @@ public class MobMeshBuilder extends MeshBuilder{
                 mobWidth = 1.0f;
                 mobHeight = 2.0f;
                 textureSlot = 1.0f;
-                textureCoordinates = animationTextureAtlas("mob").getTextureCoordinates(0, 0);
+                textureCoordinates = animationTextureAtlas("mob").getTextureCoordinates(0, (int) (System.currentTimeMillis() / 300 % animationTextureAtlas("mob").getAnimationNumberOfFrames(0)));
                 break;
-            case SLIME:
+            case BLUE_SLIME:
                 mobWidth = 1.0f;
                 mobHeight = 1.0f;
                 textureSlot = 1.0f;
-                textureCoordinates = animationTextureAtlas("mob").getTextureCoordinates(1, 0);
+                textureCoordinates = animationTextureAtlas("mob").getTextureCoordinates(1, (int) (System.currentTimeMillis() / 100 % animationTextureAtlas("mob").getAnimationNumberOfFrames(1)));
+                break;
+            case GREEN_SLIME:
+                mobWidth = 1.0f;
+                mobHeight = 1.0f;
+                textureSlot = 1.0f;
+                textureCoordinates = animationTextureAtlas("mob").getTextureCoordinates(2, (int) (System.currentTimeMillis() / 100 % animationTextureAtlas("mob").getAnimationNumberOfFrames(2)));
+                break;
+            case PURPLE_SLIME:
+                mobWidth = 1.0f;
+                mobHeight = 1.0f;
+                textureSlot = 1.0f;
+                textureCoordinates = animationTextureAtlas("mob").getTextureCoordinates(3, (int) (System.currentTimeMillis() / 100 % animationTextureAtlas("mob").getAnimationNumberOfFrames(3)));
                 break;
             case TREE:
                 mobWidth = 3.0f;

@@ -15,4 +15,7 @@
     <string name="lbl_level_up_stats_int">%1$d - %2$d</string>
     <string name="lbl_level_up_stats_float">%1$.2f - %2$.2f</string>
     <string name="lbl_new_spell_text">NEW SPELL GAINED</string>
+    <string name="lbl_death_screen_you_died">YOU DIED</string>
+    <string name="lbl_map_x">X: %1$d</string>
+    <string name="lbl_map_y">Y: %1$d</string>
 </resources>
