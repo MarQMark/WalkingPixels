@@ -32,6 +32,7 @@ import com.game.walkingpixels.util.vector.Vector2;
 import com.game.walkingpixels.view.DeathScreen;
 import com.game.walkingpixels.view.Iconbar;
 import com.game.walkingpixels.view.NewSpell;
+import com.game.walkingpixels.view.ResponsiveButton;
 
 import java.util.ArrayList;
 
@@ -72,15 +73,20 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
         barHealth.setProgress(player.getHealth());
 
         //buttons
-        Button btnStats = findViewById(R.id.btn_walking_stats);
+        ResponsiveButton btnStats = findViewById(R.id.btn_walking_stats);
         btnStats.setOnClickListener(e -> startActivity(new Intent(this, Stats.class)));
-        Button btnMap = findViewById(R.id.btn_walking_map);
+        ResponsiveButton btnMap = findViewById(R.id.btn_walking_map);
         btnMap.setOnClickListener(e -> startActivity(new Intent(this, Map.class)));
-        Button btnBonfire = findViewById(R.id.btn_walking_bonfire);
-        btnBonfire.setOnClickListener(e -> levelUpActivityLauncher.launch(new Intent(this, LevelUp.class)));
+        ResponsiveButton btnBonfire = findViewById(R.id.btn_walking_bonfire);
+        btnBonfire.setOnClickListener(e -> {
+            player.setLastSavePosition(new Vector2(GameState.world.getPosition()));
+            player.saveStats();
+            levelUpActivityLauncher.launch(new Intent(this, LevelUp.class));
+        });
+
 
         //move forward
-        Button btnMoveForward = findViewById(R.id.btn_walking_forward);
+        ResponsiveButton btnMoveForward = findViewById(R.id.btn_walking_forward);
         btnMoveForward.setOnClickListener(e -> {
             if(GameState.world.forward())
             {
@@ -103,9 +109,9 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
 
         //rotate map
         int[] rotationLeft = new int[] {0};
-        Button btnTurnLeft = findViewById(R.id.btn_walking_turn_left);
+        ResponsiveButton btnTurnLeft = findViewById(R.id.btn_walking_turn_left);
         btnTurnLeft.setOnClickListener(e -> rotationLeft[0] += 45);
-        Button btnTurnRight = findViewById(R.id.btn_walking_turn_right);
+        ResponsiveButton btnTurnRight = findViewById(R.id.btn_walking_turn_right);
         btnTurnRight.setOnClickListener(e -> rotationLeft[0] += -45);
 
         //2nd Game loop
@@ -116,15 +122,9 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
                 if(rotationLeft[0] != 0){
 
                     btnMoveForward.setEnabled(false);
-                    btnMoveForward.getForeground().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
-                    //btnTurnLeft.setEnabled(false);
-                    //btnTurnRight.setEnabled(false);
                     btnStats.setEnabled(false);
-                    btnStats.getForeground().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
                     btnMap.setEnabled(false);
-                    btnMap.getForeground().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
                     btnBonfire.setEnabled(false);
-                    btnBonfire.getForeground().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
 
                     if(rotationLeft[0] > 0){
                         sv.getRenderer().camera.rotationY++;
@@ -137,15 +137,9 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
 
                     if(rotationLeft[0] == 0){
                         btnMoveForward.setEnabled(true);
-                        btnMoveForward.getForeground().setColorFilter(null);
-                        //btnTurnLeft.setEnabled(true);
-                        //btnTurnRight.setEnabled(true);
                         btnStats.setEnabled(true);
-                        btnStats.getForeground().setColorFilter(null);
                         btnMap.setEnabled(true);
-                        btnMap.getForeground().setColorFilter(null);
                         btnBonfire.setEnabled(true);
-                        btnBonfire.getForeground().setColorFilter(null);
                     }
                 }
 

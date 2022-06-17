@@ -19,7 +19,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
+    <com.game.walkingpixels.view.ResponsiveButton
         android:id="@+id/btn_new_spell_close"
         android:layout_width="0dp"
         android:layout_height="65dp"

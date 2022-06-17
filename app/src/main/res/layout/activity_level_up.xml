@@ -136,7 +136,7 @@
         level_up_stat:name="@string/lbl_level_up_strength"
         level_up_stat:stat="@string/lbl_level_up_stats_float" />
 
-    <Button
+    <com.game.walkingpixels.view.ResponsiveButton
         android:id="@+id/btn_level_up_level_up"
         android:layout_width="0dp"
         android:layout_height="30dp"
@@ -149,7 +149,7 @@
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
+    <com.game.walkingpixels.view.ResponsiveButton
         android:id="@+id/btn_level_up_cancel"
         android:layout_width="0dp"
         android:layout_height="30dp"

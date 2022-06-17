@@ -21,6 +21,7 @@ import com.game.walkingpixels.model.Player;
 import com.game.walkingpixels.model.Spell;
 import com.game.walkingpixels.view.Iconbar;
 import com.game.walkingpixels.view.NewSpell;
+import com.game.walkingpixels.view.ResponsiveButton;
 import com.game.walkingpixels.view.SpellAdapter;
 import com.game.walkingpixels.view.Simplebar;
 
@@ -59,7 +60,7 @@ public class Drawing extends AppCompatActivity {
 
 
             //open spell menu
-            Button btnAttackSelector = findViewById(R.id.btn_drawing_attack_selector);
+            ResponsiveButton btnAttackSelector = findViewById(R.id.btn_drawing_attack_selector);
             btnAttackSelector.setOnClickListener(e -> {
                 GameState.setDrawTime(1.0f);
                 btnAttackSelector.setVisibility(View.INVISIBLE);

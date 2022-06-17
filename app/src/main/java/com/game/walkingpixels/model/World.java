@@ -266,7 +266,7 @@ public class World {
         }
         else if(z == height + 1){
             //spawn bonfire at spawn (only hardcoded bonfire)
-            if(x == 0 && y == 0)
+            if(x == blockGridSize / 2 + 1 && y == blockGridSize / 2 + 1)
                 block = Block.BONFIRE;
             //set bonfires
             else if(generateBonfire(x, y) && heightToBlock(height) != Block.WATER)

@@ -223,4 +223,8 @@ public class Player {
         xp = 0;
         health = maxHealth;
     }
+
+    public void setLastSavePosition(Vector2 lastSavePosition){
+        this.lastSavePosition = lastSavePosition;
+    }
 }

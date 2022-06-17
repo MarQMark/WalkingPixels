@@ -12,14 +12,15 @@ import com.game.walkingpixels.R;
 import com.game.walkingpixels.model.Constants;
 import com.game.walkingpixels.model.Player;
 import com.game.walkingpixels.view.LevelUpStat;
+import com.game.walkingpixels.view.ResponsiveButton;
 import com.game.walkingpixels.view.Simplebar;
 
 public class LevelUp extends AppCompatActivity {
 
-    private Button btnStaminaAdd;
-    private Button btnHealthAdd;
-    private Button btnTimeAdd;
-    private Button btnStrengthAdd;
+    private ResponsiveButton btnStaminaAdd;
+    private ResponsiveButton btnHealthAdd;
+    private ResponsiveButton btnTimeAdd;
+    private ResponsiveButton btnStrengthAdd;
 
     private TextView lblLevel;
     private TextView lblXp;
@@ -52,7 +53,7 @@ public class LevelUp extends AppCompatActivity {
             level++;
             update();
         });
-        Button btnStaminaRm = statStamina.getRemoveButton();
+        ResponsiveButton btnStaminaRm = statStamina.getRemoveButton();
         btnStaminaRm.setOnClickListener(e -> {
             statStamina.rm();
             level--;
@@ -68,7 +69,7 @@ public class LevelUp extends AppCompatActivity {
             level++;
             update();
         });
-        Button btnHealthRm = statHealth.getRemoveButton();
+        ResponsiveButton btnHealthRm = statHealth.getRemoveButton();
         btnHealthRm.setOnClickListener(e -> {
             statHealth.rm();
             level--;
@@ -84,7 +85,7 @@ public class LevelUp extends AppCompatActivity {
             level++;
             update();
         });
-        Button btnTimeRm = statTime.getRemoveButton();
+        ResponsiveButton btnTimeRm = statTime.getRemoveButton();
         btnTimeRm.setOnClickListener(e -> {
             statTime.rm();
             level--;
@@ -100,7 +101,7 @@ public class LevelUp extends AppCompatActivity {
             level++;
             update();
         });
-        Button btnStrengthRm = statStrength.getRemoveButton();
+        ResponsiveButton btnStrengthRm = statStrength.getRemoveButton();
         btnStrengthRm.setOnClickListener(e -> {
             statStrength.rm();
             level--;
@@ -108,7 +109,7 @@ public class LevelUp extends AppCompatActivity {
         });
 
 
-        Button btnLevelUp = findViewById(R.id.btn_level_up_level_up);
+        ResponsiveButton btnLevelUp = findViewById(R.id.btn_level_up_level_up);
         btnLevelUp.setOnClickListener(e -> {
             player.setStaminaLevel(statStamina.getLevel());
             player.setHealthLevel(statHealth.getLevel());
@@ -119,7 +120,7 @@ public class LevelUp extends AppCompatActivity {
             player.saveStats();
             finish();
         });
-        Button btnCancel = findViewById(R.id.btn_level_up_cancel);
+        ResponsiveButton btnCancel = findViewById(R.id.btn_level_up_cancel);
         btnCancel.setOnClickListener(e -> {
             player.setHealth(player.getMaxHealth());
             player.saveStats();

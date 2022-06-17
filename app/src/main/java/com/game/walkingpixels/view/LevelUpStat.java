@@ -21,8 +21,8 @@ public class LevelUpStat extends RelativeLayout {
     private TextView lblName;
     private TextView lblLevel;
     private TextView lblStat;
-    private Button btnAdd;
-    private Button btnRm;
+    private ResponsiveButton btnAdd;
+    private ResponsiveButton btnRm;
     private int levelStart;
     private int levelAdded = 0;
     private float baseValue;
@@ -112,10 +112,10 @@ public class LevelUpStat extends RelativeLayout {
         return levelStart + levelAdded;
     }
 
-    public Button getAddButton(){
+    public ResponsiveButton getAddButton(){
         return btnAdd;
     }
-    public Button getRemoveButton(){
+    public ResponsiveButton getRemoveButton(){
         return btnRm;
     }
 

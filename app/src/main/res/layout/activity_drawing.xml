@@ -29,7 +29,7 @@
         app:srcCompat="@drawable/castscroll"
         tools:ignore="ContentDescription"/>
 
-    <Button
+    <com.game.walkingpixels.view.ResponsiveButton
         android:id="@+id/btn_drawing_attack_selector"
         android:layout_width="0dp"
         android:layout_height="0dp"

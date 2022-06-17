@@ -43,7 +43,7 @@ public class NewSpell extends AlertDialog.Builder {
         AlertDialog alertDialog = this.create();
         alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-        Button btn = customLayout.findViewById(R.id.btn_new_spell_close);
+        ResponsiveButton btn = customLayout.findViewById(R.id.btn_new_spell_close);
         btn.setOnClickListener(v -> alertDialog.dismiss());
 
         alertDialog.show();

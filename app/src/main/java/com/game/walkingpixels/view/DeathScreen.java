@@ -24,7 +24,7 @@ public class DeathScreen extends AlertDialog.Builder {
         AlertDialog alertDialog = this.create();
         alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-        Button btn = customLayout.findViewById(R.id.btn_death_screen_close);
+        ResponsiveButton btn = customLayout.findViewById(R.id.btn_death_screen_close);
         btn.setOnClickListener(v -> alertDialog.dismiss());
 
         alertDialog.show();

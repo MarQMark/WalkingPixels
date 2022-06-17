@@ -5,7 +5,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-    <Button
+    <com.game.walkingpixels.view.ResponsiveButton
         android:id="@+id/btn_level_up_stat_rm_level"
         android:layout_width="40dp"
         android:layout_height="40dp"
@@ -26,7 +26,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
+    <com.game.walkingpixels.view.ResponsiveButton
         android:id="@+id/btn_level_up_stat_add_level"
         android:layout_width="40dp"
         android:layout_height="40dp"
