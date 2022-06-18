@@ -14,12 +14,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.WalkingPixels">
-        <activity android:name=".controller.Settings" />
-        <activity android:name=".controller.LevelUp" />
-        <activity android:name=".controller.Stats" />
-        <activity android:name=".controller.Map" />
-        <activity android:name=".controller.Drawing" />
-        <activity android:name=".controller.Walking" />
+        <activity android:name=".controller.Settings" android:launchMode = "singleTop"/>
+        <activity android:name=".controller.LevelUp" android:launchMode = "singleTop"/>
+        <activity android:name=".controller.Stats" android:launchMode = "singleTop"/>
+        <activity android:name=".controller.Map" android:launchMode = "singleTop"/>
+        <activity android:name=".controller.Drawing" android:launchMode = "singleTop"/>
+        <activity android:name=".controller.Walking" android:launchMode = "singleTop"/>
         <activity android:name=".controller.MainMenu">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

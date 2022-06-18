@@ -37,42 +37,56 @@
         android:adjustViewBounds="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_spell_scroll"
+        app:srcCompat="@drawable/spell_scroll"
         tools:ignore="ContentDescription" />
 
     <ImageView
         android:id="@+id/image_new_spell_image"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginStart="16dp"
         app:layout_constraintBottom_toBottomOf="@+id/imageView"
         app:layout_constraintDimensionRatio="1"
         app:layout_constraintEnd_toStartOf="@+id/lbl_new_spell_description"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/imageView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/imageView"
-        app:layout_constraintWidth_percent="0.2"
+        app:layout_constraintWidth_percent="0.25"
         tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/lbl_new_spell_name"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:gravity="center_vertical"
+        android:gravity="center"
         android:textColor="@color/black"
+        android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintDimensionRatio="12"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/image_new_spell_image"
-        app:layout_constraintWidth_percent="0.65" />
+        app:layout_constraintBottom_toTopOf="@+id/lbl_new_spell_description"
+        app:layout_constraintDimensionRatio="14"
+        app:layout_constraintEnd_toEndOf="@+id/lbl_new_spell_description"
+        app:layout_constraintStart_toStartOf="@+id/lbl_new_spell_description"
+        app:layout_constraintTop_toTopOf="@+id/imageView"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintWidth_percent="0.6" />
 
     <TextView
         android:id="@+id/lbl_new_spell_description"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginEnd="8dp"
+        android:textAlignment="center"
         android:textColor="@color/black"
-        app:layout_constraintDimensionRatio="4.1"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView"
+        app:layout_constraintDimensionRatio="2.6"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/image_new_spell_image"
         app:layout_constraintTop_toBottomOf="@+id/lbl_new_spell_name"
-        app:layout_constraintWidth_percent="0.65" />
+        app:layout_constraintWidth_percent="0.6" />
 </androidx.constraintlayout.widget.ConstraintLayout>

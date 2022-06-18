@@ -18,6 +18,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Switch;
@@ -43,6 +44,7 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
 
     private Iconbar barStamina;
     private Iconbar barHealth;
+    private ResponsiveButton btnMoveForward;
 
     private int[] stamina;
 
@@ -81,12 +83,13 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
         btnBonfire.setOnClickListener(e -> {
             player.setLastSavePosition(new Vector2(GameState.world.getPosition()));
             player.saveStats();
+            Log.d("Bonfire", player.getLastSavePosition().x + "  " + player.getLastSavePosition().y);
             levelUpActivityLauncher.launch(new Intent(this, LevelUp.class));
         });
 
 
         //move forward
-        ResponsiveButton btnMoveForward = findViewById(R.id.btn_walking_forward);
+        btnMoveForward = findViewById(R.id.btn_walking_forward);
         btnMoveForward.setOnClickListener(e -> {
             if(GameState.world.forward())
             {
@@ -95,6 +98,7 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
 
                 Enemy enemy = GameState.world.checkForEnemy();
                 if(enemy != null){
+                    btnMoveForward.setEnabled(false);
                     Intent intent = new Intent(this, Drawing.class);
                     intent.putExtra("ENEMY", enemy);
                     drawingActivityLauncher.launch(intent);
@@ -150,10 +154,12 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
 
 
     private final ActivityResultLauncher<Intent> drawingActivityLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+        btnMoveForward.setEnabled(true);
         if (result.getResultCode() == Activity.RESULT_OK) {
             Intent data = result.getData();
             if(data != null){
                 player.loadStats();
+                Log.d("Bonfire", player.getLastSavePosition().x + "  " + player.getLastSavePosition().y);
 
                 int health = data.getIntExtra("health", 0);
                 if(health == 0){

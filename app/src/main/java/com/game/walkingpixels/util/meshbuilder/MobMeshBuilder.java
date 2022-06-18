@@ -16,7 +16,8 @@ import javax.xml.transform.Source;
 public class MobMeshBuilder extends MeshBuilder{
 
     public MobMeshBuilder(){
-        registerAnimationTextureAtlas("mob", new AnimationTextureAtlas(416, 245));
+        registerAnimationTextureAtlas("mob", new AnimationTextureAtlas());
+        animationTextureAtlas("mob").addAnimation(64, 128, 4);
         animationTextureAtlas("mob").addAnimation(64, 128, 4);
         animationTextureAtlas("mob").addAnimation(32, 39, 13);
         animationTextureAtlas("mob").addAnimation(32, 39, 13);
@@ -82,28 +83,17 @@ public class MobMeshBuilder extends MeshBuilder{
         };
         switch (type){
             case PLAYER:
-                mobWidth = 1.0f;
                 mobHeight = 2.0f;
-                textureSlot = 1.0f;
                 textureCoordinates = animationTextureAtlas("mob").getTextureCoordinates(0, (int) (System.currentTimeMillis() / 300 % animationTextureAtlas("mob").getAnimationNumberOfFrames(0)));
                 break;
             case BLUE_SLIME:
-                mobWidth = 1.0f;
-                mobHeight = 1.0f;
-                textureSlot = 1.0f;
-                textureCoordinates = animationTextureAtlas("mob").getTextureCoordinates(1, (int) (System.currentTimeMillis() / 100 % animationTextureAtlas("mob").getAnimationNumberOfFrames(1)));
-                break;
-            case GREEN_SLIME:
-                mobWidth = 1.0f;
-                mobHeight = 1.0f;
-                textureSlot = 1.0f;
                 textureCoordinates = animationTextureAtlas("mob").getTextureCoordinates(2, (int) (System.currentTimeMillis() / 100 % animationTextureAtlas("mob").getAnimationNumberOfFrames(2)));
                 break;
-            case PURPLE_SLIME:
-                mobWidth = 1.0f;
-                mobHeight = 1.0f;
-                textureSlot = 1.0f;
+            case GREEN_SLIME:
                 textureCoordinates = animationTextureAtlas("mob").getTextureCoordinates(3, (int) (System.currentTimeMillis() / 100 % animationTextureAtlas("mob").getAnimationNumberOfFrames(3)));
+                break;
+            case PURPLE_SLIME:
+                textureCoordinates = animationTextureAtlas("mob").getTextureCoordinates(4, (int) (System.currentTimeMillis() / 100 % animationTextureAtlas("mob").getAnimationNumberOfFrames(4)));
                 break;
             case TREE:
                 mobWidth = 3.0f;
@@ -111,9 +101,8 @@ public class MobMeshBuilder extends MeshBuilder{
                 textureSlot = 2.0f;
                 break;
             case BONFIRE:
-                mobWidth = 1.0f;
-                mobHeight = 1.0f;
-                textureSlot = 3.0f;
+                mobHeight = 2.0f;
+                textureCoordinates = animationTextureAtlas("mob").getTextureCoordinates(1, (int) (System.currentTimeMillis() / 300 % animationTextureAtlas("mob").getAnimationNumberOfFrames(1)));
                 break;
         }
 

@@ -40,7 +40,7 @@ public class MapRenderer extends Renderer{
     @Override
     public void update(double dt) {
         if(!initialized){
-            batch("map").updateVertices("Grid", mapMeshBuilder.generateMesh(GameState.world,32, (int) (32.0f * (height / width))));
+            batch("map").updateVertices("Grid", mapMeshBuilder.generateMesh(GameState.world,33, (int) (33.0f * (height / width))));
             initialized = true;
         }
     }

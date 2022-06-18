@@ -6,17 +6,18 @@ import java.util.ArrayList;
 
 public class AnimationTextureAtlas {
 
-    private final int width;
-    private final int height;
+    private int width = 0;
+    private int height = 0;
 
     private final ArrayList<Animation> animations = new ArrayList<>();
 
-    public AnimationTextureAtlas(int width, int height){
-        this.width = width;
-        this.height = height;
+    public AnimationTextureAtlas(){
     }
 
     public void addAnimation(int frameWidth, int frameHeight, int numberOfFrames){
+        height += frameHeight;
+        width = Math.max(width, frameWidth * numberOfFrames);
+
         int yOffset = 0;
         if(animations.size() != 0)
             yOffset = animations.get(animations.size() - 1).yOffset + animations.get(animations.size() - 1).frameHeight;

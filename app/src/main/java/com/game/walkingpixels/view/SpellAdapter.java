@@ -2,6 +2,7 @@ package com.game.walkingpixels.view;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,11 +23,13 @@ public class SpellAdapter extends ArrayAdapter<Spell> {
 
     private final Context context;
     private final ArrayList<Spell> spells;
+    private final int fontSize;
 
-    public SpellAdapter(Context context, ArrayList<Spell> spells){
+    public SpellAdapter(Context context, ArrayList<Spell> spells, int fontSize){
         super(context, android.R.layout.select_dialog_item, spells);
         this.context = context;
         this.spells = spells;
+        this.fontSize = fontSize;
     }
 
     @NonNull
@@ -39,6 +42,9 @@ public class SpellAdapter extends ArrayAdapter<Spell> {
         TextView title = convertView.findViewById(R.id.lbl_spell_list_name);
         TextView description = convertView.findViewById(R.id.lbl_spell_list_description);
         ImageView image = convertView.findViewById(R.id.image_spell_list_image);
+
+        title.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
+        description.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize - 2);
 
         Spell spell = spells.get(position);
         title.setText(spell.getName());

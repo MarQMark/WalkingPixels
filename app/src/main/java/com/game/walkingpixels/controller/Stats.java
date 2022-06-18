@@ -32,7 +32,7 @@ public class Stats extends AppCompatActivity {
         svBackground.init();
 
         ListView listSpells = findViewById(R.id.list_stats_spells);
-        final SpellAdapter spellAdapter = new SpellAdapter(Stats.this, player.getSpells());
+        final SpellAdapter spellAdapter = new SpellAdapter(Stats.this, player.getSpells(), 14);
         listSpells.setAdapter(spellAdapter);
 
         TextView lblLevel = findViewById(R.id.lbl_stats_level);

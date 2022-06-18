@@ -66,7 +66,6 @@ public class WalkingRenderer extends Renderer{
         lightManager("walk").initShader(new Shader(context, "Shaders/ShadowGeometry.shaders"));
         lightManager("walk").initWorldShader(shader("walk"));
         lightManager("walk").createPointLight(sun.getPosition(), new Vector4(1f, 1f, 1f, 1.0f), 1000f, camera);
-        //lightManager("walk").createPointLight(new Vector3(2.0f, 5.0f, 0.0f), new Vector4(1f, 1f, 1f, 1.0f), 8f, camera);
 
 
         //init world

@@ -34,7 +34,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:backgroundTint="#00FFFFFF"
-        android:foreground="@drawable/ic_select_spell_large"
+        android:foreground="@drawable/select_spell"
         app:layout_constraintBottom_toTopOf="@+id/layout_helper"
         app:layout_constraintDimensionRatio="1"
         app:layout_constraintEnd_toEndOf="parent"

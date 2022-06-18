@@ -68,7 +68,7 @@ public class Drawing extends AppCompatActivity {
                 AlertDialog.Builder builderSingle = new AlertDialog.Builder(Drawing.this);
                 builderSingle.setCancelable(false);
 
-                final SpellAdapter spellAdapter = new SpellAdapter(Drawing.this, player.getSpells());
+                final SpellAdapter spellAdapter = new SpellAdapter(Drawing.this, player.getSpells(), 16);
 
                 builderSingle.setAdapter(spellAdapter, (dialog, which) -> {
                     Spell spell = spellAdapter.getItem(which);

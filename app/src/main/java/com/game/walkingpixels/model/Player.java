@@ -77,7 +77,7 @@ public class Player {
         strengthLevel = sharedPreferences.getInt("strengthLevel", 1);
 
         health = sharedPreferences.getInt("health", maxHealth);
-        lastSavePosition= new Vector2(
+        lastSavePosition = new Vector2(
                 sharedPreferences.getFloat("lastSavePositionX", 0.0f),
                 sharedPreferences.getFloat("lastSavePositionY", 0.0f));
 
@@ -111,7 +111,7 @@ public class Player {
 
         editor.putInt("health", health);
         editor.putFloat("lastSavePositionX", lastSavePosition.x);
-        editor.putFloat("lastSavePositionY", lastSavePosition.x);
+        editor.putFloat("lastSavePositionY", lastSavePosition.y);
 
         for (Spell spell : spells)
             editor.putInt("spell_" + spell.getId(), spell.getUsages());
