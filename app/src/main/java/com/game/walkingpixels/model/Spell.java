@@ -187,9 +187,6 @@ public class Spell {
         if(usages != -1)
             usages++;
     }
-    public void setMastered(){
-        usages = -1;
-    }
     public int getUsages() {
         return usages;
     }

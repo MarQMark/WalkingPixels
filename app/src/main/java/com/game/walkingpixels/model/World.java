@@ -141,24 +141,16 @@ public class World {
             for(int x = 0; x < enemyGridSize - 1; x++)
                 System.arraycopy(enemyGrid[x + 1], 0, enemyGrid[x], 0, enemyGridSize);
 
-            for(int y = 0; y < enemyGridSize; y++){
-                if(random.nextInt() % (100 * blockGridSize) == 0)
-                    spawnEnemy(blockGridSize + despawnRadius - 1,  y);
-                else
-                    enemyGrid[enemyGridSize - 1][y] = null;
-            }
+            for(int y = 0; y < enemyGridSize; y++)
+                spawnEnemy(enemyGridSize - 1,  y);
         }
         if(direction.x == -1){
             for(int x = enemyGridSize - 1; x > 0; x--){
                     System.arraycopy(enemyGrid[x - 1], 0, enemyGrid[x], 0, enemyGridSize);
             }
 
-            for(int y = 0; y < enemyGridSize; y++){
-                if(random.nextInt() % (100 * blockGridSize) == 0)
-                    spawnEnemy(0, y);
-                else
-                    enemyGrid[0][y] = null;
-            }
+            for(int y = 0; y < enemyGridSize; y++)
+                spawnEnemy(0, y);
         }
         if(direction.y == 1){
             for(int y = 0; y < enemyGridSize - 1; y++){
@@ -166,12 +158,8 @@ public class World {
                     enemyGrid[x][y] = enemyGrid[x][y + 1];
             }
 
-            for(int x = 0; x < enemyGridSize; x++){
-                if(random.nextInt() % (100 * blockGridSize) == 0)
-                    spawnEnemy(x, enemyGridSize - 1);
-                else
-                    enemyGrid[x][enemyGridSize - 1] = null;
-            }
+            for(int x = 0; x < enemyGridSize; x++)
+                spawnEnemy(x, enemyGridSize - 1);
         }
         if(direction.y == -1){
             for(int y = enemyGridSize - 1; y > 0 ; y--){
@@ -179,49 +167,34 @@ public class World {
                     enemyGrid[x][y] = enemyGrid[x][y - 1];
             }
 
-            for(int x = 0; x < enemyGridSize; x++){
-                if(random.nextInt() % (100 * blockGridSize) == 0)
-                    spawnEnemy(x, 0);
-                else
-                    enemyGrid[x][0] = null;
-            }
+            for(int x = 0; x < enemyGridSize; x++)
+                spawnEnemy(x, 0);
         }
     }
 
     private void generateEnemyGrid(){
         for (int x = 0; x < enemyGridSize; x++) {
             for (int y = 0; y < enemyGridSize; y++) {
-                //if(random.nextInt() % (100 * renderedWorldSize) == 0 && !insideCircle(x, y, renderedWorldSize * 0.6f))
-                if(random.nextInt() % (4) == 0 && !insideCircle(x-despawnRadius, y-despawnRadius, (blockGridSize / 2.0f) * 0.8f)){
+                if(!insideCircle(x - despawnRadius, y - despawnRadius, (blockGridSize / 2.0f) * 0.8f))
                     spawnEnemy(x, y);
-                }
-                else {
-                    enemyGrid[x][y] = null;
-                }
             }
         }
     }
 
     private void spawnEnemy(int x, int y){
-        //make sure enemy doesn't spawn in something
-        int worldX = (int) (x + position.x - despawnRadius);
-        int worldY = (int) (y + position.y - despawnRadius);
-        int height = generateHeight(worldX, worldY);
-        if(generateBlock(worldX, worldY, height) != Block.WATER && generateBlock(worldX, worldY, height + 1) == Block.AIR){
-            Random random = new Random();
-            switch (random.nextInt(3)){
-                case 0:
-                    enemyGrid[x][y] = new Enemy(Block.BLUE_SLIME, 100, 1);
-                    break;
-                case 1:
-                    enemyGrid[x][y] = new Enemy(Block.GREEN_SLIME, 100, 2);
-                    break;
-                case 2:
-                    enemyGrid[x][y] = new Enemy(Block.PURPLE_SLIME, 100, 3);
-                    break;
+
+        if(random.nextInt() % (7 * blockGridSize) == 0){
+            //make sure enemy doesn't spawn in something
+            int worldX = (int) (x + position.x - despawnRadius);
+            int worldY = (int) (y + position.y - despawnRadius);
+            int height = generateHeight(worldX, worldY);
+            if(generateBlock(worldX, worldY, height) != Block.WATER && generateBlock(worldX, worldY, height + 1) == Block.AIR){
+                int level = (int) (position.getLength() / 100.0f + 1.0f);
+                enemyGrid[x][y] = new Enemy(level);
             }
-
-
+        }
+        else{
+            enemyGrid[x][y] = null;
         }
     }
 

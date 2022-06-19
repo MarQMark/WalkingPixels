@@ -35,11 +35,6 @@ public class Drawing extends AppCompatActivity {
         if (enemy == null) {
             finish();
         } else {
-
-            enemy.addAttack(new Attack(20, 10, 3));
-            enemy.addAttack(new Attack(30, 20, 1));
-            enemy.addAttack(new Attack(30, 0, 2));
-
             setContentView(R.layout.activity_drawing);
 
             Player player = new Player(Drawing.this);
@@ -73,11 +68,10 @@ public class Drawing extends AppCompatActivity {
                 builderSingle.setAdapter(spellAdapter, (dialog, which) -> {
                     Spell spell = spellAdapter.getItem(which);
                     spell.addUsages();
+                    player.setSpellUsages(spell.getId(), spell.getUsages());
                     barTimeRemaining.setMax((int) (spell.getCastTime() * 10));
                     sv.getRenderer().loadSpell(spell);
                     GameState.setDrawTime(spell.getCastTime() * player.getTime());
-
-                    player.saveStats();
                 });
 
 

@@ -9,37 +9,17 @@ import java.util.ArrayList;
 
 public class Player {
 
-    private final ArrayList<Spell> spells = new ArrayList<>();
-    private int health;
-
-    //stats
     private final SharedPreferences sharedPreferences;
-    private int level;
-    private int xp;
-    private int maxXp;
-
-    private int maxStamina;
-    private int maxHealth;
-    private float time;
-    private float strength;
-
-    private int staminaLevel;
-    private int healthLevel;
-    private int timeLevel;
-    private int strengthLevel;
-
-    private Vector2 lastSavePosition;
 
     public Player(Context context){
         sharedPreferences = context.getSharedPreferences("Stats", Context.MODE_PRIVATE);
-        loadStats();
     }
 
     public void reset(){
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt("level", 1);
         editor.putInt("xp", 0);
-        editor.putInt("maxXp", (int) Constants.xpFunction(1));
+        editor.putInt("maxXp", (int)(Constants.baseMaxXp  * Constants.xpFunction(1)));
 
         editor.putInt("maxStamina", Constants.baseStamina);
         editor.putInt("maxHealth", Constants.baseHealth);
@@ -55,82 +35,33 @@ public class Player {
         editor.putFloat("lastSavePositionX", 0.0f);
         editor.putFloat("lastSavePositionY", 0.0f);
 
-        for (Spell spell : spells)
-            editor.putInt("spell_" + spell.getId(), -2);
-
-        editor.apply();
-    }
-
-    public void loadStats(){
-        level = sharedPreferences.getInt("level", 1);
-        xp = sharedPreferences.getInt("xp", 0);
-        maxXp = sharedPreferences.getInt("maxXp", (int) Constants.xpFunction(1));
-
-        maxStamina = sharedPreferences.getInt("maxStamina", Constants.baseStamina);
-        maxHealth = sharedPreferences.getInt("maxHealth", Constants.baseHealth);
-        time = sharedPreferences.getFloat("time", Constants.baseTime);
-        strength = sharedPreferences.getFloat("strength", Constants.baseStrength);
-
-        staminaLevel = sharedPreferences.getInt("staminaLevel", 1);
-        healthLevel = sharedPreferences.getInt("healthLevel", 1);
-        timeLevel = sharedPreferences.getInt("timeLevel", 1);
-        strengthLevel = sharedPreferences.getInt("strengthLevel", 1);
-
-        health = sharedPreferences.getInt("health", maxHealth);
-        lastSavePosition = new Vector2(
-                sharedPreferences.getFloat("lastSavePositionX", 0.0f),
-                sharedPreferences.getFloat("lastSavePositionY", 0.0f));
-
-        spells.clear();
         for (int i = 0; i <= Spell.maxID; i++){
-            int usages = sharedPreferences.getInt("spell_" + i, -2);
-            if(usages != -2)
-                spells.add(new Spell(i, usages));
+            editor.putInt("spell_" + i, -2);
         }
 
-        addSpell(0);
-        addSpell(4);
-        addSpell(8);
-        addSpell(12);
-    }
-    public void saveStats(){
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt("level", level);
-        editor.putInt("xp", xp);
-        editor.putInt("maxXp", maxXp);
-
-        editor.putInt("maxStamina", maxStamina);
-        editor.putInt("maxHealth", maxHealth);
-        editor.putFloat("time", time);
-        editor.putFloat("strength", strength);
-
-        editor.putInt("staminaLevel", staminaLevel);
-        editor.putInt("healthLevel", healthLevel);
-        editor.putInt("timeLevel", timeLevel);
-        editor.putInt("strengthLevel", strengthLevel);
-
-        editor.putInt("health", health);
-        editor.putFloat("lastSavePositionX", lastSavePosition.x);
-        editor.putFloat("lastSavePositionY", lastSavePosition.y);
-
-        for (Spell spell : spells)
-            editor.putInt("spell_" + spell.getId(), spell.getUsages());
-
         editor.apply();
     }
 
 
+    public void setSpellUsages(int id, int usages){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt("spell_" + id, usages);
+        editor.apply();
+    }
+
     public void addSpell(int id){
-        for (Spell spell : spells){
+        for (Spell spell : getSpells()){
             if(id == spell.getId())
                 return;
         }
 
-        spells.add(new Spell(id, 0));
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt("spell_" + id, 0);
+        editor.apply();
     }
 
     public boolean hasSpell(int id){
-        for (Spell spell : spells){
+        for (Spell spell : getSpells()){
             if(id == spell.getId())
                 return true;
         }
@@ -138,93 +69,129 @@ public class Player {
     }
 
     public ArrayList<Spell> getSpells(){
+        ArrayList<Spell> spells = new ArrayList<>();
+        for (int i = 0; i <= Spell.maxID; i++){
+            int usages = sharedPreferences.getInt("spell_" + i, -2);
+            if(usages != -2)
+                spells.add(new Spell(i, usages));
+            else if(i == 0 || i == 4 || i == 8 || i == 12)
+                spells.add(new Spell(i, 0));
+        }
+
         return spells;
     }
 
     public int getLevel() {
-        return level;
+        return sharedPreferences.getInt("level", 1);
     }
 
     public void addXp(int xp){
-        this.xp += xp;
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt("xp", getXp() + xp);
+        editor.apply();
     }
     public int getXp() {
-        return xp;
+        return sharedPreferences.getInt("xp", 0);
     }
     public int getMaxXp() {
-        return maxXp;
+        return sharedPreferences.getInt("maxXp", (int)(Constants.baseMaxXp  * Constants.xpFunction(1)));
     }
 
     public void damage(int damage){
+        int health = getHealth();
         health -= damage;
         if(health < 0)
             health = 0;
+        setHealth(health);
     }
     public int getHealth() {
-        return health;
+        return sharedPreferences.getInt("health", getMaxHealth());
     }
     public void setHealth(int health){
-        this.health = health;
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt("health", health);
+        editor.apply();
     }
     public int getMaxHealth() {
-        return maxHealth;
+        return sharedPreferences.getInt("maxHealth", Constants.baseHealth);
     }
     public int getMaxStamina(){
-        return maxStamina;
+        return sharedPreferences.getInt("maxStamina", Constants.baseStamina);
     }
     public float getTime() {
-        return time;
+        return sharedPreferences.getFloat("time", Constants.baseTime);
     }
     public float getStrength() {
-        return strength;
+        return sharedPreferences.getFloat("strength", Constants.baseStrength);
     }
 
     public int getStaminaLevel() {
-        return staminaLevel;
+        return sharedPreferences.getInt("staminaLevel", 1);
     }
     public int getHealthLevel() {
-        return healthLevel;
+        return sharedPreferences.getInt("healthLevel", 1);
     }
     public int getTimeLevel() {
-        return timeLevel;
+        return sharedPreferences.getInt("timeLevel", 1);
     }
     public int getStrengthLevel() {
-        return strengthLevel;
+        return sharedPreferences.getInt("strengthLevel", 1);
     }
 
     public void setLevel(int level){
-        for (int i = this.level; i < level; i++)
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        int xp = getXp();
+        for (int i = getLevel(); i < level; i++)
             xp -= Constants.baseMaxXp * Constants.xpFunction(i);
 
-        this.level = level;
-        maxXp = (int) (Constants.baseMaxXp * Constants.xpFunction(level));
+        editor.putInt("level", level);
+        editor.putInt("xp", xp);
+        editor.putInt("maxXp", (int) (Constants.baseMaxXp * Constants.xpFunction(level)));
+        editor.apply();
     }
     public void setStaminaLevel(int level){
-        staminaLevel = level;
-        maxStamina = (int) (Constants.baseStamina * Constants.levelFunction(level));
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt("staminaLevel", level);
+        editor.putInt("maxStamina", (int) (Constants.baseStamina * Constants.levelFunction(level)));
+        editor.apply();
     }
     public void setHealthLevel(int level){
-        healthLevel = level;
-        maxHealth = (int) (Constants.baseHealth * Constants.levelFunction(level));
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt("healthLevel", level);
+        editor.putInt("maxHealth", (int) (Constants.baseHealth * Constants.levelFunction(level)));
+        editor.apply();
     }
     public void setTimeLevel(int level){
-        timeLevel = level;
-        time = Constants.baseTime * Constants.levelFunction(level);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt("timeLevel", level);
+        editor.putFloat("time", Constants.baseTime * Constants.levelFunction(level));
+        editor.apply();
     }
     public void setStrengthLevel(int level){
-        strengthLevel = level;
-        strength = Constants.baseStrength * Constants.levelFunction(level);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt("strengthLevel", level);
+        editor.putFloat("strength", Constants.baseStrength * Constants.levelFunction(level));
+        editor.apply();
     }
 
     public Vector2 getLastSavePosition() {
-        return lastSavePosition;
+        return new Vector2(
+                sharedPreferences.getFloat("lastSavePositionX", 0.0f),
+                sharedPreferences.getFloat("lastSavePositionY", 0.0f));
     }
+
     public void kill(){
-        xp = 0;
-        health = maxHealth;
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt("xp", 0);
+        editor.apply();
+        setHealth(getMaxHealth());
     }
 
     public void setLastSavePosition(Vector2 lastSavePosition){
-        this.lastSavePosition = lastSavePosition;
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putFloat("lastSavePositionX", lastSavePosition.x);
+        editor.putFloat("lastSavePositionY", lastSavePosition.y);
+        editor.apply();
     }
 }

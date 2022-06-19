@@ -12,4 +12,9 @@ public enum Block {
     BLUE_SLIME,
     GREEN_SLIME,
     PURPLE_SLIME,
+    BAT,
+    SPIDER,
+    DANGER_NOODLE,
+    PLANT,
+    GOLEM
 }

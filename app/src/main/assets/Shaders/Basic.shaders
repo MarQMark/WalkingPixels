@@ -75,7 +75,7 @@ void main()
         if(texture2D(u_Textures[index], v_TexCoord).a == 0.0)
             discard;
 
-        if(u_LightCount == 0.0){
+        if(u_LightCount == 0.0 || index == 1){
             gl_FragColor = vec4(r, g, b, a);
         }
         else {

@@ -117,13 +117,11 @@ public class LevelUp extends AppCompatActivity {
             player.setStrengthLevel(statStrength.getLevel());
             player.setLevel(level);
             player.setHealth(player.getMaxHealth());
-            player.saveStats();
             finish();
         });
         ResponsiveButton btnCancel = findViewById(R.id.btn_level_up_cancel);
         btnCancel.setOnClickListener(e -> {
             player.setHealth(player.getMaxHealth());
-            player.saveStats();
             finish();
         });
 
@@ -148,24 +146,11 @@ public class LevelUp extends AppCompatActivity {
         btnHealthAdd.setEnabled(enable);
         btnTimeAdd.setEnabled(enable);
         btnStrengthAdd.setEnabled(enable);
-        if(!enable){
-            btnStaminaAdd.getForeground().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
-            btnHealthAdd.getForeground().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
-            btnTimeAdd.getForeground().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
-            btnStrengthAdd.getForeground().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
-        }
-        else {
-            btnStaminaAdd.getForeground().setColorFilter(null);
-            btnHealthAdd.getForeground().setColorFilter(null);
-            btnTimeAdd.getForeground().setColorFilter(null);
-            btnStrengthAdd.getForeground().setColorFilter(null);
-        }
     }
 
     @Override
     public void onBackPressed() {
         player.setHealth(player.getMaxHealth());
-        player.saveStats();
         super.onBackPressed();
     }
 }

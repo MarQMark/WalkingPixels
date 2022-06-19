@@ -19,6 +19,7 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Switch;
@@ -45,10 +46,13 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
     private Iconbar barStamina;
     private Iconbar barHealth;
     private ResponsiveButton btnMoveForward;
+    private ResponsiveButton btnBonfire;
 
     private int[] stamina;
+    private boolean moving = false;
 
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,37 +83,25 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
         btnStats.setOnClickListener(e -> startActivity(new Intent(this, Stats.class)));
         ResponsiveButton btnMap = findViewById(R.id.btn_walking_map);
         btnMap.setOnClickListener(e -> startActivity(new Intent(this, Map.class)));
-        ResponsiveButton btnBonfire = findViewById(R.id.btn_walking_bonfire);
+        btnBonfire = findViewById(R.id.btn_walking_bonfire);
         btnBonfire.setOnClickListener(e -> {
             player.setLastSavePosition(new Vector2(GameState.world.getPosition()));
-            player.saveStats();
-            Log.d("Bonfire", player.getLastSavePosition().x + "  " + player.getLastSavePosition().y);
             levelUpActivityLauncher.launch(new Intent(this, LevelUp.class));
         });
 
 
         //move forward
         btnMoveForward = findViewById(R.id.btn_walking_forward);
-        btnMoveForward.setOnClickListener(e -> {
-            if(GameState.world.forward())
-            {
-                stamina[0] -= 100;
-                barStamina.setProgress(stamina[0]);
-
-                Enemy enemy = GameState.world.checkForEnemy();
-                if(enemy != null){
-                    btnMoveForward.setEnabled(false);
-                    Intent intent = new Intent(this, Drawing.class);
-                    intent.putExtra("ENEMY", enemy);
-                    drawingActivityLauncher.launch(intent);
-                }
+        btnMoveForward.setOnClickListener(e -> forward());
+        /*Handler handler1 = new Handler();
+        final Runnable r1 = new Runnable() {
+            public void run() {
+                handler1.postDelayed(this, 200);
+                if(moving) forward();
             }
+        };
+        handler1.postDelayed(r1, 0);*/
 
-            if(GameState.world.checkForBonfire())
-                btnBonfire.setVisibility(View.VISIBLE);
-            else
-                btnBonfire.setVisibility(View.INVISIBLE);
-        });
 
         //rotate map
         int[] rotationLeft = new int[] {0};
@@ -158,11 +150,9 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
         if (result.getResultCode() == Activity.RESULT_OK) {
             Intent data = result.getData();
             if(data != null){
-                player.loadStats();
-                Log.d("Bonfire", player.getLastSavePosition().x + "  " + player.getLastSavePosition().y);
-
                 int health = data.getIntExtra("health", 0);
                 if(health == 0){
+                    //player lost
                     player.kill();
                     barHealth.setProgress(player.getHealth());
                     new DeathScreen(Walking.this);
@@ -170,6 +160,7 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
                     GameState.world.setPosition((int) lastPosition.x, (int) lastPosition.y);
                 }
                 else {
+                    //player won
                     GameState.world.removeEnemy();
                     player.setHealth(health);
                     player.addXp(data.getIntExtra("xp", 0));
@@ -181,21 +172,19 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
                 for (Spell spell : player.getSpells()){
                     if(spell.getId() < 16 && spell.getId() % 4 < 3 && spell.getUsages() >= Constants.tierSpellUsages[spell.getId() % 4]){
                         new NewSpell(Walking.this, new Spell(spell.getId() + 1, 0));
-                        spell.setMastered();
+                        player.setSpellUsages(spell.getId(), -1);
                         newSpells.add(spell.getId() + 1);
                     }
                 }
                 for (int id : newSpells){
                     player.addSpell(id);
-
+                    System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA          " + id);
                     //Meggido
                     if(player.hasSpell(3) && player.hasSpell(7) && player.hasSpell(11) && player.hasSpell(15)){
                         new NewSpell(Walking.this, new Spell(16, 0));
                         player.addSpell(16);
                     }
                 }
-
-                player.saveStats();
             }
         }
     });
@@ -207,6 +196,28 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
         barStamina.setMax(player.getMaxStamina());
         barStamina.setProgress(stamina[0]);
     });
+
+    private void forward(){
+        if(GameState.world.forward())
+        {
+            stamina[0] -= 100;
+            barStamina.setProgress(stamina[0]);
+
+            Enemy enemy = GameState.world.checkForEnemy();
+            if(enemy != null){
+                moving = false;
+                btnMoveForward.setEnabled(false);
+                Intent intent = new Intent(this, Drawing.class);
+                intent.putExtra("ENEMY", enemy);
+                drawingActivityLauncher.launch(intent);
+            }
+        }
+
+        if(GameState.world.checkForBonfire())
+            btnBonfire.setVisibility(View.VISIBLE);
+        else
+            btnBonfire.setVisibility(View.INVISIBLE);
+    }
 
     @Override
     public void onSensorChanged(SensorEvent event) {
