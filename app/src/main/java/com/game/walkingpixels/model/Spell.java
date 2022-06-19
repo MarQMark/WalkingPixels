@@ -22,8 +22,7 @@ public class Spell {
                 name = "Spark";
                 description = "This is the most basic fire spell.";
                 castTime = 2.0;
-                maxDamage = 250;
-                //maxDamage = 25;
+                maxDamage = 25;
                 break;
 
             case 1:

@@ -4,7 +4,7 @@ import com.game.walkingpixels.controller.Map;
 
 public class Constants {
 
-    public static final int[] tierSpellUsages = new int[]{2, 3, 4};
+    public static final int[] tierSpellUsages = new int[]{20, 30, 50};
 
     public static final int baseStamina = 5000;
     public static final int baseHealth = 100;

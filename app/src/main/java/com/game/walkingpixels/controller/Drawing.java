@@ -108,15 +108,13 @@ public class Drawing extends AppCompatActivity {
                         finish();
                     }
 
-
-
                     //update damage taken labels
                     if (oldHealth[0] != enemy.getHealth()) {
-                        lblEnemyDamageTaken.setText(Integer.toString(enemy.getHealth() - oldHealth[0]));
+                        lblEnemyDamageTaken.setText(getResources().getString(R.string.lbl_drawing_damage, enemy.getHealth() - oldHealth[0]));
                         numberLoopsDamageTakenVisible[0] = 50;
                     }
                     if (oldHealth[1] != player.getHealth()) {
-                        lblPlayerDamageTaken.setText(Integer.toString(player.getHealth() - oldHealth[1]));
+                        lblPlayerDamageTaken.setText(getResources().getString(R.string.lbl_drawing_damage, player.getHealth() - oldHealth[1]));
                         numberLoopsDamageTakenVisible[0] = 50;
                     }
                     if (numberLoopsDamageTakenVisible[0] > 0)
@@ -147,5 +145,9 @@ public class Drawing extends AppCompatActivity {
             };
             handler.postDelayed(r, 0);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
     }
 }

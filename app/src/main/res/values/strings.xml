@@ -27,4 +27,5 @@
     <string name="lbl_settings_credits_credits">Font: Alagard - Hewett Tsoi</string>
     <string name="lbl_walking_auto_walk">AUTO-WALK</string>
     <string name="lbl_walking_out_of_stamina">OUT OF STAMINA!</string>
+    <string name="lbl_drawing_damage">%1$d</string>
 </resources>
