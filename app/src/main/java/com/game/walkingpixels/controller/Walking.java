@@ -4,6 +4,7 @@ package com.game.walkingpixels.controller;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -17,6 +18,8 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.TextView;
 
 import com.game.walkingpixels.R;
 import com.game.walkingpixels.model.Constants;
@@ -40,11 +43,17 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
     private Iconbar barStamina;
     private Iconbar barHealth;
     private ResponsiveButton btnMoveForward;
+    private ResponsiveButton btnStats;
+    private ResponsiveButton btnMap;
+    private ResponsiveButton btnTurnLeft;
+    private ResponsiveButton btnTurnRight;
     private ResponsiveButton btnBonfire;
+    private SwitchCompat switchAutoMoving;
+    private TextView lblOutOfStamina;
 
     private int[] stamina;
-    private boolean moving = false;
-    private boolean rTWalking = false;
+    private boolean autoMoving = false;
+    private boolean realTimeWalking = false;
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -59,7 +68,7 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
         sensorManager.registerListener(this, stepCounterSensor, SensorManager.SENSOR_DELAY_FASTEST);
 
         SharedPreferences sharedPreferences = getSharedPreferences("Settings", MODE_PRIVATE);
-        rTWalking = sharedPreferences.getBoolean("r_t_walking", false);
+        realTimeWalking = sharedPreferences.getBoolean("r_t_walking", false);
 
         sv = findViewById(R.id.myGLSurfaceViewWalking);
         sv.init();
@@ -77,9 +86,9 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
         barHealth.setProgress(player.getHealth());
 
         //buttons
-        ResponsiveButton btnStats = findViewById(R.id.btn_walking_stats);
+        btnStats = findViewById(R.id.btn_walking_stats);
         btnStats.setOnClickListener(e -> startActivity(new Intent(this, Stats.class)));
-        ResponsiveButton btnMap = findViewById(R.id.btn_walking_map);
+        btnMap = findViewById(R.id.btn_walking_map);
         btnMap.setOnClickListener(e -> startActivity(new Intent(this, Map.class)));
         btnBonfire = findViewById(R.id.btn_walking_bonfire);
         btnBonfire.setVisibility(MainWorld.getWorld().checkForBonfire() ? View.VISIBLE : View.INVISIBLE);
@@ -89,38 +98,56 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
             levelUpActivityLauncher.launch(new Intent(this, LevelUp.class));
         });
 
+        //out of stamina
+        lblOutOfStamina = findViewById(R.id.lbl_walking_out_of_stamina);
+        lblOutOfStamina.setVisibility(stamina[0] == 0 ? View.VISIBLE : View.INVISIBLE);
 
         //move forward
         btnMoveForward = findViewById(R.id.btn_walking_forward);
         btnMoveForward.setOnClickListener(e -> forward());
-        /*Handler handler1 = new Handler();
-        final Runnable r1 = new Runnable() {
+
+        //auto moving
+        switchAutoMoving = findViewById(R.id.switch_walking_auto_walking);
+        switchAutoMoving.setChecked(false);
+        switchAutoMoving.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            btnStats.setEnabled(!isChecked);
+            btnTurnLeft.setEnabled(!isChecked);
+            btnTurnRight.setEnabled(!isChecked);
+            btnMoveForward.setEnabled(!isChecked);
+            btnMap.setEnabled(!isChecked);
+            btnBonfire.setEnabled(!isChecked);
+            autoMoving = isChecked;
+        });
+        //auto moving loop
+        Handler autoMovingHandler = new Handler();
+        final Runnable autoMovingRunnable = new Runnable() {
             public void run() {
-                handler1.postDelayed(this, 200);
-                if(moving) forward();
+                autoMovingHandler.postDelayed(this, 500);
+                if(autoMoving)
+                    forward();
             }
         };
-        handler1.postDelayed(r1, 0);*/
-
+        autoMovingHandler.postDelayed(autoMovingRunnable, 0);
 
         //rotate map
         int[] rotationLeft = new int[] {0};
-        ResponsiveButton btnTurnLeft = findViewById(R.id.btn_walking_turn_left);
+        btnTurnLeft = findViewById(R.id.btn_walking_turn_left);
         btnTurnLeft.setOnClickListener(e -> rotationLeft[0] += 45);
-        ResponsiveButton btnTurnRight = findViewById(R.id.btn_walking_turn_right);
+        btnTurnRight = findViewById(R.id.btn_walking_turn_right);
         btnTurnRight.setOnClickListener(e -> rotationLeft[0] += -45);
 
-        //2nd Game loop
-        Handler handler = new Handler();
-        final Runnable r = new Runnable() {
+        //Rotation loop Game loop
+        Handler rotationHandler = new Handler();
+        final Runnable rotationRunnable = new Runnable() {
             public void run() {
-                handler.postDelayed(this, 10);
+                rotationHandler.postDelayed(this, 10);
                 if(rotationLeft[0] != 0){
 
                     btnMoveForward.setEnabled(false);
                     btnStats.setEnabled(false);
                     btnMap.setEnabled(false);
                     btnBonfire.setEnabled(false);
+                    switchAutoMoving.setEnabled(false);
 
                     if(rotationLeft[0] > 0){
                         sv.getRenderer().camera.rotationY++;
@@ -140,12 +167,13 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
                         btnStats.setEnabled(true);
                         btnMap.setEnabled(true);
                         btnBonfire.setEnabled(true);
+                        switchAutoMoving.setEnabled(true);
                     }
                 }
 
             }
         };
-        handler.postDelayed(r, 0);
+        rotationHandler.postDelayed(rotationRunnable, 0);
     }
 
 
@@ -203,19 +231,30 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
     });
 
     private void forward(){
-        if(MainWorld.getWorld().forward())
+        if(stamina[0] > 0 && MainWorld.getWorld().forward())
         {
             SharedPreferences.Editor editor = getSharedPreferences("World", Context.MODE_PRIVATE).edit();
             editor.putInt("positionX", (int) MainWorld.getWorld().getPosition().x);
             editor.putInt("positionY", (int) MainWorld.getWorld().getPosition().y);
             editor.apply();
 
-            stamina[0] -= 100;
+            stamina[0] -= 1;
             barStamina.setProgress(stamina[0]);
+            if(stamina[0] <= 0){
+                stamina[0] = 0;
+                lblOutOfStamina.setVisibility(View.VISIBLE);
+            }
 
             Enemy enemy = MainWorld.getWorld().checkForEnemy();
             if(enemy != null){
-                moving = false;
+                btnStats.setEnabled(true);
+                btnTurnLeft.setEnabled(true);
+                btnTurnRight.setEnabled(true);
+                btnMap.setEnabled(true);
+                btnBonfire.setEnabled(true);
+                switchAutoMoving.setChecked(false);
+                autoMoving = false;
+
                 btnMoveForward.setEnabled(false);
                 Intent intent = new Intent(this, Drawing.class);
                 intent.putExtra("ENEMY", enemy);
@@ -231,11 +270,12 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        if(rTWalking){
+        if(realTimeWalking){
             if(btnMoveForward.isEnabled())
                 forward();
         }else {
             stamina[0]++;
+            lblOutOfStamina.setVisibility(View.INVISIBLE);
         }
     }
 

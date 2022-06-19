@@ -23,6 +23,11 @@
         <item name="colorSwitchThumbNormal">@color/scroll_background</item>
         <item name="android:fontFamily">@font/alagard</item>
     </style>
+    <style name="BronzeSwitch">
+        <item name="colorControlActivated">@color/bronze</item>
+        <item name="colorSwitchThumbNormal">@color/light_bronze</item>
+        <item name="android:fontFamily">@font/alagard</item>
+    </style>
     <style name="ScrollAlertDialog" parent="Theme.AppCompat.Dialog.Alert">
         <item name="android:fontFamily">@font/alagard</item>
         <item name="android:background">@color/scroll_background</item>

@@ -104,5 +104,39 @@
         iconbar:icon="@drawable/health_icon"
         iconbar:icon_bar_progress="@drawable/bar_health_clip" />
 
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/switch_walking_auto_walking"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:theme="@style/BronzeSwitch"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_walking_forward"
+        app:layout_constraintStart_toStartOf="@+id/btn_walking_stats"
+        app:layout_constraintTop_toTopOf="@+id/btn_walking_forward" />
+
+    <TextView
+        android:id="@+id/lbl_walking_auto_walking_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/lbl_walking_auto_walk"
+        android:textAlignment="center"
+        android:textColor="@color/bronze"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/switch_walking_auto_walking"
+        app:layout_constraintEnd_toEndOf="@+id/switch_walking_auto_walking"
+        app:layout_constraintStart_toStartOf="@+id/switch_walking_auto_walking" />
+
+    <TextView
+        android:id="@+id/lbl_walking_out_of_stamina"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="@string/lbl_walking_out_of_stamina"
+        android:textColor="#D22D2C"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/btn_walking_forward"
+        app:layout_constraintEnd_toEndOf="@+id/btn_walking_forward"
+        app:layout_constraintStart_toStartOf="@+id/btn_walking_forward" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

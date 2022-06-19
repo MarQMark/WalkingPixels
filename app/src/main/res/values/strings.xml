@@ -25,4 +25,6 @@
     <string name="lbl_settings_walking">! Real-Time Walking may be very delayed sometimes</string>
     <string name="lbl_settings_credits_header">CREDITS</string>
     <string name="lbl_settings_credits_credits">Font: Alagard - Hewett Tsoi</string>
+    <string name="lbl_walking_auto_walk">AUTO-WALK</string>
+    <string name="lbl_walking_out_of_stamina">OUT OF STAMINA!</string>
 </resources>
