@@ -28,6 +28,7 @@ import com.game.walkingpixels.R;
 import com.game.walkingpixels.model.Constants;
 import com.game.walkingpixels.model.Enemy;
 import com.game.walkingpixels.model.GameState;
+import com.game.walkingpixels.model.MainWorld;
 import com.game.walkingpixels.model.Player;
 import com.game.walkingpixels.model.Spell;
 import com.game.walkingpixels.util.vector.Vector2;
@@ -85,7 +86,7 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
         btnMap.setOnClickListener(e -> startActivity(new Intent(this, Map.class)));
         btnBonfire = findViewById(R.id.btn_walking_bonfire);
         btnBonfire.setOnClickListener(e -> {
-            player.setLastSavePosition(new Vector2(GameState.world.getPosition()));
+            player.setLastSavePosition(new Vector2(MainWorld.getWorld().getPosition()));
             levelUpActivityLauncher.launch(new Intent(this, LevelUp.class));
         });
 
@@ -132,6 +133,10 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
                     }
 
                     if(rotationLeft[0] == 0){
+                        SharedPreferences sharedPreferences = getSharedPreferences("World", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putFloat("rotation", sv.getRenderer().camera.rotationY);
+                        editor.apply();
                         btnMoveForward.setEnabled(true);
                         btnStats.setEnabled(true);
                         btnMap.setEnabled(true);
@@ -157,11 +162,11 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
                     barHealth.setProgress(player.getHealth());
                     new DeathScreen(Walking.this);
                     Vector2 lastPosition = player.getLastSavePosition();
-                    GameState.world.setPosition((int) lastPosition.x, (int) lastPosition.y);
+                    MainWorld.getWorld().setPosition((int) lastPosition.x, (int) lastPosition.y);
                 }
                 else {
                     //player won
-                    GameState.world.removeEnemy();
+                    MainWorld.getWorld().removeEnemy();
                     player.setHealth(health);
                     player.addXp(data.getIntExtra("xp", 0));
                     barHealth.setProgress(player.getHealth());
@@ -178,7 +183,7 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
                 }
                 for (int id : newSpells){
                     player.addSpell(id);
-                    System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA          " + id);
+
                     //Meggido
                     if(player.hasSpell(3) && player.hasSpell(7) && player.hasSpell(11) && player.hasSpell(15)){
                         new NewSpell(Walking.this, new Spell(16, 0));
@@ -198,12 +203,17 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
     });
 
     private void forward(){
-        if(GameState.world.forward())
+        if(MainWorld.getWorld().forward())
         {
+            SharedPreferences.Editor editor = getSharedPreferences("World", Context.MODE_PRIVATE).edit();
+            editor.putInt("positionX", (int) MainWorld.getWorld().getPosition().x);
+            editor.putInt("positionY", (int) MainWorld.getWorld().getPosition().y);
+            editor.apply();
+
             stamina[0] -= 100;
             barStamina.setProgress(stamina[0]);
 
-            Enemy enemy = GameState.world.checkForEnemy();
+            Enemy enemy = MainWorld.getWorld().checkForEnemy();
             if(enemy != null){
                 moving = false;
                 btnMoveForward.setEnabled(false);
@@ -213,7 +223,7 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
             }
         }
 
-        if(GameState.world.checkForBonfire())
+        if(MainWorld.getWorld().checkForBonfire())
             btnBonfire.setVisibility(View.VISIBLE);
         else
             btnBonfire.setVisibility(View.INVISIBLE);

@@ -22,6 +22,4 @@ public class GameState {
     public static void setDrawTime(double time){
         drawTime = time;
     }
-
-    public static World world = new World(54216.709022936559375);
 }

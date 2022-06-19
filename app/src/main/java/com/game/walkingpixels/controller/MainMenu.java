@@ -2,11 +2,16 @@ package com.game.walkingpixels.controller;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 
 import com.game.walkingpixels.R;
+import com.game.walkingpixels.model.MainWorld;
+import com.game.walkingpixels.model.World;
+import com.game.walkingpixels.view.ResponsiveButton;
 
 public class MainMenu extends AppCompatActivity {
 
@@ -19,21 +24,28 @@ public class MainMenu extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
 
-        /*View decorView = getWindow().getDecorView();
-        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
-        decorView.setSystemUiVisibility(uiOptions);*/
+        MainWorld.init(MainMenu.this);
 
-        Button btnPlay = findViewById(R.id.btn_main_menu_play);
+
+        MainMenuGLSurfaceView sv = findViewById(R.id.myGLSurfaceViewMainMenu);
+        sv.init();
+
+        ResponsiveButton btnPlay = findViewById(R.id.btn_main_menu_play);
         btnPlay.setOnClickListener(e -> {
             Intent intent = new Intent(this, Walking.class);
             startActivity(intent);
         });
-        Button btnOptions = findViewById(R.id.btn_main_menu_options);
+        ResponsiveButton btnOptions = findViewById(R.id.btn_main_menu_options);
         btnOptions.setOnClickListener(e -> {
             Intent intent = new Intent(this, Settings.class);
             startActivity(intent);
         });
-        Button btnExit = findViewById(R.id.btn_main_menu_exit);
+        ResponsiveButton btnHelp = findViewById(R.id.btn_main_menu_help);
+        btnHelp.setOnClickListener(e -> {
+            Intent intent = new Intent(this, Help.class);
+            startActivity(intent);
+        });
+        ResponsiveButton btnExit = findViewById(R.id.btn_main_menu_exit);
         btnExit.setOnClickListener(e -> {
             finish();
             System.exit(0);

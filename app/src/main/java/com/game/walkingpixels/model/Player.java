@@ -42,13 +42,11 @@ public class Player {
         editor.apply();
     }
 
-
     public void setSpellUsages(int id, int usages){
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt("spell_" + id, usages);
         editor.apply();
     }
-
     public void addSpell(int id){
         for (Spell spell : getSpells()){
             if(id == spell.getId())
@@ -59,7 +57,6 @@ public class Player {
         editor.putInt("spell_" + id, 0);
         editor.apply();
     }
-
     public boolean hasSpell(int id){
         for (Spell spell : getSpells()){
             if(id == spell.getId())
@@ -67,7 +64,6 @@ public class Player {
         }
         return false;
     }
-
     public ArrayList<Spell> getSpells(){
         ArrayList<Spell> spells = new ArrayList<>();
         for (int i = 0; i <= Spell.maxID; i++){
@@ -180,6 +176,12 @@ public class Player {
                 sharedPreferences.getFloat("lastSavePositionX", 0.0f),
                 sharedPreferences.getFloat("lastSavePositionY", 0.0f));
     }
+    public void setLastSavePosition(Vector2 lastSavePosition){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putFloat("lastSavePositionX", lastSavePosition.x);
+        editor.putFloat("lastSavePositionY", lastSavePosition.y);
+        editor.apply();
+    }
 
     public void kill(){
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -188,10 +190,4 @@ public class Player {
         setHealth(getMaxHealth());
     }
 
-    public void setLastSavePosition(Vector2 lastSavePosition){
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putFloat("lastSavePositionX", lastSavePosition.x);
-        editor.putFloat("lastSavePositionY", lastSavePosition.y);
-        editor.apply();
-    }
 }

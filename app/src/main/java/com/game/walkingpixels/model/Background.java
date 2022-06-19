@@ -20,7 +20,7 @@ public class Background {
     }
 
     public void update(double dt, int width, int height){
-        currentTime += dt;
+        currentTime += dt / 3;
         if(currentTime >= loopTime)
             currentTime = 0.0;
 

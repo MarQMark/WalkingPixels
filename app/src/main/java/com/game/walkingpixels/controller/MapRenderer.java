@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.game.walkingpixels.Camera;
 import com.game.walkingpixels.model.GameState;
+import com.game.walkingpixels.model.MainWorld;
 import com.game.walkingpixels.openGL.Batch;
 import com.game.walkingpixels.openGL.Shader;
 import com.game.walkingpixels.openGL.Texture;
@@ -30,7 +31,7 @@ public class MapRenderer extends Renderer{
     public void init() {
         registerShader("map", new Shader(context, "Shaders/Map.shaders"));
         registerBatch("map", new Batch(shader("map").getID(), 20000, MapVertex.size, MapVertex.getLayout()));
-        batch("map").addVertices("Grid", mapMeshBuilder.generateMesh(GameState.world,32, 64));
+        batch("map").addVertices("Grid", mapMeshBuilder.generateMesh(MainWorld.getWorld(),32, 64));
         batch("map").addTexture(new Texture(context, "textures/map_texture_atlas.png", 0));
 
         shader("map").bind();
@@ -40,7 +41,7 @@ public class MapRenderer extends Renderer{
     @Override
     public void update(double dt) {
         if(!initialized){
-            batch("map").updateVertices("Grid", mapMeshBuilder.generateMesh(GameState.world,33, (int) (33.0f * (height / width))));
+            batch("map").updateVertices("Grid", mapMeshBuilder.generateMesh(MainWorld.getWorld(),33, (int) (33.0f * (height / width))));
             initialized = true;
         }
     }

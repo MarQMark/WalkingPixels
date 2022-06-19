@@ -5,17 +5,18 @@ import android.content.SharedPreferences;
 
 import com.game.walkingpixels.Camera;
 import com.game.walkingpixels.model.Background;
-import com.game.walkingpixels.model.GameState;
+import com.game.walkingpixels.model.Block;
 import com.game.walkingpixels.model.MainWorld;
 import com.game.walkingpixels.model.Sun;
+import com.game.walkingpixels.model.World;
 import com.game.walkingpixels.openGL.Batch;
 import com.game.walkingpixels.openGL.LightManager;
 import com.game.walkingpixels.openGL.Shader;
 import com.game.walkingpixels.openGL.Texture;
 import com.game.walkingpixels.openGL.vertices.PlaneVertex;
 import com.game.walkingpixels.openGL.vertices.WorldVertex;
-import com.game.walkingpixels.util.meshbuilder.MobMeshBuilder;
 import com.game.walkingpixels.util.meshbuilder.BlockMeshBuilder;
+import com.game.walkingpixels.util.meshbuilder.MobMeshBuilder;
 import com.game.walkingpixels.util.vector.Vector3;
 import com.game.walkingpixels.util.vector.Vector4;
 
@@ -24,17 +25,17 @@ import static android.opengl.GLES20.GL_DEPTH_BUFFER_BIT;
 import static android.opengl.GLES20.glClear;
 import static android.opengl.GLES20.glClearColor;
 
-public class WalkingRenderer extends Renderer{
+public class MainMenuRenderer extends Renderer{
 
-    private Background background;
+    private World world;
 
     private final Sun sun = new Sun();
+    private Background background;
 
     private final MobMeshBuilder mobMeshBuilder = new MobMeshBuilder();
     private final BlockMeshBuilder blockMeshBuilder = new BlockMeshBuilder();
 
-
-    public WalkingRenderer(Context context) {
+    public MainMenuRenderer(Context context) {
         super(context);
     }
 
@@ -42,17 +43,21 @@ public class WalkingRenderer extends Renderer{
     public void init() {
         camera = new Camera(new Vector3(0.0f, 0.0f, 12.8f), new Vector3(0.0f, 0.0f, -1.0f));
         camera.rotationX = 50;
-        SharedPreferences sharedPreferences = context.getSharedPreferences("World", Context.MODE_PRIVATE);
-        camera.rotationY = sharedPreferences.getFloat("rotation", 0);
+        camera.rotationY =  0;
 
-        //init shaders
+        world = new World(MainWorld.getWorld().getSeed());
+        world.getBlockGrid()
+                [world.getBlockGridSize() / 2]
+                [world.getBlockGridSize() / 2]
+                [world.generateHeight(world.getBlockGridSize() / 2, world.getBlockGridSize() / 2) + 1]
+                = Block.AIR;
+
         SharedPreferences sharedPref = context.getSharedPreferences("Settings", Context.MODE_PRIVATE);
         if(sharedPref.getBoolean("shadowEnabled", true))
-            registerShader("walk", new Shader(context, "Shaders/BasicShadow.shaders"));
+            registerShader("world", new Shader(context, "Shaders/BasicShadow.shaders"));
         else
-            registerShader("walk", new Shader(context, "Shaders/Basic.shaders"));
+            registerShader("world", new Shader(context, "Shaders/Basic.shaders"));
         registerShader("background", new Shader(context, "Shaders/Background.shaders"));
-
 
         //init background
         background = new Background(new Texture(context, "textures/clouds.png", 0), 20);
@@ -62,51 +67,44 @@ public class WalkingRenderer extends Renderer{
         batch("background").addVertices("Background", background.getVertices());
         batch("background").addTexture(background.getTexture());
 
-
         //init light
-        registerLightManager("walk", new LightManager());
-        lightManager("walk").initShader(new Shader(context, "Shaders/ShadowGeometry.shaders"));
-        lightManager("walk").initWorldShader(shader("walk"));
-        lightManager("walk").createPointLight(sun.getPosition(), new Vector4(1f, 1f, 1f, 1.0f), 1000f, camera);
-
+        registerLightManager("world", new LightManager());
+        lightManager("world").initShader(new Shader(context, "Shaders/ShadowGeometry.shaders"));
+        lightManager("world").initWorldShader(shader("world"));
+        lightManager("world").createPointLight(sun.getPosition(), new Vector4(1f, 1f, 1f, 1.0f), 1000f, camera);
 
         //init world
-        shader("walk").bind();
-        registerBatch("walk", new Batch(shader("walk").getID(), 2000, WorldVertex.size, WorldVertex.getLayout()));
-        batch("walk").addVertices("Player", mobMeshBuilder.generateMesh(MainWorld.getWorld(), camera, false));
-        batch("walk").addVertices("World", blockMeshBuilder.generateMesh(MainWorld.getWorld()));
-        batch("walk").addTexture(new Texture(context, "textures/texture_atlas.png", 0));
-        batch("walk").addTexture(new Texture(context, "textures/mob_texture_atlas.png", 1));
-        batch("walk").addTexture(new Texture(context, "textures/tree.png", 2));
-        batch("walk").addTexture(new Texture(context, "textures/bonfire.png", 3));
+        shader("world").bind();
+        registerBatch("world", new Batch(shader("world").getID(), 2000, WorldVertex.size, WorldVertex.getLayout()));
+        batch("world").addVertices("Mobs", mobMeshBuilder.generateMesh(world, camera, false));
+        batch("world").addVertices("World", blockMeshBuilder.generateMesh(world));
+        batch("world").addTexture(new Texture(context, "textures/texture_atlas.png", 0));
+        batch("world").addTexture(new Texture(context, "textures/mob_texture_atlas.png", 1));
+        batch("world").addTexture(new Texture(context, "textures/tree.png", 2));
+        batch("world").addTexture(new Texture(context, "textures/bonfire.png", 3));
 
-        shader("walk").setUniform1iv("u_Textures", 4, new int[] {0, 1, 2, 3}, 0);
+        shader("world").setUniform1iv("u_Textures", 4, new int[] {0, 1, 2, 3}, 0);
     }
 
     @Override
     public void update(double dt) {
-        //update camera rotation
-        MainWorld.getWorld().setDirection((int) camera.rotationY);
+        camera.rotationY += dt / 100;
 
         //update sun
-        lightManager("walk").setLightPosition(0, sun.getPosition());
+        lightManager("world").setLightPosition(0, sun.getPosition());
 
         //update background
         background.update(dt / 1000, width, height);
         batch("background").updateVertices("Background", background.getVertices());
 
         //update player rotation
-        batch("walk").updateVertices("Player", mobMeshBuilder.generateMesh(MainWorld.getWorld(), camera, false));
-
-        //move world
-        if(MainWorld.getWorld().hasMoved())
-            batch("walk").updateVertices("World" , blockMeshBuilder.generateMesh(MainWorld.getWorld()));
+        batch("world").updateVertices("Mobs", mobMeshBuilder.generateMesh(world, camera, false));
     }
 
     @Override
     public void render(double dt) {
         //calculate sun shadow
-        lightManager("walk").calculateShadow(new Batch[]{batch("walk")}, width, height);
+        lightManager("world").calculateShadow(new Batch[]{batch("world")}, width, height);
 
         //set background color according to the time
         Vector4 clearColor = sun.getColor();
@@ -120,9 +118,9 @@ public class WalkingRenderer extends Renderer{
 
         glClear(GL_DEPTH_BUFFER_BIT);
         //render world
-        shader("walk").bind();
-        shader("walk").setUniformMatrix4fv("mvpmatrix", camera.getMVPMatrix());
-        batch("walk").bind();
-        batch("walk").draw();
+        shader("world").bind();
+        shader("world").setUniformMatrix4fv("mvpmatrix", camera.getMVPMatrix());
+        batch("world").bind();
+        batch("world").draw();
     }
 }

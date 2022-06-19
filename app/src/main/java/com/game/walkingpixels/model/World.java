@@ -12,7 +12,7 @@ public class World {
     public final int worldMaxHeight = 5;
     public int blockGridSize = 15;
 
-    private int despawnRadius = 5;
+    private final int despawnRadius = 5;
     private int enemyGridSize = blockGridSize + despawnRadius;
     public Block[][][] blockGrid = new Block[blockGridSize][blockGridSize][worldMaxHeight];
     public Enemy[][] enemyGrid = new Enemy[enemyGridSize][enemyGridSize];
@@ -22,7 +22,7 @@ public class World {
     private final Vector2 position = new Vector2(0,0);
     private final Vector2 direction = new Vector2(1, 0);
 
-    private final NoiseGenerator noiseGenerator;
+    private NoiseGenerator noiseGenerator;
     private final Random random = new Random();
 
 
@@ -30,6 +30,20 @@ public class World {
         noiseGenerator = new NoiseGenerator(seed);
         generateBlockGrid();
         generateEnemyGrid();
+    }
+
+    public World(){
+        noiseGenerator = new NoiseGenerator(random.nextFloat());
+        validSeed();
+        generateBlockGrid();
+        generateEnemyGrid();
+    }
+
+    private void validSeed(){
+        if(heightToBlock(generateHeight(blockGridSize / 2,blockGridSize / 2)) == Block.WATER || heightToBlock(generateHeight(blockGridSize / 2 + 1,blockGridSize / 2 + 1)) == Block.WATER){
+            noiseGenerator = new NoiseGenerator(random.nextFloat());
+            validSeed();
+        }
     }
 
     public void removeEnemy(){
@@ -175,7 +189,7 @@ public class World {
     private void generateEnemyGrid(){
         for (int x = 0; x < enemyGridSize; x++) {
             for (int y = 0; y < enemyGridSize; y++) {
-                if(!insideCircle(x - despawnRadius, y - despawnRadius, (blockGridSize / 2.0f) * 0.8f))
+                if(!insideCircle(x - despawnRadius, y - despawnRadius, (blockGridSize / 2.0f) * 0.5f))
                     spawnEnemy(x, y);
             }
         }
@@ -273,8 +287,7 @@ public class World {
         return Block.AIR;
     }
 
-    public int generateHeight(int x, int y)
-    {
+    public int generateHeight(int x, int y){
         double perlinScale = 1f;
         double perlinNoise = noiseGenerator.noise(x * perlinScale, y * perlinScale);
 
@@ -284,15 +297,13 @@ public class World {
         else return 0; //water level
     }
 
-    private boolean generateTree(int x, int y)
-    {
+    private boolean generateTree(int x, int y){
         double perlinScale = 100f;
         double perlinNoise = noiseGenerator.noise(x * perlinScale, y * perlinScale);
 
         return perlinNoise > 0.7f;
     }
-    private boolean generateBonfire(int x, int y)
-    {
+    private boolean generateBonfire(int x, int y){
         double perlinScale = 1000f;
         double perlinNoise = noiseGenerator.noise(x * perlinScale, y * perlinScale);
 
@@ -319,6 +330,10 @@ public class World {
     }
     public Vector2 getPosition() {
         return position;
+    }
+
+    public float getSeed(){
+        return (float) noiseGenerator.getSeed();
     }
 
     public boolean hasMoved() {

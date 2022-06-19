@@ -4,24 +4,23 @@ import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 
-
-public class BackgroundGLSurfaceView extends GLSurfaceView {
+public class MainMenuGLSurfaceView extends GLSurfaceView {
 
     private final Context context;
-    private BackgroundRenderer renderer;
+    private MainMenuRenderer renderer;
 
-    public BackgroundGLSurfaceView(Context context, AttributeSet attrs) {
+    public MainMenuGLSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.context = context;
         setEGLContextClientVersion(3);
     }
 
     public void init(){
-        renderer = new BackgroundRenderer(context);
+        renderer = new MainMenuRenderer(context);
         setRenderer(renderer);
     }
 
-    public BackgroundRenderer getRenderer(){
+    public MainMenuRenderer getRenderer(){
         return renderer;
     }
 }

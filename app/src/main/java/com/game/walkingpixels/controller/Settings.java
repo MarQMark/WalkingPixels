@@ -4,13 +4,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.Switch;
 
 import com.game.walkingpixels.R;
+import com.game.walkingpixels.model.MainWorld;
 import com.game.walkingpixels.model.Player;
+import com.game.walkingpixels.model.World;
 
 public class Settings extends AppCompatActivity {
 
@@ -36,6 +39,7 @@ public class Settings extends AppCompatActivity {
         btnReset.setOnClickListener(e -> {
             Player player = new Player(Settings.this);
             player.reset();
+            MainWorld.reset(Settings.this);
         });
     }
 }
