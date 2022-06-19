@@ -16,26 +16,35 @@
         android:theme="@style/Theme.WalkingPixels">
         <activity
             android:name=".controller.Help"
+            android:screenOrientation="portrait"
             android:launchMode="singleTop" />
         <activity
             android:name=".controller.Settings"
+            android:screenOrientation="portrait"
             android:launchMode="singleTop" />
         <activity
             android:name=".controller.LevelUp"
+            android:screenOrientation="portrait"
             android:launchMode="singleTop" />
         <activity
             android:name=".controller.Stats"
+            android:screenOrientation="portrait"
             android:launchMode="singleTop" />
         <activity
             android:name=".controller.Map"
+            android:screenOrientation="portrait"
             android:launchMode="singleTop" />
         <activity
             android:name=".controller.Drawing"
+            android:screenOrientation="portrait"
             android:launchMode="singleTop" />
         <activity
             android:name=".controller.Walking"
+            android:screenOrientation="portrait"
             android:launchMode="singleTop" />
-        <activity android:name=".controller.MainMenu">
+        <activity
+            android:name=".controller.MainMenu"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

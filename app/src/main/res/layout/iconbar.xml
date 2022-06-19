@@ -57,7 +57,7 @@
         android:layout_height="wrap_content"
         android:text="@string/lbl_iconbar_progress"
         android:textColor="#140C1C"
-        android:textSize="18sp"
+        android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/image_iconbar_foundation"
         app:layout_constraintEnd_toEndOf="@+id/image_iconbar_foundation"
