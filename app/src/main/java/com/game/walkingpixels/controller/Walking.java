@@ -68,7 +68,7 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
         sensorManager.registerListener(this, stepCounterSensor, SensorManager.SENSOR_DELAY_FASTEST);
 
         SharedPreferences sharedPreferences = getSharedPreferences("Settings", MODE_PRIVATE);
-        realTimeWalking = sharedPreferences.getBoolean("r_t_walking", false);
+        realTimeWalking = sharedPreferences.getBoolean("real_time_walking", false);
 
         sv = findViewById(R.id.myGLSurfaceViewWalking);
         sv.init();
@@ -257,7 +257,7 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
 
                 btnMoveForward.setEnabled(false);
                 Intent intent = new Intent(this, Drawing.class);
-                intent.putExtra("ENEMY", enemy);
+                intent.putExtra("Enemy", enemy);
                 drawingActivityLauncher.launch(intent);
             }
         }

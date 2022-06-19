@@ -51,5 +51,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/image_iconbar_foundation" />
 
+    <TextView
+        android:id="@+id/lbl_iconbar_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/lbl_iconbar_progress"
+        android:textColor="#140C1C"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/image_iconbar_foundation"
+        app:layout_constraintEnd_toEndOf="@+id/image_iconbar_foundation"
+        app:layout_constraintStart_toEndOf="@+id/image_iconbar_icon"
+        app:layout_constraintTop_toTopOf="@+id/image_iconbar_foundation" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

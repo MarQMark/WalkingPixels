@@ -21,6 +21,7 @@ public class Iconbar extends ConstraintLayout {
     private int max = 100;
     private int progress = 0;
 
+    private TextView lblProgress;
     private ImageView imageProgress;
     private ImageView icon;
     private TextView text;
@@ -60,6 +61,7 @@ public class Iconbar extends ConstraintLayout {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.iconbar, this);
 
+        lblProgress = findViewById(R.id.lbl_iconbar_progress);
         imageProgress = findViewById(R.id.image_iconbar_health);
         icon = findViewById(R.id.image_iconbar_icon);
         text = findViewById(R.id.lbl_iconbar_icon);
@@ -68,9 +70,11 @@ public class Iconbar extends ConstraintLayout {
 
     public void setMax(int max){
         this.max = max;
+        lblProgress.setText(getResources().getString(R.string.lbl_iconbar_progress, progress, max));
     }
     public void setProgress(int progress){
         this.progress = progress;
+        lblProgress.setText(getResources().getString(R.string.lbl_iconbar_progress, progress, max));
         ClipDrawable mImageDrawable = (ClipDrawable) imageProgress.getDrawable();
         mImageDrawable.setLevel((int) ((progress / (float)max) * 10000.0f));
     }
@@ -84,6 +88,7 @@ public class Iconbar extends ConstraintLayout {
     }
 
     public void flip(){
+        lblProgress.setScaleX(-1);
         icon.setScaleX(-1);
         text.setScaleX(-1);
     }

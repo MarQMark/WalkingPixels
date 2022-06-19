@@ -8,7 +8,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="bronze">#D27D2C</color>
-    <color name="light_bronze">#D19359</color>
+    <color name="light_bronze">#CEA37D</color>
     <color name="scroll_background">#FFD36D</color>
     <color name="scroll_foreground">#A35F23</color>
 </resources>

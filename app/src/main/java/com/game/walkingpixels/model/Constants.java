@@ -25,7 +25,7 @@ public class Constants {
     }
 
     public static float enemyLevelFunction(int level){
-        return (float) ((0.75f * Math.sqrt(level) + 2.25f) + Math.pow(2, level / 50.0f) - 3.0f);
+        return (float) ((0.75f * Math.sqrt(level) + 2.25f) + Math.pow(2, level / 50.0f) - 3.01f);
     }
     public static float enemyXpFunction(int level){
         return (float) (0.05f * Math.pow(level - 1, 1.5) + 1.0f);

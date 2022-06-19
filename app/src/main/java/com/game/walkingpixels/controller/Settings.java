@@ -45,9 +45,9 @@ public class Settings extends AppCompatActivity {
         });
 
         SwitchCompat switchWalking = findViewById(R.id.switch_settings_walking);
-        switchWalking.setChecked(preferences.getBoolean("r_t_walking",false));
+        switchWalking.setChecked(preferences.getBoolean("real_time_walking",false));
         switchWalking.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            editor.putBoolean("r_t_walking", isChecked);
+            editor.putBoolean("real_time_walking", isChecked);
             editor.apply();
         });
 

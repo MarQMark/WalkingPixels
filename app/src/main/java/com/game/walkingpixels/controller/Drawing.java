@@ -27,7 +27,7 @@ public class Drawing extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Enemy enemy = (Enemy) getIntent().getSerializableExtra("ENEMY");
+        Enemy enemy = (Enemy) getIntent().getSerializableExtra("Enemy");
         if (enemy == null) {
             finish();
         } else {
