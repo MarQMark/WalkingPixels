@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 
 import com.game.walkingpixels.Camera;
 import com.game.walkingpixels.model.Background;
-import com.game.walkingpixels.model.GameState;
 import com.game.walkingpixels.model.MainWorld;
 import com.game.walkingpixels.model.Sun;
 import com.game.walkingpixels.openGL.Batch;
@@ -47,7 +46,7 @@ public class WalkingRenderer extends Renderer{
 
         //init shaders
         SharedPreferences sharedPref = context.getSharedPreferences("Settings", Context.MODE_PRIVATE);
-        if(sharedPref.getBoolean("shadowEnabled", true))
+        if(sharedPref.getBoolean("shadow_enabled", false))
             registerShader("walk", new Shader(context, "Shaders/BasicShadow.shaders"));
         else
             registerShader("walk", new Shader(context, "Shaders/Basic.shaders"));

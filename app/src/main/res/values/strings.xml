@@ -18,4 +18,11 @@
     <string name="lbl_death_screen_you_died">YOU DIED</string>
     <string name="lbl_map_x">X: %1$d</string>
     <string name="lbl_map_y">Y: %1$d</string>
+    <string name="switch_settings_shadow">Shadow </string>
+    <string name="switch_settings_walking">Real-Time Walking </string>
+    <string name="lbl_settings_settings">SETTINGS</string>
+    <string name="lbl_settings_shadow">! Shadows may decrease performance</string>
+    <string name="lbl_settings_walking">! Real-Time Walking may be very delayed sometimes</string>
+    <string name="lbl_settings_credits_header">CREDITS</string>
+    <string name="lbl_settings_credits_credits">Font: Alagard - Hewett Tsoi</string>
 </resources>

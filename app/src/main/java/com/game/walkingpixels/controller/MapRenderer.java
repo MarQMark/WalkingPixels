@@ -2,15 +2,12 @@ package com.game.walkingpixels.controller;
 
 import android.content.Context;
 
-import com.game.walkingpixels.Camera;
-import com.game.walkingpixels.model.GameState;
 import com.game.walkingpixels.model.MainWorld;
 import com.game.walkingpixels.openGL.Batch;
 import com.game.walkingpixels.openGL.Shader;
 import com.game.walkingpixels.openGL.Texture;
 import com.game.walkingpixels.openGL.vertices.MapVertex;
 import com.game.walkingpixels.util.meshbuilder.MapMeshBuilder;
-import com.game.walkingpixels.util.vector.Vector3;
 
 import static android.opengl.GLES20.GL_COLOR_BUFFER_BIT;
 import static android.opengl.GLES20.GL_DEPTH_BUFFER_BIT;

@@ -10,24 +10,17 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
-import android.widget.Switch;
 
 import com.game.walkingpixels.R;
 import com.game.walkingpixels.model.Constants;
 import com.game.walkingpixels.model.Enemy;
-import com.game.walkingpixels.model.GameState;
 import com.game.walkingpixels.model.MainWorld;
 import com.game.walkingpixels.model.Player;
 import com.game.walkingpixels.model.Spell;
@@ -51,6 +44,7 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
 
     private int[] stamina;
     private boolean moving = false;
+    private boolean rTWalking = false;
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -63,6 +57,9 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
         SensorManager sensorManager = (SensorManager) this.getSystemService(Context.SENSOR_SERVICE);
         Sensor stepCounterSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
         sensorManager.registerListener(this, stepCounterSensor, SensorManager.SENSOR_DELAY_FASTEST);
+
+        SharedPreferences sharedPreferences = getSharedPreferences("Settings", MODE_PRIVATE);
+        rTWalking = sharedPreferences.getBoolean("r_t_walking", false);
 
         sv = findViewById(R.id.myGLSurfaceViewWalking);
         sv.init();
@@ -85,7 +82,9 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
         ResponsiveButton btnMap = findViewById(R.id.btn_walking_map);
         btnMap.setOnClickListener(e -> startActivity(new Intent(this, Map.class)));
         btnBonfire = findViewById(R.id.btn_walking_bonfire);
+        btnBonfire.setVisibility(MainWorld.getWorld().checkForBonfire() ? View.VISIBLE : View.INVISIBLE);
         btnBonfire.setOnClickListener(e -> {
+            btnBonfire.setEnabled(false);
             player.setLastSavePosition(new Vector2(MainWorld.getWorld().getPosition()));
             levelUpActivityLauncher.launch(new Intent(this, LevelUp.class));
         });
@@ -195,6 +194,7 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
     });
 
     private final ActivityResultLauncher<Intent> levelUpActivityLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+        btnBonfire.setEnabled(true);
         player = new Player(Walking.this);
         barHealth.setMax(player.getMaxHealth());
         barHealth.setProgress(player.getHealth());
@@ -231,7 +231,12 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        stamina[0]++;
+        if(rTWalking){
+            if(btnMoveForward.isEnabled())
+                forward();
+        }else {
+            stamina[0]++;
+        }
     }
 
     @Override

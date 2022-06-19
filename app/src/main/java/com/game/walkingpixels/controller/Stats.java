@@ -2,20 +2,12 @@ package com.game.walkingpixels.controller;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.AlertDialog;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.game.walkingpixels.R;
-import com.game.walkingpixels.model.GameState;
 import com.game.walkingpixels.model.Player;
-import com.game.walkingpixels.model.Spell;
 import com.game.walkingpixels.view.Simplebar;
 import com.game.walkingpixels.view.SpellAdapter;
 

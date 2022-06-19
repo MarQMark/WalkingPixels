@@ -2,12 +2,12 @@
     <!-- Base application theme. -->
     <style name="Theme.WalkingPixels" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_200</item>
+        <item name="colorPrimary">@color/purple_500</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
-        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/teal_700</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
@@ -17,5 +17,15 @@
     </style>
     <style name="AlagardTextViewStyle" parent="android:Widget.TextView">
         <item name="android:fontFamily">@font/alagard</item>
+    </style>
+    <style name="ScrollSwitch">
+        <item name="colorControlActivated">@color/scroll_foreground</item>
+        <item name="colorSwitchThumbNormal">@color/scroll_background</item>
+        <item name="android:fontFamily">@font/alagard</item>
+    </style>
+    <style name="ScrollAlertDialog" parent="Theme.AppCompat.Dialog.Alert">
+        <item name="android:fontFamily">@font/alagard</item>
+        <item name="android:background">@color/scroll_background</item>
+        <item name="android:textColorPrimary">@color/scroll_foreground</item>
     </style>
 </resources>

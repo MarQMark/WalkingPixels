@@ -18,4 +18,14 @@
     <style name="AlagardTextViewStyle" parent="android:Widget.TextView">
         <item name="android:fontFamily">@font/alagard</item>
     </style>
+    <style name="ScrollSwitch">
+        <item name="colorControlActivated">@color/scroll_foreground</item>
+        <item name="colorSwitchThumbNormal">@color/scroll_background</item>
+        <item name="android:fontFamily">@font/alagard</item>
+    </style>
+    <style name="ScrollAlertDialog" parent="Theme.AppCompat.Dialog.Alert">
+        <item name="android:fontFamily">@font/alagard</item>
+        <item name="android:background">@color/scroll_background</item>
+        <item name="android:textColorPrimary">@color/scroll_foreground</item>
+    </style>
 </resources>

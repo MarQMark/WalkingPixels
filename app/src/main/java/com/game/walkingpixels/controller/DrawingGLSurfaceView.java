@@ -6,6 +6,7 @@ import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
+import com.game.walkingpixels.model.DrawTimer;
 import com.game.walkingpixels.model.Enemy;
 import com.game.walkingpixels.util.EventHandler;
 
@@ -20,8 +21,8 @@ public class DrawingGLSurfaceView extends GLSurfaceView {
         setEGLContextClientVersion(3);
     }
 
-    public void init(Enemy enemy){
-        renderer = new DrawingRenderer(context, enemy);
+    public void init(Enemy enemy, DrawTimer drawTimer){
+        renderer = new DrawingRenderer(context, enemy, drawTimer);
         setRenderer(renderer);
     }
 

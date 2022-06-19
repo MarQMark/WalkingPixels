@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="64dp"
         android:text="@string/lbl_death_screen_you_died"
-        android:textColor="#7A0000"
+        android:textColor="#D22D2C"
         android:textSize="75sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/btn_death_screen_close"

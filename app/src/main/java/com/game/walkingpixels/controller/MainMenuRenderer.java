@@ -53,7 +53,7 @@ public class MainMenuRenderer extends Renderer{
                 = Block.AIR;
 
         SharedPreferences sharedPref = context.getSharedPreferences("Settings", Context.MODE_PRIVATE);
-        if(sharedPref.getBoolean("shadowEnabled", true))
+        if(sharedPref.getBoolean("shadow_enabled", false))
             registerShader("world", new Shader(context, "Shaders/BasicShadow.shaders"));
         else
             registerShader("world", new Shader(context, "Shaders/Basic.shaders"));

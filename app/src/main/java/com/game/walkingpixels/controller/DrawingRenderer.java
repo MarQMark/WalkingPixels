@@ -7,8 +7,8 @@ import com.game.walkingpixels.Camera;
 import com.game.walkingpixels.model.Background;
 import com.game.walkingpixels.model.Block;
 import com.game.walkingpixels.model.DrawGrid;
+import com.game.walkingpixels.model.DrawTimer;
 import com.game.walkingpixels.model.Enemy;
-import com.game.walkingpixels.model.GameState;
 import com.game.walkingpixels.model.Player;
 import com.game.walkingpixels.model.RenderedSpell;
 import com.game.walkingpixels.model.Spell;
@@ -39,6 +39,7 @@ public class DrawingRenderer extends Renderer {
     private final Enemy enemy;
     private World world;
 
+    private final DrawTimer drawTimer;
     private Spell spell;
     private RenderedSpell renderedSpell;
     private Player player;
@@ -51,9 +52,10 @@ public class DrawingRenderer extends Renderer {
     private final BlockMeshBuilder blockMeshBuilder = new BlockMeshBuilder();
     private final MobMeshBuilder mobMeshBuilder = new MobMeshBuilder();
 
-    public DrawingRenderer(Context context, Enemy enemy) {
+    public DrawingRenderer(Context context, Enemy enemy, DrawTimer drawTimer) {
         super(context);
         this.enemy = enemy;
+        this.drawTimer = drawTimer;
     }
 
     @Override
@@ -110,18 +112,13 @@ public class DrawingRenderer extends Renderer {
 
     @Override
     public void update(double dt) {
-        //update in-game time (1 day = 24 min)
-        float sunRotation = (float) (System.currentTimeMillis() / 4000.0) % 360;
-
         //update DrawGrid
         drawGrid.update(width, height);
         batch("draw").updateVertices("Grid", drawGridMeshBuilder.generateMesh(drawGrid));
 
-
         //update background
         background.update(dt / 1000, width, height);
         batch("background").updateVertices("Background", background.getVertices());
-
 
         //update enemy
         if(enemy.isEnemyTurn())
@@ -129,10 +126,10 @@ public class DrawingRenderer extends Renderer {
 
         //lower time while drawing
         if(drawGrid.isDrawing())
-            GameState.updateDrawTime(dt / 1000);
+            drawTimer.updateDrawTime(dt / 1000);
 
         //finished drawing spell
-        if(GameState.getDrawTime() == 0.0 && drawGrid.isEnabled()){
+        if(drawTimer.getDrawTime() == 0.0 && drawGrid.isEnabled()){
             drawGrid.disable();
             renderedSpell = new RenderedSpell(drawGrid.getDrawnAsBitmap(), 1.0, (int) ((Math.max(drawGrid.calculateScore(), 0.0) / 100.0) * spell.getMaxDamage()));
             batch("spell").addTexture(renderedSpell.getTexture());

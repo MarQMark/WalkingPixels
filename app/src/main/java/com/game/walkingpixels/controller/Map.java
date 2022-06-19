@@ -6,9 +6,7 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import com.game.walkingpixels.R;
-import com.game.walkingpixels.model.GameState;
 import com.game.walkingpixels.model.MainWorld;
-import com.game.walkingpixels.model.Player;
 
 public class Map extends AppCompatActivity {
 

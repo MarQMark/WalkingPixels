@@ -9,18 +9,14 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.game.walkingpixels.R;
-import com.game.walkingpixels.model.Attack;
-import com.game.walkingpixels.model.Constants;
+import com.game.walkingpixels.model.DrawTimer;
 import com.game.walkingpixels.model.Enemy;
-import com.game.walkingpixels.model.GameState;
 import com.game.walkingpixels.model.Player;
 import com.game.walkingpixels.model.Spell;
 import com.game.walkingpixels.view.Iconbar;
-import com.game.walkingpixels.view.NewSpell;
 import com.game.walkingpixels.view.ResponsiveButton;
 import com.game.walkingpixels.view.SpellAdapter;
 import com.game.walkingpixels.view.Simplebar;
@@ -38,9 +34,10 @@ public class Drawing extends AppCompatActivity {
             setContentView(R.layout.activity_drawing);
 
             Player player = new Player(Drawing.this);
+            DrawTimer drawTimer = new DrawTimer();
 
             DrawingGLSurfaceView sv = findViewById(R.id.myGLSurfaceViewDrawing);
-            sv.init(enemy);
+            sv.init(enemy, drawTimer);
 
 
             //Time & Healthbar init
@@ -57,7 +54,7 @@ public class Drawing extends AppCompatActivity {
             //open spell menu
             ResponsiveButton btnAttackSelector = findViewById(R.id.btn_drawing_attack_selector);
             btnAttackSelector.setOnClickListener(e -> {
-                GameState.setDrawTime(1.0f);
+                drawTimer.setDrawTime(1.0f);
                 btnAttackSelector.setVisibility(View.INVISIBLE);
 
                 AlertDialog.Builder builderSingle = new AlertDialog.Builder(Drawing.this);
@@ -71,7 +68,7 @@ public class Drawing extends AppCompatActivity {
                     player.setSpellUsages(spell.getId(), spell.getUsages());
                     barTimeRemaining.setMax((int) (spell.getCastTime() * 10));
                     sv.getRenderer().loadSpell(spell);
-                    GameState.setDrawTime(spell.getCastTime() * player.getTime());
+                    drawTimer.setDrawTime(spell.getCastTime() * player.getTime());
                 });
 
 
@@ -133,7 +130,7 @@ public class Drawing extends AppCompatActivity {
 
 
                     //update drawing timebar
-                    barTimeRemaining.setProgress((int) (GameState.getDrawTime() * 10));
+                    barTimeRemaining.setProgress((int) (drawTimer.getDrawTime() * 10));
 
                     //update healthbar
                     barEnemyHealth.setProgress(enemy.getHealth());
