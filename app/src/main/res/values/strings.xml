@@ -29,4 +29,6 @@
     <string name="lbl_walking_out_of_stamina">OUT OF STAMINA!</string>
     <string name="lbl_drawing_damage">%1$d</string>
     <string name="lbl_iconbar_progress">%1$d/%2$d</string>
+    <string name="lbl_help_header">HELP</string>
+    <string name="lbl_help_page_number">%1$d/%2$d</string>
 </resources>
