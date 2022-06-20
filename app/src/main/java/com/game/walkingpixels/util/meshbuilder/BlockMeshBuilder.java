@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class BlockMeshBuilder extends MeshBuilder{
 
     public BlockMeshBuilder(){
-        registerGridTextureAtlas("blocks", new GridTextureAtlas(64, 64, 16));
+        registerGridTextureAtlas("blocks", new GridTextureAtlas(128, 64, 32));
     }
 
     private enum Side{

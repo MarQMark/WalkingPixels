@@ -78,7 +78,7 @@ public class MainMenuRenderer extends Renderer{
         registerBatch("world", new Batch(shader("world").getID(), 2000, WorldVertex.size, WorldVertex.getLayout()));
         batch("world").addVertices("Mobs", mobMeshBuilder.generateMesh(world, camera, false));
         batch("world").addVertices("World", blockMeshBuilder.generateMesh(world));
-        batch("world").addTexture(new Texture(context, "textures/texture_atlas.png", 0));
+        batch("world").addTexture(new Texture(context, "textures/block_atlas.png", 0));
         batch("world").addTexture(new Texture(context, "textures/mob_texture_atlas.png", 1));
         batch("world").addTexture(new Texture(context, "textures/tree.png", 2));
         batch("world").addTexture(new Texture(context, "textures/bonfire.png", 3));

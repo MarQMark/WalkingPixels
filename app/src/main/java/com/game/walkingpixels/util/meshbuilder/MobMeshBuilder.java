@@ -4,6 +4,7 @@ import com.game.walkingpixels.Camera;
 import com.game.walkingpixels.model.Block;
 import com.game.walkingpixels.model.World;
 import com.game.walkingpixels.model.atlas.AnimationTextureAtlas;
+import com.game.walkingpixels.model.atlas.GridTextureAtlas;
 import com.game.walkingpixels.openGL.vertices.WorldVertex;
 import com.game.walkingpixels.util.vector.Vector2;
 import com.game.walkingpixels.util.vector.Vector3;
@@ -16,6 +17,7 @@ import javax.xml.transform.Source;
 public class MobMeshBuilder extends MeshBuilder{
 
     public MobMeshBuilder(){
+        registerGridTextureAtlas("blocks", new GridTextureAtlas(128, 64, 32));
         registerAnimationTextureAtlas("mob", new AnimationTextureAtlas());
         animationTextureAtlas("mob").addAnimation(64, 128, 4);
         animationTextureAtlas("mob").addAnimation(64, 128, 4);
@@ -33,6 +35,8 @@ public class MobMeshBuilder extends MeshBuilder{
                 for (int z = 0; z < world.getWorldMaxHeight(); z++) {
                     if(world.getBlockGrid()[x][y][z].ordinal() > Block.AIR.ordinal()){
                         getMobVertices(mobs, new Vector3(x, z, y).sub(new Vector3(world.getBlockGridSize() / 2.0f, 0, world.getBlockGridSize() / 2.0f)), world.getBlockGrid()[x][y][z], camera, adjust);
+                        if(world.getBlockGrid()[x][y][z].ordinal() > Block.TREE.ordinal())
+                            getShadowVertices(mobs, new Vector3(x, z, y).sub(new Vector3(world.getBlockGridSize() / 2.0f, 0, world.getBlockGridSize() / 2.0f)), world.heightToBlock(z - 1));
                     }
                 }
             }
@@ -56,6 +60,7 @@ public class MobMeshBuilder extends MeshBuilder{
                         }
 
                         getMobVertices(mobs,new Vector3(mobX, height, mobY).sub(new Vector3(world.getBlockGridSize() / 2.0f, 0, world.getBlockGridSize() / 2.0f)), world.getEnemyGrid()[x][y].getType(), camera, adjust);
+                        getShadowVertices(mobs, new Vector3(mobX, height, mobY).sub(new Vector3(world.getBlockGridSize() / 2.0f, 0, world.getBlockGridSize() / 2.0f)), world.heightToBlock(height - 1));
                     }
                 }
             }
@@ -66,6 +71,43 @@ public class MobMeshBuilder extends MeshBuilder{
             finishedMesh[i] = mobs.get(i);
         }
         return finishedMesh;
+    }
+
+    private void getShadowVertices(ArrayList<WorldVertex> mobs, Vector3 position, Block block){
+
+        int id = 3;
+        if(block == Block.SNOW)
+            id = 7;
+
+        Vector2[] texture = gridTextureAtlas("blocks").getTextureCoordinates(id);
+
+        mobs.add(new WorldVertex(
+                new float[]{ position.x, position.y + 0.0001f, position.z},
+                new float[]{ texture[0].x, texture[0].y },
+                new float[] {0, 1, 0},
+                new float[]{ 0.0f, 0.0f, 0.0f, 0.0f },
+                0));
+
+        mobs.add(new WorldVertex(
+                new float[]{ position.x + 1, position.y + 0.0001f, position.z},
+                new float[]{ texture[1].x, texture[1].y },
+                new float[] {0, 1, 0},
+                new float[]{ 0.0f, 0.0f, 0.0f, 0.0f },
+                0));
+
+        mobs.add(new WorldVertex(
+                new float[]{ position.x, position.y + 0.0001f, position.z + 1},
+                new float[]{ texture[2].x, texture[2].y },
+                new float[] {0, 1, 0},
+                new float[]{ 0.0f, 0.0f, 0.0f, 0.0f },
+                0));
+
+        mobs.add(new WorldVertex(
+                new float[]{ position.x + 1, position.y + 0.0001f,  position.z + 1 },
+                new float[]{ texture[3].x, texture[3].y },
+                new float[] {0, 1, 0},
+                new float[]{ 1.0f, 0.0f, 0.0f, 0.0f },
+                0));
     }
 
     public void getMobVertices(ArrayList<WorldVertex> mobs, Vector3 position, Block type, Camera camera, boolean adjust){

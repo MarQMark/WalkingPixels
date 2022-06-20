@@ -98,10 +98,10 @@ public class DrawingRenderer extends Renderer {
         //init world
         world = new World(0);
         generateWorld(world);
-        registerBatch("world", new Batch(shader("world").getID(), 2000, WorldVertex.size, WorldVertex.getLayout()));
+        registerBatch("world", new Batch(shader("world").getID(), 3000, WorldVertex.size, WorldVertex.getLayout()));
         batch("world").addVertices("ground", blockMeshBuilder.generateMesh(world));
         batch("world").addVertices("mobs", mobMeshBuilder.generateMesh(world, camera, true));
-        batch("world").addTexture(new Texture(context, "textures/texture_atlas.png", 0));
+        batch("world").addTexture(new Texture(context, "textures/block_atlas.png", 0));
         batch("world").addTexture(new Texture(context, "textures/mob_texture_atlas.png", 1));
 
         shader("world").bind();

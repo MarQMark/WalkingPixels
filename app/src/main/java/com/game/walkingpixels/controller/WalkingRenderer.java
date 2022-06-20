@@ -74,7 +74,7 @@ public class WalkingRenderer extends Renderer{
         registerBatch("walk", new Batch(shader("walk").getID(), 2000, WorldVertex.size, WorldVertex.getLayout()));
         batch("walk").addVertices("Player", mobMeshBuilder.generateMesh(MainWorld.getWorld(), camera, false));
         batch("walk").addVertices("World", blockMeshBuilder.generateMesh(MainWorld.getWorld()));
-        batch("walk").addTexture(new Texture(context, "textures/texture_atlas.png", 0));
+        batch("walk").addTexture(new Texture(context, "textures/block_atlas.png", 0));
         batch("walk").addTexture(new Texture(context, "textures/mob_texture_atlas.png", 1));
         batch("walk").addTexture(new Texture(context, "textures/tree.png", 2));
         batch("walk").addTexture(new Texture(context, "textures/bonfire.png", 3));
