@@ -52,7 +52,6 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
 
     private boolean staminaInitialized = false;
     private boolean autoMoving = false;
-    private boolean realTimeWalking = false;
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -67,9 +66,6 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
         sensorManager.registerListener(this, stepCounterSensor, SensorManager.SENSOR_DELAY_FASTEST);
         Sensor accelerationSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         sensorManager.registerListener(this, accelerationSensor, SensorManager.SENSOR_DELAY_NORMAL);
-
-        SharedPreferences sharedPreferences = getSharedPreferences("Settings", MODE_PRIVATE);
-        realTimeWalking = sharedPreferences.getBoolean("real_time_walking", false);
 
         sv = findViewById(R.id.myGLSurfaceViewWalking);
         sv.init();
@@ -104,7 +100,7 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
 
         //move forward
         btnMoveForward = findViewById(R.id.btn_walking_forward);
-        btnMoveForward.setOnClickListener(e -> forward());
+        btnMoveForward.setOnClickListener(e -> forward(1));
 
         //auto moving
         switchAutoMoving = findViewById(R.id.switch_walking_auto_walking);
@@ -124,7 +120,7 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
             public void run() {
                 autoMovingHandler.postDelayed(this, 500);
                 if(autoMoving)
-                    forward();
+                    forward(2);
             }
         };
         autoMovingHandler.postDelayed(autoMovingRunnable, 0);
@@ -230,7 +226,9 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
         barStamina.setProgress(player.getStamina());
     });
 
-    private void forward(){
+    private void forward(int i){
+        SharedPreferences sharedPreferences = getSharedPreferences("Settings", MODE_PRIVATE);
+        System.out.println("AAAAAAAAAAAAAA   " + i + "    " + sharedPreferences.getBoolean("real_time_walking", false));
         if(player.getStamina() > 0 && MainWorld.getWorld().forward())
         {
             SharedPreferences.Editor editor = getSharedPreferences("World", Context.MODE_PRIVATE).edit();
@@ -298,9 +296,11 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
 
             if((Math.abs(prevY - gravity[1]) > 1.0) && !ignore){
 
-                if(realTimeWalking){
-                    if(btnMoveForward.isEnabled())
-                        forward();
+                SharedPreferences sharedPreferences = getSharedPreferences("Settings", MODE_PRIVATE);
+                if(sharedPreferences.getBoolean("real_time_walking", false)){
+                    if(btnMoveForward.isEnabled()){
+                        forward(3);
+                    }
                 }
                 else {
                     player.setStamina(player.getStamina() + 1);
@@ -328,7 +328,6 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
             }
             editor.putInt("last_steps_measured", (int)event.values[0]);
             editor.apply();
-
         }
     }
 
