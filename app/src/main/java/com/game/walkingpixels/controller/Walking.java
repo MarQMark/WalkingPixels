@@ -100,7 +100,7 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
 
         //move forward
         btnMoveForward = findViewById(R.id.btn_walking_forward);
-        btnMoveForward.setOnClickListener(e -> forward(1));
+        btnMoveForward.setOnClickListener(e -> forward());
 
         //auto moving
         switchAutoMoving = findViewById(R.id.switch_walking_auto_walking);
@@ -120,7 +120,7 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
             public void run() {
                 autoMovingHandler.postDelayed(this, 500);
                 if(autoMoving)
-                    forward(2);
+                    forward();
             }
         };
         autoMovingHandler.postDelayed(autoMovingRunnable, 0);
@@ -226,9 +226,7 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
         barStamina.setProgress(player.getStamina());
     });
 
-    private void forward(int i){
-        SharedPreferences sharedPreferences = getSharedPreferences("Settings", MODE_PRIVATE);
-        System.out.println("AAAAAAAAAAAAAA   " + i + "    " + sharedPreferences.getBoolean("real_time_walking", false));
+    private void forward(){
         if(player.getStamina() > 0 && MainWorld.getWorld().forward())
         {
             SharedPreferences.Editor editor = getSharedPreferences("World", Context.MODE_PRIVATE).edit();
@@ -299,7 +297,7 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
                 SharedPreferences sharedPreferences = getSharedPreferences("Settings", MODE_PRIVATE);
                 if(sharedPreferences.getBoolean("real_time_walking", false)){
                     if(btnMoveForward.isEnabled()){
-                        forward(3);
+                        forward();
                     }
                 }
                 else {

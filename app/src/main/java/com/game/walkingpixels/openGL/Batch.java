@@ -1,5 +1,7 @@
 package com.game.walkingpixels.openGL;
 
+import android.util.Log;
+
 import com.game.walkingpixels.openGL.buffer.IndexBuffer;
 import com.game.walkingpixels.openGL.buffer.VertexBuffer;
 import com.game.walkingpixels.openGL.buffer.VertexBufferLayout;
@@ -31,7 +33,7 @@ public class Batch {
     private final ArrayList<Texture> textures = new ArrayList<>();
 
     private final int shaderID;
-    private int lastVertexPosition;
+    private int lastVertexPosition = 0;
 
     public Batch(int shaderID, int maxQuadCount, int vertexSize, VertexBufferLayout[] layouts){
         this.shaderID = shaderID;
@@ -85,18 +87,9 @@ public class Batch {
         parts.get(partNumber).vertices = vertices;
         vb.fillPartBuffer(vertices, parts.get(partNumber).offset);
 
-        if(vertices.length > oldSize){
+        if(vertices.length != oldSize){
 
             lastVertexPosition += ((vertices.length - oldSize) / 4) * 6;
-
-            for (int i = partNumber + 1; i < parts.size(); i++){
-                parts.get(i).offset = parts.get(i - 1).offset + parts.get(i - 1).vertices.length;
-                vb.fillPartBuffer(parts.get(i).vertices, parts.get(i).offset);
-            }
-        }
-        else if(vertices.length < oldSize){
-
-            lastVertexPosition -= ((oldSize - vertices.length) / 4) * 6;
 
             for (int i = partNumber + 1; i < parts.size(); i++){
                 parts.get(i).offset = parts.get(i - 1).offset + parts.get(i - 1).vertices.length;
