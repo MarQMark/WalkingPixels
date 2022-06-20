@@ -17,6 +17,8 @@ public class Player {
 
     public void reset(){
         SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt("stamina", Constants.baseStamina / 2);
+
         editor.putInt("level", 1);
         editor.putInt("xp", 0);
         editor.putInt("maxXp", (int)(Constants.baseMaxXp  * Constants.xpFunction(1)));
@@ -40,6 +42,16 @@ public class Player {
         }
 
         editor.apply();
+    }
+
+    public void setStamina(int stamina){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt("stamina", Math.min(stamina, getMaxStamina()));
+        editor.apply();
+    }
+
+    public int getStamina(){
+        return sharedPreferences.getInt("stamina", Constants.baseStamina / 2);
     }
 
     public void setSpellUsages(int id, int usages){

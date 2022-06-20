@@ -18,7 +18,6 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.game.walkingpixels.R;
@@ -51,7 +50,7 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
     private SwitchCompat switchAutoMoving;
     private TextView lblOutOfStamina;
 
-    private int[] stamina;
+    private boolean staminaInitialized = false;
     private boolean autoMoving = false;
     private boolean realTimeWalking = false;
 
@@ -66,6 +65,8 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
         SensorManager sensorManager = (SensorManager) this.getSystemService(Context.SENSOR_SERVICE);
         Sensor stepCounterSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
         sensorManager.registerListener(this, stepCounterSensor, SensorManager.SENSOR_DELAY_FASTEST);
+        Sensor accelerationSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        sensorManager.registerListener(this, accelerationSensor, SensorManager.SENSOR_DELAY_NORMAL);
 
         SharedPreferences sharedPreferences = getSharedPreferences("Settings", MODE_PRIVATE);
         realTimeWalking = sharedPreferences.getBoolean("real_time_walking", false);
@@ -75,12 +76,11 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
 
         //init player
         player = new Player(Walking.this);
-        stamina = new int[]{3000};
 
         //stamina and health bar
         barStamina = findViewById(R.id.bar_walking_stamina);
         barStamina.setMax(player.getMaxStamina());
-        barStamina.setProgress(stamina[0]);
+        barStamina.setProgress(player.getStamina());
         barHealth = findViewById(R.id.bar_walking_health);
         barHealth.setMax(player.getMaxHealth());
         barHealth.setProgress(player.getHealth());
@@ -100,7 +100,7 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
 
         //out of stamina
         lblOutOfStamina = findViewById(R.id.lbl_walking_out_of_stamina);
-        lblOutOfStamina.setVisibility(stamina[0] == 0 ? View.VISIBLE : View.INVISIBLE);
+        lblOutOfStamina.setVisibility(player.getStamina() == 0 ? View.VISIBLE : View.INVISIBLE);
 
         //move forward
         btnMoveForward = findViewById(R.id.btn_walking_forward);
@@ -227,21 +227,21 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
         barHealth.setMax(player.getMaxHealth());
         barHealth.setProgress(player.getHealth());
         barStamina.setMax(player.getMaxStamina());
-        barStamina.setProgress(stamina[0]);
+        barStamina.setProgress(player.getStamina());
     });
 
     private void forward(){
-        if(stamina[0] > 0 && MainWorld.getWorld().forward())
+        if(player.getStamina() > 0 && MainWorld.getWorld().forward())
         {
             SharedPreferences.Editor editor = getSharedPreferences("World", Context.MODE_PRIVATE).edit();
             editor.putInt("positionX", (int) MainWorld.getWorld().getPosition().x);
             editor.putInt("positionY", (int) MainWorld.getWorld().getPosition().y);
             editor.apply();
 
-            stamina[0] -= 1;
-            barStamina.setProgress(stamina[0]);
-            if(stamina[0] <= 0){
-                stamina[0] = 0;
+            player.setStamina(player.getStamina() - 1);
+            barStamina.setProgress(player.getStamina());
+            if(player.getStamina() <= 0){
+                player.setStamina(0);
                 lblOutOfStamina.setVisibility(View.VISIBLE);
             }
 
@@ -268,18 +268,72 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
             btnBonfire.setVisibility(View.INVISIBLE);
     }
 
+
+    private final float[] gravity = new float[3];
+    private double prevY;
+    private boolean ignore = true;
+    private int countdown = 5;
+
+    private float[] lowPassFilter( float[] input, float[] output ) {
+        if ( output == null ) return input;
+        for ( int i=0; i<input.length; i++ ) {
+            output[i] = output[i] + 1.0f * (input[i] - output[i]);
+        }
+        return output;
+    }
+
     @Override
     public void onSensorChanged(SensorEvent event) {
-        if(realTimeWalking){
-            if(btnMoveForward.isEnabled())
-                forward();
-        }else {
-            stamina[0]++;
-            lblOutOfStamina.setVisibility(View.INVISIBLE);
+        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+            float[] smoothed = lowPassFilter(event.values, gravity);
+            gravity[0] = smoothed[0];
+            gravity[1] = smoothed[1];
+            gravity[2] = smoothed[2];
+            if(ignore) {
+                countdown--;
+                ignore = (countdown >= 0) && ignore;
+            }
+            else
+                countdown = 22;
+
+            if((Math.abs(prevY - gravity[1]) > 1.0) && !ignore){
+
+                if(realTimeWalking){
+                    if(btnMoveForward.isEnabled())
+                        forward();
+                }
+                else {
+                    player.setStamina(player.getStamina() + 1);
+                    lblOutOfStamina.setVisibility(View.INVISIBLE);
+                    barStamina.setProgress(player.getStamina());
+                }
+
+                ignore = true;
+            }
+            prevY = gravity[1];
+        }
+        else if (event.sensor.getType() == Sensor.TYPE_STEP_COUNTER) {
+            SharedPreferences sharedPreferences = getSharedPreferences("Stamina", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            if(!staminaInitialized){
+                int lastStepsMeasured = sharedPreferences.getInt("last_steps_measured", (int)event.values[0]);
+                //counter reset due to phone restart
+                if(lastStepsMeasured > event.values[0])
+                    player.setStamina(player.getStamina() + (int)event.values[0]);
+                else
+                    player.setStamina(player.getStamina() + (int)event.values[0] - lastStepsMeasured);
+
+                barStamina.setProgress(player.getStamina());
+                staminaInitialized = true;
+            }
+            editor.putInt("last_steps_measured", (int)event.values[0]);
+            editor.apply();
+
         }
     }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
     }
+
 }
