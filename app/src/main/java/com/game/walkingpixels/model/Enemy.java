@@ -46,11 +46,14 @@ public class Enemy implements Serializable {
 
     private Block getType(int id){
         switch (id){
-            case 0: return Block.BLUE_SLIME;
-            case 1: return Block.GREEN_SLIME;
-            case 2: return Block.PURPLE_SLIME;
-            //case 1: return Block.BAT;
-            //case 2: return Block.SPIDER;
+            case 0:
+                switch (new Random().nextInt(3)){
+                    case 0: return Block.BLUE_SLIME;
+                    case 1: return Block.GREEN_SLIME;
+                    case 2: return Block.PURPLE_SLIME;
+                }
+            case 1: return Block.BAT;
+            case 2: return Block.EYE;
             case 3: return Block.DANGER_NOODLE;
             case 4: return Block.PLANT;
             case 5: return Block.GOLEM;

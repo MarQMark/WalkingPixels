@@ -24,6 +24,11 @@ public class MobMeshBuilder extends MeshBuilder{
         animationTextureAtlas("mob").addAnimation(32, 39, 13);
         animationTextureAtlas("mob").addAnimation(32, 39, 13);
         animationTextureAtlas("mob").addAnimation(32, 39, 13);
+        animationTextureAtlas("mob").addAnimation(32, 32, 4);
+        animationTextureAtlas("mob").addAnimation(32, 32, 4);
+        animationTextureAtlas("mob").addAnimation(32, 32, 4);
+        animationTextureAtlas("mob").addAnimation(32, 32, 4);
+        animationTextureAtlas("mob").addAnimation(32, 32, 6);
     }
 
     public WorldVertex[] generateMesh(World world, Camera camera, boolean adjust){
@@ -59,6 +64,7 @@ public class MobMeshBuilder extends MeshBuilder{
                             }
                         }
 
+                        //Somehow the fuck can world.getEnemyGrid()[x][y].getType() throw an null reference error THE FUUUUUUUUUUUUUUUUUUUUUUUUUUUUUCK !!!!!!!!!!!!!!!!!!!! HA NO I'm done
                         getMobVertices(mobs,new Vector3(mobX, height, mobY).sub(new Vector3(world.getBlockGridSize() / 2.0f, 0, world.getBlockGridSize() / 2.0f)), world.getEnemyGrid()[x][y].getType(), camera, adjust);
                         getShadowVertices(mobs, new Vector3(mobX, height, mobY).sub(new Vector3(world.getBlockGridSize() / 2.0f, 0, world.getBlockGridSize() / 2.0f)), world.heightToBlock(height - 1));
                     }
@@ -136,6 +142,21 @@ public class MobMeshBuilder extends MeshBuilder{
                 break;
             case PURPLE_SLIME:
                 textureCoordinates = animationTextureAtlas("mob").getTextureCoordinates(4, (int) (System.currentTimeMillis() / 100 % animationTextureAtlas("mob").getAnimationNumberOfFrames(4)));
+                break;
+            case BAT:
+                textureCoordinates = animationTextureAtlas("mob").getTextureCoordinates(5, (int) (System.currentTimeMillis() / 200 % animationTextureAtlas("mob").getAnimationNumberOfFrames(5)));
+                break;
+            case PLANT:
+                textureCoordinates = animationTextureAtlas("mob").getTextureCoordinates(6, (int) (System.currentTimeMillis() / 200 % animationTextureAtlas("mob").getAnimationNumberOfFrames(6)));
+                break;
+            case GOLEM:
+                textureCoordinates = animationTextureAtlas("mob").getTextureCoordinates(7, (int) (System.currentTimeMillis() / 250 % animationTextureAtlas("mob").getAnimationNumberOfFrames(7)));
+                break;
+            case DANGER_NOODLE:
+                textureCoordinates = animationTextureAtlas("mob").getTextureCoordinates(8, (int) (System.currentTimeMillis() / 250 % animationTextureAtlas("mob").getAnimationNumberOfFrames(8)));
+                break;
+            case EYE:
+                textureCoordinates = animationTextureAtlas("mob").getTextureCoordinates(9, (int) (System.currentTimeMillis() / 200 % animationTextureAtlas("mob").getAnimationNumberOfFrames(9)));
                 break;
             case TREE:
                 mobWidth = 3.0f;
