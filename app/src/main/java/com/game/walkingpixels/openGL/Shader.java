@@ -11,7 +11,6 @@ import com.game.walkingpixels.util.vector.Vector4;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.nio.IntBuffer;
 import java.util.HashMap;
 
 import static android.opengl.GLES31.*;
@@ -65,7 +64,6 @@ public class Shader {
 
     private int getUniformLocation(String uniform){
         if(uniformLocations.containsKey(uniform)){
-            //noinspection ConstantConditions
             return uniformLocations.get(uniform);
         }
 

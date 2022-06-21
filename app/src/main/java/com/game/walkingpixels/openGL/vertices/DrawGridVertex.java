@@ -11,8 +11,8 @@ public class DrawGridVertex implements IVertex{
 
     public static final int size = DataType.FloatBYTES * (3 + 4);
 
-    public float[] position; //vec2 - x, y
-    public float[] color;   //vec4 - r, g, b, a
+    public final float[] position; //vec2 - x, y
+    public final float[] color;   //vec4 - r, g, b, a
 
     public DrawGridVertex(float[] position, float[] color){
         this.position = position;

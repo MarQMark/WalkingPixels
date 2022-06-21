@@ -1,10 +1,8 @@
 package com.game.walkingpixels.model;
 
-import com.game.walkingpixels.controller.Walking;
 import com.game.walkingpixels.util.NoiseGenerator;
 import com.game.walkingpixels.util.vector.Vector2;
 
-import java.io.Serializable;
 import java.util.Random;
 
 public class World {

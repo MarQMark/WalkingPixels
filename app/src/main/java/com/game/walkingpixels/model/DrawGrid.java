@@ -16,10 +16,10 @@ import java.util.List;
 
 public class DrawGrid {
 
+    private static final int BRUSH_SIZE = 1;
     private static final int DISTANCE_EQUILIBRIUM = 2;
     private final int[][] grid;
     private final int size;
-    private int brushSize = 1;
 
     private final boolean[][] shapeGrid;
     private int shapePixels = 0;
@@ -68,7 +68,7 @@ public class DrawGrid {
                     for (Vector2 p: findLine(x0, y0, lastX, lastY)){
                         for (int py = 0; py < size; py++) {
                             for (int px = 0; px < size; px++) {
-                                if (insideCircle(new Vector2(p.x, p.y), new Vector2(px, py), brushSize)) {
+                                if (insideCircle(new Vector2(p.x, p.y), new Vector2(px, py), BRUSH_SIZE)) {
                                     grid[px][py] = 1;
                                 }
                             }

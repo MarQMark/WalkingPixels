@@ -1,7 +1,5 @@
 package com.game.walkingpixels.model;
 
-import com.game.walkingpixels.controller.Map;
-
 public class Constants {
 
     public static final int[] tierSpellUsages = new int[]{20, 30, 50};

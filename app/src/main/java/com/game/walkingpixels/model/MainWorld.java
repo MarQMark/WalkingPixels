@@ -3,8 +3,6 @@ package com.game.walkingpixels.model;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.game.walkingpixels.controller.MainMenu;
-
 public class MainWorld {
 
     private static World world;

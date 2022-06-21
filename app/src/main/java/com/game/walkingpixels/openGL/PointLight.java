@@ -16,7 +16,7 @@ public class PointLight {
     private static final int shadowMapHeight = 2048;
     private int textureSlot = 4;
 
-    private Shader shader = null;
+    private Shader shader;
     private final Camera camera;
 
     private Vector3 position;

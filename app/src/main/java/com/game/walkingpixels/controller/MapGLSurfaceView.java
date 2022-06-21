@@ -6,8 +6,8 @@ import android.util.AttributeSet;
 
 public class MapGLSurfaceView extends GLSurfaceView {
 
-    Context context;
-    MapRenderer renderer;
+    private final Context context;
+    private MapRenderer renderer;
 
     public MapGLSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);

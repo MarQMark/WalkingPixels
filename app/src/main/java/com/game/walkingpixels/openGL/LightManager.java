@@ -11,17 +11,17 @@ import static android.opengl.GLES20.glViewport;
 
 public class LightManager {
 
-    private final int maxNumberOfPointLights = 4;
+    private static final int SHADOW_MAP_WIDTH = 2048;
+    private static final int SHADOW_MAP_HEIGHT = 2048;
+    private static final int MAX_NUMBER_OF_POINT_LIGHTS = 4;
+
     private int numberOfPointLights = 0;
-    private final PointLight[] lights = new PointLight[maxNumberOfPointLights];
+    private final PointLight[] lights = new PointLight[MAX_NUMBER_OF_POINT_LIGHTS];
 
     private Shader worldShader= null;
 
     private int framebuffer = 0;
     private Shader shader = null;
-
-    private final int shadowMapWidth = 2048;
-    private final int shadowMapHeight = 2048;
 
     public LightManager(){
     }
@@ -31,7 +31,7 @@ public class LightManager {
             return;
 
         shader.bind();
-        glViewport(0, 0, shadowMapWidth, shadowMapHeight);
+        glViewport(0, 0, SHADOW_MAP_WIDTH, SHADOW_MAP_HEIGHT);
         glBindFramebuffer(GL_FRAMEBUFFER  , framebuffer);
 
         for (int i = 0; i < numberOfPointLights; i++)
@@ -43,7 +43,7 @@ public class LightManager {
     }
 
     public void createPointLight(Vector3 position, Vector4 color, float intensity, Camera camera){
-        if(numberOfPointLights >= maxNumberOfPointLights)
+        if(numberOfPointLights >= MAX_NUMBER_OF_POINT_LIGHTS)
             throw new NumberOfPointLightsOutOfBoundsException();
 
         if(framebuffer == 0){
@@ -138,7 +138,7 @@ public class LightManager {
 
     private class NumberOfPointLightsOutOfBoundsException extends RuntimeException {
         public NumberOfPointLightsOutOfBoundsException(){
-            super("Number of PointLights: " + numberOfPointLights + "  Maximum: " + maxNumberOfPointLights);
+            super("Number of PointLights: " + numberOfPointLights + "  Maximum: " + MAX_NUMBER_OF_POINT_LIGHTS);
         }
     }
     private static class LightShadowShaderIsNotInitializedException extends RuntimeException {

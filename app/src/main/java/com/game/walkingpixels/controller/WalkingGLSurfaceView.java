@@ -6,8 +6,8 @@ import android.util.AttributeSet;
 
 public class WalkingGLSurfaceView extends GLSurfaceView {
 
-    Context context;
-    WalkingRenderer renderer;
+    private final Context context;
+    private WalkingRenderer renderer;
 
     public WalkingGLSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);

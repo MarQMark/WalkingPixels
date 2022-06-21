@@ -10,11 +10,11 @@ import static android.opengl.GLES31.GL_FLOAT;
 public class WorldVertex implements IVertex {
     public static final int size = DataType.FloatBYTES * (3 + 2 + 3 + 4 + 1);
 
-    public float[] position; //vec2 - x, y
-    public float[] texPosition;
-    public float[] normal;
-    public float[] color;   //vec4 - r, g, b, a
-    public float textureSlot;
+    public final float[] position; //vec2 - x, y
+    public final float[] texPosition;
+    public final float[] normal;
+    public final float[] color;   //vec4 - r, g, b, a
+    public final float textureSlot;
 
     public WorldVertex(float[] position, float[] texPosition, float[] normal, float[] color, float textureSlot){
         this.position = position;

@@ -5,7 +5,6 @@ import androidx.appcompat.content.res.AppCompatResources;
 
 import android.os.Bundle;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.game.walkingpixels.R;

@@ -1,9 +1,6 @@
 package com.game.walkingpixels.model;
 
-import android.util.Log;
-
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Random;
 
 public class Enemy implements Serializable {

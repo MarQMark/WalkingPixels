@@ -6,23 +6,16 @@ import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.content.res.ResourcesCompat;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.ContextWrapper;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.game.walkingpixels.R;
 import com.game.walkingpixels.model.MainWorld;
 import com.game.walkingpixels.model.Player;
-import com.game.walkingpixels.model.World;
 
 public class Settings extends AppCompatActivity {
 

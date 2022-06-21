@@ -6,14 +6,10 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.appcompat.content.res.AppCompatResources;
-
 import com.game.walkingpixels.R;
-import com.game.walkingpixels.controller.Map;
 import com.game.walkingpixels.model.Constants;
 
 public class LevelUpStat extends RelativeLayout {

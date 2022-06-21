@@ -9,7 +9,6 @@ import com.game.walkingpixels.openGL.Batch;
 import com.game.walkingpixels.openGL.LightManager;
 import com.game.walkingpixels.openGL.Shader;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -33,7 +32,7 @@ public abstract class Renderer implements GLSurfaceView.Renderer {
     private final HashMap<String, Batch> batches = new HashMap<>();
     private final HashMap<String, LightManager> lightManagers = new HashMap<>();
 
-    public Context context;
+    public final Context context;
     public Camera camera;
 
     private double lastTime;

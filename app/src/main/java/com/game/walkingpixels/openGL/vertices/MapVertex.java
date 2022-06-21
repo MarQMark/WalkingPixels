@@ -11,9 +11,9 @@ public class MapVertex implements IVertex{
 
     public static final int size = DataType.FloatBYTES * (2 + 2 + 1);
 
-    public float[] position; //vec2 - x, y
-    public float[] texPosition;  //2
-    public float textureSlot;
+    public final float[] position; //vec2 - x, y
+    public final float[] texPosition;  //2
+    public final float textureSlot;
 
     public MapVertex(float[] position, float[] texPosition, float textureSlot){
         this.position = position;

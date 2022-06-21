@@ -1,7 +1,5 @@
 package com.game.walkingpixels.openGL;
 
-import android.util.Log;
-
 import com.game.walkingpixels.openGL.buffer.IndexBuffer;
 import com.game.walkingpixels.openGL.buffer.VertexBuffer;
 import com.game.walkingpixels.openGL.buffer.VertexBufferLayout;
@@ -15,7 +13,7 @@ import static android.opengl.GLES31.*;
 public class Batch {
 
     private static class BatchPart{
-        public String name;
+        public final String name;
         public int offset;
         public IVertex[] vertices;
         public BatchPart(String name, int offset,  IVertex[] vertices){
@@ -32,11 +30,9 @@ public class Batch {
     private final IndexBuffer ib;
     private final ArrayList<Texture> textures = new ArrayList<>();
 
-    private final int shaderID;
     private int lastVertexPosition = 0;
 
     public Batch(int shaderID, int maxQuadCount, int vertexSize, VertexBufferLayout[] layouts){
-        this.shaderID = shaderID;
         vb = new VertexBuffer(shaderID, maxQuadCount * 4, vertexSize, layouts);
 
         short[] indices = new short[maxQuadCount * 6];

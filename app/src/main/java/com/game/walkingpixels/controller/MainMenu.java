@@ -2,15 +2,11 @@ package com.game.walkingpixels.controller;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.widget.Button;
 
 import com.game.walkingpixels.R;
 import com.game.walkingpixels.model.MainWorld;
-import com.game.walkingpixels.model.World;
 import com.game.walkingpixels.view.ResponsiveButton;
 
 public class MainMenu extends AppCompatActivity {

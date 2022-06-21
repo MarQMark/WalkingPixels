@@ -1,7 +1,6 @@
 package com.game.walkingpixels.model;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.BlurMaskFilter;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -10,7 +9,6 @@ import android.graphics.Paint;
 import com.game.walkingpixels.Camera;
 import com.game.walkingpixels.openGL.Texture;
 import com.game.walkingpixels.openGL.vertices.PlaneVertex;
-import com.game.walkingpixels.openGL.vertices.WorldVertex;
 import com.game.walkingpixels.util.vector.Vector3;
 
 public class RenderedSpell {

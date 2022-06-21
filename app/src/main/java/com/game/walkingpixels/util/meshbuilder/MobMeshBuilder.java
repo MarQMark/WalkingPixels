@@ -10,9 +10,6 @@ import com.game.walkingpixels.util.vector.Vector2;
 import com.game.walkingpixels.util.vector.Vector3;
 
 import java.util.ArrayList;
-import java.util.Random;
-
-import javax.xml.transform.Source;
 
 public class MobMeshBuilder extends MeshBuilder{
 

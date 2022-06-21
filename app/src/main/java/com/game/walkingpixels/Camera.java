@@ -6,9 +6,9 @@ import com.game.walkingpixels.util.vector.Vector3;
 
 public class Camera {
 
-    public Vector3 position;
-    public Vector3 orientation;
-    public Vector3 up = new Vector3( 0.0f, 1.0f, 0.0f);
+    public final Vector3 position;
+    public final Vector3 orientation;
+    public final Vector3 up = new Vector3( 0.0f, 1.0f, 0.0f);
 
     private static final Matrix4f projection = new Matrix4f();
 

@@ -11,9 +11,9 @@ public class PlaneVertex implements IVertex{
 
     public static final int size = DataType.FloatBYTES * (3 + 2 + 1);
 
-    public float[] position; //vec2 - x, y
-    public float[] texPosition;
-    public float textureSlot;
+    public final float[] position; //vec2 - x, y
+    public final float[] texPosition;
+    public final float textureSlot;
 
     public PlaneVertex(float[] position, float[] texPosition, float textureSlot){
         this.position = position;

@@ -12,8 +12,8 @@ import com.game.walkingpixels.util.EventHandler;
 
 public class DrawingGLSurfaceView extends GLSurfaceView {
 
-    Context context;
-    DrawingRenderer renderer;
+    private final Context context;
+    private DrawingRenderer renderer;
 
     public DrawingGLSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
