@@ -64,9 +64,14 @@ public class MobMeshBuilder extends MeshBuilder{
                             }
                         }
 
-                        //Somehow the fuck can world.getEnemyGrid()[x][y].getType() throw an null reference error THE FUUUUUUUUUUUUUUUUUUUUUUUUUUUUUCK !!!!!!!!!!!!!!!!!!!! HA NO I'm done
-                        getMobVertices(mobs,new Vector3(mobX, height, mobY).sub(new Vector3(world.getBlockGridSize() / 2.0f, 0, world.getBlockGridSize() / 2.0f)), world.getEnemyGrid()[x][y].getType(), camera, adjust);
-                        getShadowVertices(mobs, new Vector3(mobX, height, mobY).sub(new Vector3(world.getBlockGridSize() / 2.0f, 0, world.getBlockGridSize() / 2.0f)), world.heightToBlock(height - 1));
+                        /*
+                            This causes java.lang.NullPointerException: Attempt to invoke virtual method 'com.game.walkingpixels.model.Block com.game.walkingpixels.model.Enemy.getType()' on a null object reference.
+                            I don't know why and I can't fix it. Too bad!
+                         */
+                        if(world.getEnemyGrid()[x][y] != null){
+                            getMobVertices(mobs,new Vector3(mobX, height, mobY).sub(new Vector3(world.getBlockGridSize() / 2.0f, 0, world.getBlockGridSize() / 2.0f)), world.getEnemyGrid()[x][y].getType(), camera, adjust);
+                            getShadowVertices(mobs, new Vector3(mobX, height, mobY).sub(new Vector3(world.getBlockGridSize() / 2.0f, 0, world.getBlockGridSize() / 2.0f)), world.heightToBlock(height - 1));
+                        }
                     }
                 }
             }
