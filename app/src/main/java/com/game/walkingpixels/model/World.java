@@ -130,6 +130,7 @@ public class World {
         hasMoved = true;
         position.x = x;
         position.y = y;
+        clear();
         generateBlockGrid();
         generateEnemyGrid();
     }

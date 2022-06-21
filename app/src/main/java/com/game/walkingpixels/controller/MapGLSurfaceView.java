@@ -6,16 +6,11 @@ import android.util.AttributeSet;
 
 public class MapGLSurfaceView extends GLSurfaceView {
 
-    private final Context context;
-    private MapRenderer renderer;
+    private final MapRenderer renderer;
 
     public MapGLSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        this.context = context;
         setEGLContextClientVersion(3);
-    }
-
-    public void init(){
         renderer = new MapRenderer(context);
         setRenderer(renderer);
     }

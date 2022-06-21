@@ -68,7 +68,6 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
         sensorManager.registerListener(this, accelerationSensor, SensorManager.SENSOR_DELAY_NORMAL);
 
         sv = findViewById(R.id.myGLSurfaceViewWalking);
-        sv.init();
 
         //init player
         player = new Player(Walking.this);
@@ -333,4 +332,9 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
     }
 
+    @Override
+    public void onBackPressed() {
+        switchAutoMoving.setChecked(false);
+        super.onBackPressed();
+    }
 }

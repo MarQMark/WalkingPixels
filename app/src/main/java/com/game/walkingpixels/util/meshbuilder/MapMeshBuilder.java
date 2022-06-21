@@ -23,8 +23,6 @@ public class MapMeshBuilder extends MeshBuilder{
                 int worldY = y + (int)world.getPosition().y - countY / 2 + world.getBlockGridSize() / 2;
                 int height = world.generateHeight(worldX, worldY);
 
-
-
                 Block block = world.generateBlock(worldX, worldY, height + 1);
                 if(block == Block.TREE)
                     addVertices(mesh, 4, x, y, countX, countY);
@@ -36,7 +34,6 @@ public class MapMeshBuilder extends MeshBuilder{
                 addVertices(mesh, height, x, y, countX, countY);
             }
         }
-
 
         MapVertex[] finishedMesh = new MapVertex[mesh.size()];
         for (int i = 0; i < mesh.size(); i++){

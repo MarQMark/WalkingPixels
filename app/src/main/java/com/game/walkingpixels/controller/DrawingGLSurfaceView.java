@@ -8,7 +8,7 @@ import android.view.MotionEvent;
 
 import com.game.walkingpixels.model.DrawTimer;
 import com.game.walkingpixels.model.Enemy;
-import com.game.walkingpixels.util.EventHandler;
+import com.game.walkingpixels.util.TouchPosition;
 
 public class DrawingGLSurfaceView extends GLSurfaceView {
 
@@ -36,22 +36,22 @@ public class DrawingGLSurfaceView extends GLSurfaceView {
 
         if(event.getAction() == MotionEvent.ACTION_DOWN || event.getAction() == MotionEvent.ACTION_MOVE){
 
-            EventHandler.lastTouchPosition.x = EventHandler.touchPosition.x;
-            EventHandler.lastTouchPosition.y = EventHandler.touchPosition.y;
+            TouchPosition.lastPosition.x = TouchPosition.position.x;
+            TouchPosition.lastPosition.y = TouchPosition.position.y;
 
-            EventHandler.touchPosition.x = event.getX();
-            EventHandler.touchPosition.y = event.getY();
+            TouchPosition.position.x = event.getX();
+            TouchPosition.position.y = event.getY();
 
-            if(EventHandler.lastTouchPosition.x == -1){
-                EventHandler.lastTouchPosition.x = event.getX();
-                EventHandler.lastTouchPosition.y = event.getY();
+            if(TouchPosition.lastPosition.x == -1){
+                TouchPosition.lastPosition.x = event.getX();
+                TouchPosition.lastPosition.y = event.getY();
             }
         }
         else if(event.getAction() == MotionEvent.ACTION_UP){
-            EventHandler.lastTouchPosition.x = -1;
-            EventHandler.lastTouchPosition.y = -1;
-            EventHandler.touchPosition.x = -1;
-            EventHandler.touchPosition.y = -1;
+            TouchPosition.lastPosition.x = -1;
+            TouchPosition.lastPosition.y = -1;
+            TouchPosition.position.x = -1;
+            TouchPosition.position.y = -1;
         }
 
         return true;

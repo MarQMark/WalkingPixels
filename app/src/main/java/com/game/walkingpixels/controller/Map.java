@@ -16,12 +16,6 @@ public class Map extends AppCompatActivity {
 
         setContentView(R.layout.activity_map);
 
-        MapGLSurfaceView sv = findViewById(R.id.myGLSurfaceViewMap);
-        sv.init();
-
-        BackgroundGLSurfaceView svBackground = findViewById(R.id.myGLSurfaceViewMapBackground);
-        svBackground.init();
-
         TextView lblX = findViewById(R.id.lbl_map_x);
         lblX.setText(getResources().getString(R.string.lbl_map_x, (int) MainWorld.getWorld().getPosition().x));
         TextView lblY = findViewById(R.id.lbl_map_y);

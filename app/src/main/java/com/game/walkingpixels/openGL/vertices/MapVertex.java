@@ -9,11 +9,11 @@ import static android.opengl.GLES20.GL_FLOAT;
 
 public class MapVertex implements IVertex{
 
-    public static final int size = DataType.FloatBYTES * (2 + 2 + 1);
+    public static final int SIZE = DataType.FLOAT_BYTES * (2 + 2 + 1);
 
-    public final float[] position; //vec2 - x, y
-    public final float[] texPosition;  //2
-    public final float textureSlot;
+    private final float[] position; //vec2 - x, y
+    private final float[] texPosition;  //2
+    private final float textureSlot;
 
     public MapVertex(float[] position, float[] texPosition, float textureSlot){
         this.position = position;

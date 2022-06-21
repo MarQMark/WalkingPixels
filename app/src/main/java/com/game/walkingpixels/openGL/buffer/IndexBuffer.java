@@ -15,18 +15,18 @@ public class IndexBuffer {
 
     public IndexBuffer(short[] indices){
 
-        ByteBuffer ibb = ByteBuffer.allocateDirect(indices.length * DataType.ShortBYTES);
+        ByteBuffer ibb = ByteBuffer.allocateDirect(indices.length * DataType.SHORT_BYTES);
         ibb.order(ByteOrder.nativeOrder());
         ShortBuffer indexBuffer = ibb.asShortBuffer();
         indexBuffer.put(indices);
         indexBuffer.position(0);
 
-        IntBuffer buffers = IntBuffer.allocate(DataType.IntegerBYTES);
+        IntBuffer buffers = IntBuffer.allocate(DataType.INTEGER_BYTES);
         glGenBuffers(1 , buffers);
         id = buffers.get();
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexBuffer.capacity() * DataType.ShortBYTES, indexBuffer, GL_STATIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexBuffer.capacity() * DataType.SHORT_BYTES, indexBuffer, GL_STATIC_DRAW);
     }
 
     public void bind(){

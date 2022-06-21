@@ -4,7 +4,7 @@ import android.opengl.GLES32;
 import android.os.Build;
 import android.renderscript.Matrix4f;
 
-import com.game.walkingpixels.Camera;
+import com.game.walkingpixels.model.Camera;
 import com.game.walkingpixels.util.vector.Vector3;
 import com.game.walkingpixels.util.vector.Vector4;
 
@@ -16,7 +16,7 @@ public class PointLight {
     private static final int shadowMapHeight = 2048;
     private int textureSlot = 4;
 
-    private Shader shader;
+    private final Shader shader;
     private final Camera camera;
 
     private Vector3 position;

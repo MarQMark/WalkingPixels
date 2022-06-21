@@ -1,6 +1,6 @@
 package com.game.walkingpixels.util.meshbuilder;
 
-import com.game.walkingpixels.Camera;
+import com.game.walkingpixels.model.Camera;
 import com.game.walkingpixels.model.Block;
 import com.game.walkingpixels.model.World;
 import com.game.walkingpixels.model.atlas.AnimationTextureAtlas;
@@ -61,14 +61,14 @@ public class MobMeshBuilder extends MeshBuilder{
                             }
                         }
 
-                        /*
-                            This causes java.lang.NullPointerException: Attempt to invoke virtual method 'com.game.walkingpixels.model.Block com.game.walkingpixels.model.Enemy.getType()' on a null object reference.
-                            I don't know why and I can't fix it. Too bad!
-                         */
-                        if(world.getEnemyGrid()[x][y] != null){
+                        try {
+                            /*
+                                This causes java.lang.NullPointerException: Attempt to invoke virtual method 'com.game.walkingpixels.model.Block com.game.walkingpixels.model.Enemy.getType()' on a null object reference.
+                                I don't know why and I can't fix it. Too bad!
+                            */
                             getMobVertices(mobs,new Vector3(mobX, height, mobY).sub(new Vector3(world.getBlockGridSize() / 2.0f, 0, world.getBlockGridSize() / 2.0f)), world.getEnemyGrid()[x][y].getType(), camera, adjust);
                             getShadowVertices(mobs, new Vector3(mobX, height, mobY).sub(new Vector3(world.getBlockGridSize() / 2.0f, 0, world.getBlockGridSize() / 2.0f)), world.heightToBlock(height - 1));
-                        }
+                        }catch (Exception ignored){}
                     }
                 }
             }

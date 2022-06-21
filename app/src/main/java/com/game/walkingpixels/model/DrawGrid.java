@@ -6,7 +6,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Matrix;
 
-import com.game.walkingpixels.util.EventHandler;
+import com.game.walkingpixels.util.TouchPosition;
 import com.game.walkingpixels.util.vector.Vector2;
 
 import java.io.IOException;
@@ -51,9 +51,9 @@ public class DrawGrid {
     }
 
     public void update(int width, int height){
-        if(isEnabled && EventHandler.lastTouchPosition.x != -1){
+        if(isEnabled && TouchPosition.lastPosition.x != -1){
 
-            Vector2 touchPosition = EventHandler.touchPosition;
+            Vector2 touchPosition = TouchPosition.position;
 
             if (touchPosition.x >= width * offset.x && touchPosition.x <= width - width * offset.x){
                 if(touchPosition.y >= height - width * (offset.y + scale) && touchPosition.y <= height - width * offset.y){
@@ -62,8 +62,8 @@ public class DrawGrid {
 
                     int x0 = (int)((touchPosition.x - width * offset.x) / (width * scale) * size);
                     int y0 = (int)((height - touchPosition.y - width * offset.y) / (width * scale) * size);
-                    int lastX = (int)((EventHandler.lastTouchPosition.x - width * offset.x) / (width * scale) * size);
-                    int lastY = (int)((height - EventHandler.lastTouchPosition.y - width * offset.y) / (width * scale) * size);
+                    int lastX = (int)((TouchPosition.lastPosition.x - width * offset.x) / (width * scale) * size);
+                    int lastY = (int)((height - TouchPosition.lastPosition.y - width * offset.y) / (width * scale) * size);
 
                     for (Vector2 p: findLine(x0, y0, lastX, lastY)){
                         for (int py = 0; py < size; py++) {

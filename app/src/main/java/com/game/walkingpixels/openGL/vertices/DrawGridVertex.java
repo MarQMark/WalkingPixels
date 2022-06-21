@@ -9,10 +9,10 @@ import static android.opengl.GLES20.GL_FLOAT;
 
 public class DrawGridVertex implements IVertex{
 
-    public static final int size = DataType.FloatBYTES * (3 + 4);
+    public static final int SIZE = DataType.FLOAT_BYTES * (3 + 4);
 
-    public final float[] position; //vec2 - x, y
-    public final float[] color;   //vec4 - r, g, b, a
+    private final float[] position; //vec2 - x, y
+    private final float[] color;   //vec4 - r, g, b, a
 
     public DrawGridVertex(float[] position, float[] color){
         this.position = position;

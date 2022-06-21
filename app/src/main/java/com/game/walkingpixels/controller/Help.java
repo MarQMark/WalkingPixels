@@ -25,9 +25,6 @@ public class Help extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_help);
 
-        BackgroundGLSurfaceView sv = findViewById(R.id.myGLSurfaceViewHelpBackground);
-        sv.init();
-
         imgHelp = findViewById(R.id.img_help);
         btnNext = findViewById(R.id.btn_help_next);
         btnNext.setOnClickListener(e -> {

@@ -3,7 +3,7 @@ package com.game.walkingpixels.controller;
 import android.content.Context;
 import android.renderscript.Matrix4f;
 
-import com.game.walkingpixels.Camera;
+import com.game.walkingpixels.model.Camera;
 import com.game.walkingpixels.model.Background;
 import com.game.walkingpixels.model.Block;
 import com.game.walkingpixels.model.DrawGrid;
@@ -77,13 +77,13 @@ public class DrawingRenderer extends Renderer {
         background = new Background(new Texture(context, "textures/clouds.png", 0), 20);
         shader("background").bind();
         shader("background").setUniform1iv("u_Textures", 1, new int[] {0}, 0);
-        registerBatch("background", new Batch(shader("background").getID(), 1, PlaneVertex.size, PlaneVertex.getLayout()));
+        registerBatch("background", new Batch(shader("background").getID(), 1, PlaneVertex.SIZE, PlaneVertex.getLayout()));
         batch("background").addVertices("Background", background.getVertices());
         batch("background").addTexture(background.getTexture());
 
 
         //init spell
-        registerBatch("spell", new Batch(shader("spell").getID(), 1, PlaneVertex.size, PlaneVertex.getLayout()));
+        registerBatch("spell", new Batch(shader("spell").getID(), 1, PlaneVertex.SIZE, PlaneVertex.getLayout()));
         shader("spell").bind();
         shader("spell").setUniform1iv("u_Textures", 4, new int[] {0, 1, 2, 3}, 0);
 
@@ -91,14 +91,14 @@ public class DrawingRenderer extends Renderer {
         //init draw grid
         drawGrid = new DrawGrid(64, 0.8f, new Vector2(0.1f, 0.1f));
         shader("draw").bind();
-        registerBatch("draw", new Batch(shader("draw").getID(), drawGrid.getSize() * drawGrid.getSize(), DrawGridVertex.size, DrawGridVertex.getLayout()));
+        registerBatch("draw", new Batch(shader("draw").getID(), drawGrid.getSize() * drawGrid.getSize(), DrawGridVertex.SIZE, DrawGridVertex.getLayout()));
         batch("draw").addVertices("Grid", drawGridMeshBuilder.generateMesh(drawGrid));
 
 
         //init world
         world = new World(0);
         generateWorld(world);
-        registerBatch("world", new Batch(shader("world").getID(), 3000, WorldVertex.size, WorldVertex.getLayout()));
+        registerBatch("world", new Batch(shader("world").getID(), 3000, WorldVertex.SIZE, WorldVertex.getLayout()));
         batch("world").addVertices("ground", blockMeshBuilder.generateMesh(world));
         batch("world").addVertices("mobs", mobMeshBuilder.generateMesh(world, camera, true));
         batch("world").addTexture(new Texture(context, "textures/block_atlas.png", 0));

@@ -27,7 +27,7 @@ public class MapRenderer extends Renderer{
     @Override
     public void init() {
         registerShader("map", new Shader(context, "Shaders/Map.shaders"));
-        registerBatch("map", new Batch(shader("map").getID(), 20000, MapVertex.size, MapVertex.getLayout()));
+        registerBatch("map", new Batch(shader("map").getID(), 20000, MapVertex.SIZE, MapVertex.getLayout()));
         batch("map").addVertices("Grid", mapMeshBuilder.generateMesh(MainWorld.getWorld(),32, 64));
         batch("map").addTexture(new Texture(context, "textures/map_texture_atlas.png", 0));
 

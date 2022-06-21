@@ -4,7 +4,7 @@ import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.Log;
 
-import com.game.walkingpixels.Camera;
+import com.game.walkingpixels.model.Camera;
 import com.game.walkingpixels.openGL.Batch;
 import com.game.walkingpixels.openGL.LightManager;
 import com.game.walkingpixels.openGL.Shader;

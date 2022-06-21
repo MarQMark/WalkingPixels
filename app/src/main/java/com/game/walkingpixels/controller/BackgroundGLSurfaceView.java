@@ -7,16 +7,11 @@ import android.util.AttributeSet;
 
 public class BackgroundGLSurfaceView extends GLSurfaceView {
 
-    private final Context context;
-    private BackgroundRenderer renderer;
+    private final BackgroundRenderer renderer;
 
     public BackgroundGLSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        this.context = context;
         setEGLContextClientVersion(3);
-    }
-
-    public void init(){
         renderer = new BackgroundRenderer(context);
         setRenderer(renderer);
     }

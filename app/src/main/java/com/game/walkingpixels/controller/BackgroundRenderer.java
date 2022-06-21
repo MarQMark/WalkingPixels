@@ -31,7 +31,7 @@ public class BackgroundRenderer extends Renderer{
         background = new Background(new Texture(context, "textures/clouds.png", 0), 20);
         shader("background").bind();
         shader("background").setUniform1iv("u_Textures", 1, new int[] {0}, 0);
-        registerBatch("background", new Batch(shader("background").getID(), 1, PlaneVertex.size, PlaneVertex.getLayout()));
+        registerBatch("background", new Batch(shader("background").getID(), 1, PlaneVertex.SIZE, PlaneVertex.getLayout()));
         batch("background").addVertices("Background", background.getVertices());
         batch("background").addTexture(background.getTexture());
     }

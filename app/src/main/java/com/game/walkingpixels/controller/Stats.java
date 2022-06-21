@@ -20,9 +20,6 @@ public class Stats extends AppCompatActivity {
 
         Player player = new Player(Stats.this);
 
-        BackgroundGLSurfaceView svBackground = findViewById(R.id.myGLSurfaceViewStatsBackground);
-        svBackground.init();
-
         ListView listSpells = findViewById(R.id.list_stats_spells);
         final SpellAdapter spellAdapter = new SpellAdapter(Stats.this, player.getSpells(), 14);
         listSpells.setAdapter(spellAdapter);

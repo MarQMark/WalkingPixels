@@ -1,4 +1,4 @@
-package com.game.walkingpixels;
+package com.game.walkingpixels.model;
 
 import android.renderscript.Matrix4f;
 
@@ -22,7 +22,6 @@ public class Camera {
 
     public Camera(Vector3 position, Vector3 orientation){
         this.position = position;
-        //orientation.normalize();
         this.orientation = orientation;
     }
 

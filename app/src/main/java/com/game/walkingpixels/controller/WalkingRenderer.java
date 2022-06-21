@@ -3,7 +3,7 @@ package com.game.walkingpixels.controller;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.game.walkingpixels.Camera;
+import com.game.walkingpixels.model.Camera;
 import com.game.walkingpixels.model.Background;
 import com.game.walkingpixels.model.MainWorld;
 import com.game.walkingpixels.model.Sun;
@@ -39,6 +39,7 @@ public class WalkingRenderer extends Renderer{
 
     @Override
     public void init() {
+        //init camera
         camera = new Camera(new Vector3(0.0f, 0.0f, 12.8f), new Vector3(0.0f, 0.0f, -1.0f));
         camera.rotationX = 50;
         SharedPreferences sharedPreferences = context.getSharedPreferences("World", Context.MODE_PRIVATE);
@@ -52,15 +53,13 @@ public class WalkingRenderer extends Renderer{
             registerShader("walk", new Shader(context, "Shaders/Basic.shaders"));
         registerShader("background", new Shader(context, "Shaders/Background.shaders"));
 
-
         //init background
         background = new Background(new Texture(context, "textures/clouds.png", 0), 20);
         shader("background").bind();
         shader("background").setUniform1iv("u_Textures", 1, new int[] {0}, 0);
-        registerBatch("background", new Batch(shader("background").getID(), 1, PlaneVertex.size, PlaneVertex.getLayout()));
+        registerBatch("background", new Batch(shader("background").getID(), 1, PlaneVertex.SIZE, PlaneVertex.getLayout()));
         batch("background").addVertices("Background", background.getVertices());
         batch("background").addTexture(background.getTexture());
-
 
         //init light
         registerLightManager("walk", new LightManager());
@@ -68,16 +67,14 @@ public class WalkingRenderer extends Renderer{
         lightManager("walk").initWorldShader(shader("walk"));
         lightManager("walk").createPointLight(sun.getPosition(), new Vector4(1f, 1f, 1f, 1.0f), 1000f, camera);
 
-
         //init world
         shader("walk").bind();
-        registerBatch("walk", new Batch(shader("walk").getID(), 2000, WorldVertex.size, WorldVertex.getLayout()));
+        registerBatch("walk", new Batch(shader("walk").getID(), 2000, WorldVertex.SIZE, WorldVertex.getLayout()));
         batch("walk").addVertices("Player", mobMeshBuilder.generateMesh(MainWorld.getWorld(), camera, false));
         batch("walk").addVertices("World", blockMeshBuilder.generateMesh(MainWorld.getWorld()));
         batch("walk").addTexture(new Texture(context, "textures/block_atlas.png", 0));
         batch("walk").addTexture(new Texture(context, "textures/mob_texture_atlas.png", 1));
         batch("walk").addTexture(new Texture(context, "textures/tree.png", 2));
-        batch("walk").addTexture(new Texture(context, "textures/bonfire.png", 3));
 
         shader("walk").setUniform1iv("u_Textures", 4, new int[] {0, 1, 2, 3}, 0);
     }

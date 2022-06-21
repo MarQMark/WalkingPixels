@@ -3,7 +3,7 @@ package com.game.walkingpixels.controller;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.game.walkingpixels.Camera;
+import com.game.walkingpixels.model.Camera;
 import com.game.walkingpixels.model.Background;
 import com.game.walkingpixels.model.Block;
 import com.game.walkingpixels.model.MainWorld;
@@ -45,6 +45,7 @@ public class MainMenuRenderer extends Renderer{
         camera.rotationX = 50;
         camera.rotationY =  0;
 
+        //generate world
         world = new World(MainWorld.getWorld().getSeed());
         world.getBlockGrid()
                 [world.getBlockGridSize() / 2]
@@ -63,7 +64,7 @@ public class MainMenuRenderer extends Renderer{
         background = new Background(new Texture(context, "textures/clouds.png", 0), 20);
         shader("background").bind();
         shader("background").setUniform1iv("u_Textures", 1, new int[] {0}, 0);
-        registerBatch("background", new Batch(shader("background").getID(), 1, PlaneVertex.size, PlaneVertex.getLayout()));
+        registerBatch("background", new Batch(shader("background").getID(), 1, PlaneVertex.SIZE, PlaneVertex.getLayout()));
         batch("background").addVertices("Background", background.getVertices());
         batch("background").addTexture(background.getTexture());
 
@@ -75,13 +76,12 @@ public class MainMenuRenderer extends Renderer{
 
         //init world
         shader("world").bind();
-        registerBatch("world", new Batch(shader("world").getID(), 2000, WorldVertex.size, WorldVertex.getLayout()));
+        registerBatch("world", new Batch(shader("world").getID(), 2000, WorldVertex.SIZE, WorldVertex.getLayout()));
         batch("world").addVertices("Mobs", mobMeshBuilder.generateMesh(world, camera, false));
         batch("world").addVertices("World", blockMeshBuilder.generateMesh(world));
         batch("world").addTexture(new Texture(context, "textures/block_atlas.png", 0));
         batch("world").addTexture(new Texture(context, "textures/mob_texture_atlas.png", 1));
         batch("world").addTexture(new Texture(context, "textures/tree.png", 2));
-        batch("world").addTexture(new Texture(context, "textures/bonfire.png", 3));
 
         shader("world").setUniform1iv("u_Textures", 4, new int[] {0, 1, 2, 3}, 0);
     }

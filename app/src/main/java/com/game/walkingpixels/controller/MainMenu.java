@@ -22,10 +22,6 @@ public class MainMenu extends AppCompatActivity {
 
         MainWorld.init(MainMenu.this);
 
-
-        MainMenuGLSurfaceView sv = findViewById(R.id.myGLSurfaceViewMainMenu);
-        sv.init();
-
         ResponsiveButton btnPlay = findViewById(R.id.btn_main_menu_play);
         btnPlay.setOnClickListener(e -> {
             Intent intent = new Intent(this, Walking.class);

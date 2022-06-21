@@ -31,9 +31,6 @@ public class LevelUp extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_level_up);
 
-        BackgroundGLSurfaceView svBackground = findViewById(R.id.myGLSurfaceViewLevelUpBackground);
-        svBackground.init();
-
         player = new Player(LevelUp.this);
         level = player.getLevel();
 
