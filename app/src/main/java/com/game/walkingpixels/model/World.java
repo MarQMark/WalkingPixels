@@ -116,23 +116,22 @@ public class World {
                 return false;
         }
 
-
-        hasMoved = true;
         position.x += direction.x;
         position.y += direction.y;
         generateBlockGrid();
         moveEnemyGrid();
+        hasMoved = true;
 
         return true;
     }
 
     public void setPosition(int x, int y){
-        hasMoved = true;
         position.x = x;
         position.y = y;
         clear();
         generateBlockGrid();
         generateEnemyGrid();
+        hasMoved = true;
     }
 
     public void setWorldSize(int WorldSize){

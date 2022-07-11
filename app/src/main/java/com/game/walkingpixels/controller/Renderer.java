@@ -85,6 +85,8 @@ public abstract class Renderer implements GLSurfaceView.Renderer {
 
         update(deltaTime);
         render(deltaTime);
+
+        queryErrors("onDrawFrame");
     }
 
     @Override

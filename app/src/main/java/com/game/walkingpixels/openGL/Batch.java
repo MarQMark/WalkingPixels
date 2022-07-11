@@ -106,7 +106,6 @@ public class Batch {
         if(partNumber == -1)
             return;
 
-
         int oldSize = parts.get(partNumber).vertices.length;
 
         lastVertexPosition -= ((oldSize) / 4) * 6;
@@ -114,7 +113,6 @@ public class Batch {
             parts.get(i).offset = parts.get(i - 1).offset + parts.get(i - 1).vertices.length;
             vb.fillPartBuffer(parts.get(i).vertices, parts.get(i).offset);
         }
-
 
         parts.remove(partNumber);
     }

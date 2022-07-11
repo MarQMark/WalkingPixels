@@ -22,8 +22,11 @@ import com.game.walkingpixels.util.vector.Vector4;
 
 import static android.opengl.GLES20.GL_COLOR_BUFFER_BIT;
 import static android.opengl.GLES20.GL_DEPTH_BUFFER_BIT;
+import static android.opengl.GLES20.GL_DEPTH_TEST;
 import static android.opengl.GLES20.glClear;
 import static android.opengl.GLES20.glClearColor;
+import static android.opengl.GLES20.glDisable;
+import static android.opengl.GLES20.glEnable;
 
 public class MainMenuRenderer extends Renderer{
 
@@ -112,9 +115,11 @@ public class MainMenuRenderer extends Renderer{
         glClear(GL_COLOR_BUFFER_BIT);
 
         //render background
+        glDisable(GL_DEPTH_TEST);
         shader("background").bind();
         batch("background").bind();
         batch("background").draw();
+        glEnable(GL_DEPTH_TEST);
 
         glClear(GL_DEPTH_BUFFER_BIT);
         //render world

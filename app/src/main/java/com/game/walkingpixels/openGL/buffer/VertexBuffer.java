@@ -15,10 +15,12 @@ public class VertexBuffer {
     private final int shaderID;
     private final ArrayList<VertexBufferLayout> layouts = new ArrayList<>();
     private final int vertexSize;
+    private final int maxVertexCount;
 
     public VertexBuffer(int shaderID, int maxVertexCount, int vertexSize, VertexBufferLayout[] layouts){
         this.shaderID = shaderID;
         this.vertexSize = vertexSize;
+        this.maxVertexCount = maxVertexCount;
 
         int[] buffer = new int[1];
         glGenBuffers(1 , buffer, 0);
@@ -30,8 +32,8 @@ public class VertexBuffer {
         addLayout(layouts);
     }
 
-    public void fillBuffer(ArrayList<IVertex> vertices){
-        ByteBuffer vbb = ByteBuffer.allocateDirect(vertexSize * vertices.size());
+    public void fillBuffer(IVertex[] vertices){
+        ByteBuffer vbb = ByteBuffer.allocateDirect(vertexSize * vertices.length);
         vbb.order(ByteOrder.nativeOrder());
         FloatBuffer fb = vbb.asFloatBuffer();
         for (IVertex vertex: vertices)
@@ -39,8 +41,14 @@ public class VertexBuffer {
         fb.position(0);
 
         glBindBuffer(GL_ARRAY_BUFFER, id);
-        glBufferSubData(GL_ARRAY_BUFFER, 0, vertices.size() * vertexSize, fb);
+        glBufferData(GL_ARRAY_BUFFER,vertices.length * vertexSize, fb, GL_DYNAMIC_DRAW);
     }
+
+    public void clearBuffer(){
+        glBindBuffer(GL_ARRAY_BUFFER, id);
+        glBufferData(GL_ARRAY_BUFFER,maxVertexCount * vertexSize, null, GL_DYNAMIC_DRAW);
+    }
+
     public void fillPartBuffer(IVertex[] vertices, int offset){
         ByteBuffer vbb = ByteBuffer.allocateDirect(vertexSize * vertices.length);
         vbb.order(ByteOrder.nativeOrder());
@@ -55,8 +63,7 @@ public class VertexBuffer {
         glBufferSubData(GL_ARRAY_BUFFER, offset * vertexSize, vertices.length * vertexSize, fb);
     }
 
-    private void addLayout(VertexBufferLayout[] layouts)
-    {
+    private void addLayout(VertexBufferLayout[] layouts){
         //calculate stride
         int stride = 0;
         for (VertexBufferLayout layout : layouts) {
@@ -83,4 +90,6 @@ public class VertexBuffer {
     public void unbind(){
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
+
+    public int getVertexSize(){ return vertexSize;}
 }
