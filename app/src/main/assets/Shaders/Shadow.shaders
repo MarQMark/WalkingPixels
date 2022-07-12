@@ -41,7 +41,7 @@ uniform float u_FarPlane;
 
 void main()
 {
-    if(texture(u_Textures[int(v_Slot)], v_TexCoord).a == 0.0){
+    if(texture(u_Textures[int(v_Slot)], v_TexCoord).a <= 0.1){
         discard;
     }
 

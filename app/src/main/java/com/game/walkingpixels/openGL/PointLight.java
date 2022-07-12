@@ -79,7 +79,10 @@ public class PointLight {
         if(shader.hasGeometry()){
             for (Batch batch : batches){
                 batch.bind();
-                batch.draw();
+                for(Batch.BatchPart part : batch.getParts()){
+                    shader.setUniform1f("u_Slot", part.textureSlot);
+                    batch.drawPart(part.name);
+                }
                 batch.unbind();
             }
         }else {

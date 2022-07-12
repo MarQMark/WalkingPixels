@@ -165,16 +165,16 @@ public class DrawingRenderer extends Renderer {
         shader("background").bind();
         batch("background").bind();
         batch("background").draw();
+        glEnable(GL_DEPTH_TEST);
+        glClear(GL_DEPTH_BUFFER_BIT);
 
         //render draw grid
         shader("draw").bind();
         shader("draw").setUniformMatrix4fv("viewmatrix", getViewMatrix());
         batch("draw").bind();
         batch("draw").draw();
-        glEnable(GL_DEPTH_TEST);
 
 
-        glClear(GL_DEPTH_BUFFER_BIT);
         //render World
         shader("world").bind();
         batch("world").updateVertices("mobs", spriteMeshBuilder.generateMesh(world, camera, 1, true, true));
