@@ -4,6 +4,8 @@ import android.opengl.GLES32;
 import android.os.Build;
 import android.renderscript.Matrix4f;
 
+import com.game.walkingpixels.controller.Renderer;
+import com.game.walkingpixels.model.Background;
 import com.game.walkingpixels.model.Camera;
 import com.game.walkingpixels.util.vector.Vector3;
 import com.game.walkingpixels.util.vector.Vector4;
@@ -54,11 +56,8 @@ public class PointLight {
         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 
-        glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
-
         if(shader.hasGeometry() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-                GLES32.glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, cubeMap, 0);
-
+            GLES32.glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, cubeMap, 0);
 
         glBindFramebuffer(GL_FRAMEBUFFER  , 0);
 
@@ -74,10 +73,16 @@ public class PointLight {
 
         setShaderSpecifics();
 
+        glActiveTexture(GL_TEXTURE0 + textureSlot);
+        glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMap);
+
         if(shader.hasGeometry()){
             for (Batch batch : batches){
                 batch.bind();
-                batch.draw();
+                for(Batch.BatchPart part : batch.getParts()){
+                    shader.setUniform1f("u_Slot", part.textureSlot);
+                    batch.drawPart(part.name);
+                }
                 batch.unbind();
             }
         }else {
@@ -87,7 +92,10 @@ public class PointLight {
                 glClear(GL_DEPTH_BUFFER_BIT);
                 for (Batch batch : batches){
                     batch.bind();
-                    batch.draw();
+                    for(Batch.BatchPart part : batch.getParts()){
+                        shader.setUniform1f("u_Slot", part.textureSlot);
+                        batch.drawPart(part.name);
+                    }
                     batch.unbind();
                 }
             }

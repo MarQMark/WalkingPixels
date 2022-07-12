@@ -116,7 +116,6 @@ public class Shader {
     }
 
     public void setUniformMatrix4fv(String uniform, Matrix4f matrix4f){
-
         int location = getUniformLocation(uniform);
         if(location != -1)
             glUniformMatrix4fv(location, 1, false, matrix4f.getArray(), 0);

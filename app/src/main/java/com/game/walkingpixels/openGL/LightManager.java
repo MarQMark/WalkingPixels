@@ -1,5 +1,6 @@
 package com.game.walkingpixels.openGL;
 
+import com.game.walkingpixels.controller.Renderer;
 import com.game.walkingpixels.model.Camera;
 import com.game.walkingpixels.util.vector.Vector3;
 import com.game.walkingpixels.util.vector.Vector4;
@@ -13,7 +14,7 @@ public class LightManager {
 
     private static final int SHADOW_MAP_WIDTH = 2048;
     private static final int SHADOW_MAP_HEIGHT = 2048;
-    private static final int MAX_NUMBER_OF_POINT_LIGHTS = 4;
+    private static final int MAX_NUMBER_OF_POINT_LIGHTS = 1;
 
     private int numberOfPointLights = 0;
     private final PointLight[] lights = new PointLight[MAX_NUMBER_OF_POINT_LIGHTS];
@@ -32,7 +33,7 @@ public class LightManager {
 
         shader.bind();
         glViewport(0, 0, SHADOW_MAP_WIDTH, SHADOW_MAP_HEIGHT);
-        glBindFramebuffer(GL_FRAMEBUFFER  , framebuffer);
+        glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 
         for (int i = 0; i < numberOfPointLights; i++)
             lights[i].draw(batches);
@@ -57,7 +58,6 @@ public class LightManager {
         if(worldShader == null)
             throw new WorldLightShadowShaderIsNotInitializedException();
 
-
         lights[numberOfPointLights] = new PointLight(position, color, intensity, framebuffer, shader, numberOfPointLights, camera);
 
         worldShader.bind();
@@ -65,7 +65,7 @@ public class LightManager {
         worldShader.setUniform3f("u_LightPosition[" + numberOfPointLights + "]", position);
         worldShader.setUniform4f("u_LightColor[" + numberOfPointLights + "]", color);
         worldShader.setUniform1f("u_LightIntensity[" + numberOfPointLights + "]", intensity);
-        worldShader.setUniform1i("u_ShadowCubeMap[" + numberOfPointLights + "]", lights[numberOfPointLights].getTextureSlot());
+        worldShader.setUniform1i("u_ShadowCubeMap", lights[numberOfPointLights].getTextureSlot());
         worldShader.unbind();
 
         numberOfPointLights++;
@@ -73,9 +73,9 @@ public class LightManager {
 
     public void initShader(Shader shader){
         this.shader = shader;
-        //shader.bind();
-        //shader.setUniform1iv("u_Textures", 2, new int[] {0, 1}, 0);
-        //shader.unbind();
+        shader.bind();
+        shader.setUniform1iv("u_Textures", 4, new int[] {0, 1, 2, 3}, 0);
+        shader.unbind();
     }
     public void initWorldShader(Shader shader){
         worldShader = shader;
@@ -131,7 +131,7 @@ public class LightManager {
             worldShader.setUniform3f("u_LightPosition[" + i + "]", lights[i].getPosition());
             worldShader.setUniform4f("u_LightColor[" + i + "]", lights[i].getColor());
             worldShader.setUniform1f("u_LightIntensity[" + i + "]", lights[i].getIntensity());
-            worldShader.setUniform1i("u_ShadowCubeMap[" + i + "]", lights[i].getTextureSlot());
+            worldShader.setUniform1i("u_ShadowCubeMap", lights[numberOfPointLights].getTextureSlot());
         }
         worldShader.bind();
     }

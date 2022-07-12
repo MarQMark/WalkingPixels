@@ -16,7 +16,7 @@ import com.game.walkingpixels.openGL.Texture;
 import com.game.walkingpixels.openGL.vertices.PlaneVertex;
 import com.game.walkingpixels.openGL.vertices.WorldVertex;
 import com.game.walkingpixels.util.meshbuilder.BlockMeshBuilder;
-import com.game.walkingpixels.util.meshbuilder.MobMeshBuilder;
+import com.game.walkingpixels.util.meshbuilder.SpriteMeshBuilder;
 import com.game.walkingpixels.util.vector.Vector3;
 import com.game.walkingpixels.util.vector.Vector4;
 
@@ -35,8 +35,10 @@ public class MainMenuRenderer extends Renderer{
     private final Sun sun = new Sun();
     private Background background;
 
-    private final MobMeshBuilder mobMeshBuilder = new MobMeshBuilder();
+    private final SpriteMeshBuilder spriteMeshBuilder = new SpriteMeshBuilder();
     private final BlockMeshBuilder blockMeshBuilder = new BlockMeshBuilder();
+
+    private boolean shadow;
 
     public MainMenuRenderer(Context context) {
         super(context);
@@ -57,7 +59,8 @@ public class MainMenuRenderer extends Renderer{
                 = Block.AIR;
 
         SharedPreferences sharedPref = context.getSharedPreferences("Settings", Context.MODE_PRIVATE);
-        if(sharedPref.getBoolean("shadow_enabled", false))
+        shadow = sharedPref.getBoolean("shadow_enabled", false);
+        if(shadow)
             registerShader("world", new Shader(context, "Shaders/BasicShadow.shaders"));
         else
             registerShader("world", new Shader(context, "Shaders/Basic.shaders"));
@@ -68,7 +71,7 @@ public class MainMenuRenderer extends Renderer{
         shader("background").bind();
         shader("background").setUniform1iv("u_Textures", 1, new int[] {0}, 0);
         registerBatch("background", new Batch(shader("background").getID(), 1, PlaneVertex.SIZE, PlaneVertex.getLayout()));
-        batch("background").addVertices("Background", background.getVertices());
+        batch("background").addVertices("Background", background.getVertices(), 0);
         batch("background").addTexture(background.getTexture());
 
         //init light
@@ -80,8 +83,9 @@ public class MainMenuRenderer extends Renderer{
         //init world
         shader("world").bind();
         registerBatch("world", new Batch(shader("world").getID(), 2000, WorldVertex.SIZE, WorldVertex.getLayout()));
-        batch("world").addVertices("Mobs", mobMeshBuilder.generateMesh(world, camera, false));
-        batch("world").addVertices("World", blockMeshBuilder.generateMesh(world));
+        batch("world").addVertices("Mobs", spriteMeshBuilder.generateMesh(world, camera, 1, false, !shadow), 1);
+        batch("world").addVertices("Trees", spriteMeshBuilder.generateMesh(world, camera, 2, false, !shadow), 2);
+        batch("world").addVertices("World", blockMeshBuilder.generateMesh(world), 0);
         batch("world").addTexture(new Texture(context, "textures/block_atlas.png", 0));
         batch("world").addTexture(new Texture(context, "textures/mob_texture_atlas.png", 1));
         batch("world").addTexture(new Texture(context, "textures/tree.png", 2));
@@ -100,8 +104,9 @@ public class MainMenuRenderer extends Renderer{
         background.update(dt / 1000, width, height);
         batch("background").updateVertices("Background", background.getVertices());
 
-        //update player rotation
-        batch("world").updateVertices("Mobs", mobMeshBuilder.generateMesh(world, camera, false));
+        //update rotations
+        batch("world").updateVertices("Mobs", spriteMeshBuilder.generateMesh(world, camera, 1, false, !shadow));
+        batch("world").updateVertices("Trees", spriteMeshBuilder.generateMesh(world, camera, 2, false, !shadow));
     }
 
     @Override
