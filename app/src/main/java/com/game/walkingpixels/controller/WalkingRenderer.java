@@ -63,7 +63,7 @@ public class WalkingRenderer extends Renderer{
         shader("background").bind();
         shader("background").setUniform1iv("u_Textures", 1, new int[] {0}, 0);
         registerBatch("background", new Batch(shader("background").getID(), 1, PlaneVertex.SIZE, PlaneVertex.getLayout()));
-        batch("background").addVertices("Background", background.getVertices(), 0);
+        batch("background").addVertices("Background", background.getVertices());
         batch("background").addTexture(background.getTexture());
 
         //init light
@@ -78,9 +78,8 @@ public class WalkingRenderer extends Renderer{
         //init world
         shader("walk").bind();
         registerBatch("walk", new Batch(shader("walk").getID(), 2000, WorldVertex.SIZE, WorldVertex.getLayout()));
-        batch("walk").addVertices("Mobs", spriteMeshBuilder.generateMesh(MainWorld.getWorld(), camera, 1, false, !shadow), 1);
-        batch("walk").addVertices("Trees", spriteMeshBuilder.generateMesh(MainWorld.getWorld(), camera, 2, false, !shadow), 2);
-        batch("walk").addVertices("World", blockMeshBuilder.generateMesh(MainWorld.getWorld()), 0);
+        batch("walk").addVertices("Sprites", spriteMeshBuilder.generateMesh(MainWorld.getWorld(), camera, false, !shadow));
+        batch("walk").addVertices("World", blockMeshBuilder.generateMesh(MainWorld.getWorld()));
         batch("walk").addTexture(new Texture(context, "textures/block_atlas.png", 0));
         batch("walk").addTexture(new Texture(context, "textures/mob_texture_atlas.png", 1));
         batch("walk").addTexture(new Texture(context, "textures/tree.png", 2));
@@ -101,8 +100,7 @@ public class WalkingRenderer extends Renderer{
         batch("background").updateVertices("Background", background.getVertices());
 
         //update rotations
-        batch("walk").updateVertices("Mobs", spriteMeshBuilder.generateMesh(MainWorld.getWorld(), camera, 1, false, !shadow));
-        batch("walk").updateVertices("Trees", spriteMeshBuilder.generateMesh(MainWorld.getWorld(), camera, 2, false, !shadow));
+        batch("walk").updateVertices("Sprites", spriteMeshBuilder.generateMesh(MainWorld.getWorld(), camera, false, !shadow));
 
         //move world
         if(MainWorld.getWorld().hasMoved())

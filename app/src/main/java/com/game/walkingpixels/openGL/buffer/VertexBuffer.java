@@ -87,6 +87,13 @@ public class VertexBuffer {
         }
     }
 
+    public void bind(int shaderID){
+        glBindBuffer(GL_ARRAY_BUFFER, id);
+        for (VertexBufferLayout layout : layouts) {
+            layout.loadLayout(shaderID);
+        }
+    }
+
     public void unbind(){
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }

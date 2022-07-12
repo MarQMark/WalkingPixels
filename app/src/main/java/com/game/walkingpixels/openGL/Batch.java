@@ -16,12 +16,10 @@ public class Batch {
         public final String name;
         public int offset;
         public IVertex[] vertices;
-        public int textureSlot;
-        public BatchPart(String name, int offset,  IVertex[] vertices, int textureSlot){
+        public BatchPart(String name, int offset,  IVertex[] vertices){
             this.name = name;
             this.offset = offset;
             this.vertices = vertices;
-            this.textureSlot = textureSlot;
         }
     }
 
@@ -55,19 +53,15 @@ public class Batch {
         ib = new IndexBuffer(indices);
     }
 
-    public void addVertices(String name, IVertex[] vertices, int textureSlot){
+    public void addVertices(String name, IVertex[] vertices){
         if(parts.size() == 0)
-            parts.add(new BatchPart(name, 0, vertices, textureSlot));
+            parts.add(new BatchPart(name, 0, vertices));
         else
-            parts.add(new BatchPart(name, parts.get(parts.size() - 1).offset + parts.get(parts.size() - 1).vertices.length, vertices, textureSlot));
+            parts.add(new BatchPart(name, parts.get(parts.size() - 1).offset + parts.get(parts.size() - 1).vertices.length, vertices));
 
         lastVertexPosition += (vertices.length / 4) * 6;
 
         vb.fillPartBuffer(vertices, parts.get(parts.size() - 1).offset);
-    }
-
-    public void addVertices(String name, IVertex[] vertices){
-        addVertices(name, vertices, 0);
     }
 
     public void updateVertices(String name, IVertex[] vertices){
@@ -80,7 +74,7 @@ public class Batch {
         }
 
         if(partNumber == -1){
-            addVertices(name, vertices, 0);
+            addVertices(name, vertices);
             return;
         }
 
@@ -129,6 +123,13 @@ public class Batch {
 
     public void bind(){
         vb.bind();
+        ib.bind();
+        for (Texture texture : textures)
+            texture.bind();
+    }
+
+    public void bind(int shaderID){
+        vb.bind(shaderID);
         ib.bind();
         for (Texture texture : textures)
             texture.bind();

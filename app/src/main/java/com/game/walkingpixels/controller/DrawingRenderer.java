@@ -81,7 +81,7 @@ public class DrawingRenderer extends Renderer {
         shader("background").bind();
         shader("background").setUniform1iv("u_Textures", 1, new int[] {0}, 0);
         registerBatch("background", new Batch(shader("background").getID(), 1, PlaneVertex.SIZE, PlaneVertex.getLayout()));
-        batch("background").addVertices("Background", background.getVertices(), 0);
+        batch("background").addVertices("Background", background.getVertices());
         batch("background").addTexture(background.getTexture());
 
 
@@ -95,15 +95,15 @@ public class DrawingRenderer extends Renderer {
         drawGrid = new DrawGrid(64, 0.8f, new Vector2(0.1f, 0.1f));
         shader("draw").bind();
         registerBatch("draw", new Batch(shader("draw").getID(), drawGrid.getSize() * drawGrid.getSize(), DrawGridVertex.SIZE, DrawGridVertex.getLayout()));
-        batch("draw").addVertices("Grid", drawGridMeshBuilder.generateMesh(drawGrid), 0);
+        batch("draw").addVertices("Grid", drawGridMeshBuilder.generateMesh(drawGrid));
 
 
         //init world
         world = new World(0);
         generateWorld(world);
         registerBatch("world", new Batch(shader("world").getID(), 3000, WorldVertex.SIZE, WorldVertex.getLayout()));
-        batch("world").addVertices("ground", blockMeshBuilder.generateMesh(world), 0);
-        batch("world").addVertices("mobs", spriteMeshBuilder.generateMesh(world, camera, 1,true, true), 1);
+        batch("world").addVertices("ground", blockMeshBuilder.generateMesh(world));
+        batch("world").addVertices("mobs", spriteMeshBuilder.generateMesh(world, camera,true, true));
         batch("world").addTexture(new Texture(context, "textures/block_atlas.png", 0));
         batch("world").addTexture(new Texture(context, "textures/mob_texture_atlas.png", 1));
 
@@ -177,7 +177,7 @@ public class DrawingRenderer extends Renderer {
 
         //render World
         shader("world").bind();
-        batch("world").updateVertices("mobs", spriteMeshBuilder.generateMesh(world, camera, 1, true, true));
+        batch("world").updateVertices("mobs", spriteMeshBuilder.generateMesh(world, camera, true, true));
         shader("world").setUniformMatrix4fv("mvpmatrix", camera.getMVPMatrix());
         batch("world").bind();
         batch("world").draw();

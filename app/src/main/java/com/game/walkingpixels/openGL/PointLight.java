@@ -80,7 +80,6 @@ public class PointLight {
             for (Batch batch : batches){
                 batch.bind();
                 for(Batch.BatchPart part : batch.getParts()){
-                    shader.setUniform1f("u_Slot", part.textureSlot);
                     batch.drawPart(part.name);
                 }
                 batch.unbind();
@@ -91,10 +90,9 @@ public class PointLight {
                 glFramebufferTexture2D(GL_FRAMEBUFFER  , GL_DEPTH_ATTACHMENT, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, cubeMap, 0);
                 glClear(GL_DEPTH_BUFFER_BIT);
                 for (Batch batch : batches){
-                    batch.bind();
-                    for(Batch.BatchPart part : batch.getParts()){
-                        shader.setUniform1f("u_Slot", part.textureSlot);
-                        batch.drawPart(part.name);
+                    batch.bind(shader.getID());
+                    for (int j = batch.getParts().size() - 1; j >= 0; j--) {
+                        batch.drawPart(batch.getParts().get(j).name);
                     }
                     batch.unbind();
                 }

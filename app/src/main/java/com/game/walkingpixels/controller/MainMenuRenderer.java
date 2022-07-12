@@ -71,7 +71,7 @@ public class MainMenuRenderer extends Renderer{
         shader("background").bind();
         shader("background").setUniform1iv("u_Textures", 1, new int[] {0}, 0);
         registerBatch("background", new Batch(shader("background").getID(), 1, PlaneVertex.SIZE, PlaneVertex.getLayout()));
-        batch("background").addVertices("Background", background.getVertices(), 0);
+        batch("background").addVertices("Background", background.getVertices());
         batch("background").addTexture(background.getTexture());
 
         //init light
@@ -83,9 +83,8 @@ public class MainMenuRenderer extends Renderer{
         //init world
         shader("world").bind();
         registerBatch("world", new Batch(shader("world").getID(), 2000, WorldVertex.SIZE, WorldVertex.getLayout()));
-        batch("world").addVertices("Mobs", spriteMeshBuilder.generateMesh(world, camera, 1, false, !shadow), 1);
-        batch("world").addVertices("Trees", spriteMeshBuilder.generateMesh(world, camera, 2, false, !shadow), 2);
-        batch("world").addVertices("World", blockMeshBuilder.generateMesh(world), 0);
+        batch("world").addVertices("Sprites", spriteMeshBuilder.generateMesh(world, camera, false, !shadow));
+        batch("world").addVertices("World", blockMeshBuilder.generateMesh(world));
         batch("world").addTexture(new Texture(context, "textures/block_atlas.png", 0));
         batch("world").addTexture(new Texture(context, "textures/mob_texture_atlas.png", 1));
         batch("world").addTexture(new Texture(context, "textures/tree.png", 2));
@@ -105,8 +104,7 @@ public class MainMenuRenderer extends Renderer{
         batch("background").updateVertices("Background", background.getVertices());
 
         //update rotations
-        batch("world").updateVertices("Mobs", spriteMeshBuilder.generateMesh(world, camera, 1, false, !shadow));
-        batch("world").updateVertices("Trees", spriteMeshBuilder.generateMesh(world, camera, 2, false, !shadow));
+        batch("world").updateVertices("Sprites", spriteMeshBuilder.generateMesh(world, camera,false, !shadow));
     }
 
     @Override

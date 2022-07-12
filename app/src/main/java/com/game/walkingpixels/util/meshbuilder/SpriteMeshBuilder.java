@@ -28,7 +28,7 @@ public class SpriteMeshBuilder extends MeshBuilder{
         animationTextureAtlas("mob").addAnimation(32, 32, 6);
     }
 
-    public WorldVertex[] generateMesh(World world, Camera camera, int textureSlot, boolean adjust, boolean shadow){
+    public WorldVertex[] generateMesh(World world, Camera camera, boolean adjust, boolean shadow){
         ArrayList<WorldVertex> mobs = new ArrayList<>();
 
         //Add "Blocks"
@@ -36,7 +36,7 @@ public class SpriteMeshBuilder extends MeshBuilder{
             for(int y = 0; y < world.getBlockGridSize(); y ++) {
                 for (int z = 0; z < world.getWorldMaxHeight(); z++) {
                     if(world.getBlockGrid()[x][y][z].ordinal() > Block.AIR.ordinal()){
-                        getMobVertices(mobs, new Vector3(x, z, y).sub(new Vector3(world.getBlockGridSize() / 2.0f, 0, world.getBlockGridSize() / 2.0f)), world.getBlockGrid()[x][y][z], camera, textureSlot,adjust);
+                        getMobVertices(mobs, new Vector3(x, z, y).sub(new Vector3(world.getBlockGridSize() / 2.0f, 0, world.getBlockGridSize() / 2.0f)), world.getBlockGrid()[x][y][z], camera, adjust);
                         if(shadow && world.getBlockGrid()[x][y][z].ordinal() > Block.TREE.ordinal())
                             getShadowVertices(mobs, new Vector3(x, z, y).sub(new Vector3(world.getBlockGridSize() / 2.0f, 0, world.getBlockGridSize() / 2.0f)), world.heightToBlock(z - 1));
                     }
@@ -66,7 +66,7 @@ public class SpriteMeshBuilder extends MeshBuilder{
                                 This causes java.lang.NullPointerException: Attempt to invoke virtual method 'com.game.walkingpixels.model.Block com.game.walkingpixels.model.Enemy.getType()' on a null object reference.
                                 I don't know why and I can't fix it. Too bad!
                             */
-                            getMobVertices(mobs,new Vector3(mobX, height, mobY).sub(new Vector3(world.getBlockGridSize() / 2.0f, 0, world.getBlockGridSize() / 2.0f)), world.getEnemyGrid()[x][y].getType(), camera, textureSlot, adjust);
+                            getMobVertices(mobs,new Vector3(mobX, height, mobY).sub(new Vector3(world.getBlockGridSize() / 2.0f, 0, world.getBlockGridSize() / 2.0f)), world.getEnemyGrid()[x][y].getType(), camera, adjust);
                             if(shadow)
                                 getShadowVertices(mobs, new Vector3(mobX, height, mobY).sub(new Vector3(world.getBlockGridSize() / 2.0f, 0, world.getBlockGridSize() / 2.0f)), world.heightToBlock(height - 1));
                         }catch (Exception ignored){}
@@ -119,7 +119,7 @@ public class SpriteMeshBuilder extends MeshBuilder{
                 0));
     }
 
-    public void getMobVertices(ArrayList<WorldVertex> mobs, Vector3 position, Block type, Camera camera, int slot ,boolean adjust){
+    public void getMobVertices(ArrayList<WorldVertex> mobs, Vector3 position, Block type, Camera camera, boolean adjust){
         Vector3 center = new Vector3(position.x + 0.5f, position.y, position.z + 0.5f);
 
 
@@ -171,9 +171,6 @@ public class SpriteMeshBuilder extends MeshBuilder{
                 textureCoordinates = animationTextureAtlas("mob").getTextureCoordinates(1, (int) (System.currentTimeMillis() / 300 % animationTextureAtlas("mob").getAnimationNumberOfFrames(1)));
                 break;
         }
-
-        if(textureSlot != slot)
-            return;
 
         float deltaX = (float) Math.cos(Math.toRadians(camera.rotationY)) * (mobWidth / 2.0f);
         float deltaZ = (float) Math.sin(Math.toRadians(camera.rotationY)) * (mobWidth / 2.0f);
