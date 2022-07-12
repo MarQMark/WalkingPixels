@@ -80,7 +80,7 @@ void main()
         }
         else {
 
-            float ambient = 0.2;
+            float ambient = 0.35;
 
 
             float diffuse = 0.0;

@@ -5,7 +5,7 @@ public class Constants {
     public static final int[] tierSpellUsages = new int[]{20, 30, 50};
 
     public static final int baseStamina = 5000;
-    public static final int baseHealth = 100;
+    public static final int baseHealth = 200;
     public static final float baseTime = 1.0f;
     public static final float baseStrength = 1.0f;
     public static final float baseMaxXp = 10;
