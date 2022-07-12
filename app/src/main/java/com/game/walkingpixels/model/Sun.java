@@ -8,8 +8,8 @@ public class Sun {
     private static final Vector4 clearColor = new Vector4(0.4f, 0.6f, 1.0f, 1.0f);
 
     private final Vector3 position = new Vector3(0.0f, maxHeight, 0.0f);
-    private float sunTime = 0;
-    private long oldSystemTime = 0;
+    private static float sunTime = 0;
+    private static long oldSystemTime = 0;
 
     public Sun(){
     }
