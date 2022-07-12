@@ -79,12 +79,8 @@ void main()
             gl_FragColor = vec4(r, g, b, a);
         }
         else {
-
             float ambient = 0.2;
-
-
             float diffuse = 0.0;
-
             int lightCount = int(u_LightCount);
             if(lightCount >= 1){
                 diffuse += diffuseLighting(0);

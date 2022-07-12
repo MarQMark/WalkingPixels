@@ -14,7 +14,8 @@ public class Sun {
 
     public Vector3 getPosition(){
         //update in-game time (1 day = 24 min)
-        float sunRotation = (float) (System.currentTimeMillis() / 4000.0) % 360;
+        //float sunRotation = (float) (System.currentTimeMillis() / 4000.0) % 360;
+        float sunRotation = 120;
         position.z = (float) (Math.cos(Math.toRadians(sunRotation)) * maxHeight);
         position.y = (float) (Math.sin(Math.toRadians(sunRotation)) * maxHeight);
         return position;

@@ -42,4 +42,8 @@ public class WorldVertex implements IVertex {
                 new VertexBufferLayout("a_TextureSlot", 1, GL_FLOAT, false),
         };
     }
+
+    public float getTextureSlot() {
+        return textureSlot;
+    }
 }

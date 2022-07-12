@@ -12,14 +12,16 @@ import static android.opengl.GLES31.*;
 
 public class Batch {
 
-    private static class BatchPart{
+    public static class BatchPart{
         public final String name;
         public int offset;
         public IVertex[] vertices;
-        public BatchPart(String name, int offset,  IVertex[] vertices){
+        public int textureSlot;
+        public BatchPart(String name, int offset,  IVertex[] vertices, int textureSlot){
             this.name = name;
             this.offset = offset;
             this.vertices = vertices;
+            this.textureSlot = textureSlot;
         }
     }
 
@@ -53,15 +55,19 @@ public class Batch {
         ib = new IndexBuffer(indices);
     }
 
-    public void addVertices(String name, IVertex[] vertices){
+    public void addVertices(String name, IVertex[] vertices, int textureSlot){
         if(parts.size() == 0)
-            parts.add(new BatchPart(name, 0, vertices));
+            parts.add(new BatchPart(name, 0, vertices, textureSlot));
         else
-            parts.add(new BatchPart(name, parts.get(parts.size() - 1).offset + parts.get(parts.size() - 1).vertices.length, vertices));
+            parts.add(new BatchPart(name, parts.get(parts.size() - 1).offset + parts.get(parts.size() - 1).vertices.length, vertices, textureSlot));
 
         lastVertexPosition += (vertices.length / 4) * 6;
 
         vb.fillPartBuffer(vertices, parts.get(parts.size() - 1).offset);
+    }
+
+    public void addVertices(String name, IVertex[] vertices){
+        addVertices(name, vertices, 0);
     }
 
     public void updateVertices(String name, IVertex[] vertices){
@@ -74,7 +80,7 @@ public class Batch {
         }
 
         if(partNumber == -1){
-            addVertices(name, vertices);
+            addVertices(name, vertices, 0);
             return;
         }
 
@@ -137,4 +143,25 @@ public class Batch {
     public void draw(){
         glDrawElements(GL_TRIANGLES, lastVertexPosition, GL_UNSIGNED_SHORT, 0);
     }
+
+    public void drawPart(String name){
+        int partNumber = -1;
+        for (int i = 0; i < parts.size(); i++) {
+            if(parts.get(i).name.equals(name)){
+                partNumber = i;
+                break;
+            }
+        }
+
+        if(partNumber == -1)
+            return;
+
+        int lastVertexPosition = (parts.get(partNumber).offset + parts.get(partNumber).vertices.length / 4) * 6;
+        int offset = (parts.get(partNumber).offset / 4) * 6;
+        glDrawElements(GL_TRIANGLES, lastVertexPosition, GL_UNSIGNED_SHORT, offset);
+    }
+
+    public ArrayList<Texture> getTextures() {return textures;}
+
+    public  ArrayList<BatchPart> getParts() {return parts;}
 }
