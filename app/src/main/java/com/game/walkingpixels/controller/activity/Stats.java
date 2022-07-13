@@ -1,4 +1,4 @@
-package com.game.walkingpixels.controller;
+package com.game.walkingpixels.controller.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,8 +8,8 @@ import android.widget.TextView;
 
 import com.game.walkingpixels.R;
 import com.game.walkingpixels.model.Player;
-import com.game.walkingpixels.view.Simplebar;
-import com.game.walkingpixels.view.SpellAdapter;
+import com.game.walkingpixels.controller.view.Simplebar;
+import com.game.walkingpixels.controller.view.SpellAdapter;
 
 public class Stats extends AppCompatActivity {
 

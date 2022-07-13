@@ -1,4 +1,4 @@
-package com.game.walkingpixels.controller;
+package com.game.walkingpixels.controller.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -12,14 +12,15 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.game.walkingpixels.R;
+import com.game.walkingpixels.controller.surface.DrawingGLSurfaceView;
 import com.game.walkingpixels.model.DrawTimer;
 import com.game.walkingpixels.model.Enemy;
 import com.game.walkingpixels.model.Player;
 import com.game.walkingpixels.model.Spell;
-import com.game.walkingpixels.view.Iconbar;
-import com.game.walkingpixels.view.ResponsiveButton;
-import com.game.walkingpixels.view.SpellAdapter;
-import com.game.walkingpixels.view.Simplebar;
+import com.game.walkingpixels.controller.view.Iconbar;
+import com.game.walkingpixels.controller.view.ResponsiveButton;
+import com.game.walkingpixels.controller.view.SpellAdapter;
+import com.game.walkingpixels.controller.view.Simplebar;
 
 public class Drawing extends AppCompatActivity {
 

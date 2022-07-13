@@ -1,4 +1,4 @@
-package com.game.walkingpixels.controller;
+package com.game.walkingpixels.controller.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,7 +7,7 @@ import android.os.Bundle;
 
 import com.game.walkingpixels.R;
 import com.game.walkingpixels.model.MainWorld;
-import com.game.walkingpixels.view.ResponsiveButton;
+import com.game.walkingpixels.controller.view.ResponsiveButton;
 
 public class MainMenu extends AppCompatActivity {
 

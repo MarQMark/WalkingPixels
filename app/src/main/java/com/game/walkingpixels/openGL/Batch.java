@@ -12,7 +12,7 @@ import static android.opengl.GLES31.*;
 
 public class Batch {
 
-    public static class BatchPart{
+    private static class BatchPart{
         public final String name;
         public int offset;
         public IVertex[] vertices;

@@ -1,4 +1,4 @@
-package com.game.walkingpixels.view;
+package com.game.walkingpixels.controller.view;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;

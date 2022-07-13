@@ -4,8 +4,6 @@ import android.opengl.GLES32;
 import android.os.Build;
 import android.renderscript.Matrix4f;
 
-import com.game.walkingpixels.controller.Renderer;
-import com.game.walkingpixels.model.Background;
 import com.game.walkingpixels.model.Camera;
 import com.game.walkingpixels.util.vector.Vector3;
 import com.game.walkingpixels.util.vector.Vector4;
@@ -79,9 +77,7 @@ public class PointLight {
         if(shader.hasGeometry()){
             for (Batch batch : batches){
                 batch.bind();
-                for(Batch.BatchPart part : batch.getParts()){
-                    batch.drawPart(part.name);
-                }
+                batch.draw();
                 batch.unbind();
             }
         }else {
@@ -91,9 +87,7 @@ public class PointLight {
                 glClear(GL_DEPTH_BUFFER_BIT);
                 for (Batch batch : batches){
                     batch.bind(shader.getID());
-                    for (int j = batch.getParts().size() - 1; j >= 0; j--) {
-                        batch.drawPart(batch.getParts().get(j).name);
-                    }
+                    batch.draw();
                     batch.unbind();
                 }
             }

@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".controller.Settings">
+    tools:context=".controller.activity.Settings">
 
-    <com.game.walkingpixels.controller.BackgroundGLSurfaceView
+    <com.game.walkingpixels.controller.surface.BackgroundGLSurfaceView
         android:id="@+id/myGLSurfaceViewSettingsBackground"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -78,7 +78,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
-    <com.game.walkingpixels.view.ResponsiveButton
+    <com.game.walkingpixels.controller.view.ResponsiveButton
         android:id="@+id/btn_settings_reset"
         android:layout_width="0dp"
         android:layout_height="0dp"

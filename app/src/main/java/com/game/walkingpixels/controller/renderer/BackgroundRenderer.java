@@ -1,4 +1,4 @@
-package com.game.walkingpixels.controller;
+package com.game.walkingpixels.controller.renderer;
 
 import android.content.Context;
 
@@ -15,7 +15,7 @@ import static android.opengl.GLES20.GL_DEPTH_BUFFER_BIT;
 import static android.opengl.GLES20.glClear;
 import static android.opengl.GLES20.glClearColor;
 
-public class BackgroundRenderer extends Renderer{
+public class BackgroundRenderer extends Renderer {
 
     private Background background;
 
