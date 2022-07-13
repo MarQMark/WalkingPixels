@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.game.walkingpixels.view.ResponsiveButton
+    <com.game.walkingpixels.controller.view.ResponsiveButton
         android:id="@+id/btn_death_screen_close"
         android:layout_width="0dp"
         android:layout_height="65dp"

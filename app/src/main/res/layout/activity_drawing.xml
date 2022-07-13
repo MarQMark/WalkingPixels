@@ -6,9 +6,9 @@
     xmlns:simplebar="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".controller.Drawing">
+    tools:context=".controller.activity.Drawing">
 
-    <com.game.walkingpixels.controller.DrawingGLSurfaceView
+    <com.game.walkingpixels.controller.surface.DrawingGLSurfaceView
         android:id="@+id/myGLSurfaceViewDrawing"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -29,7 +29,7 @@
         app:srcCompat="@drawable/castscroll"
         tools:ignore="ContentDescription"/>
 
-    <com.game.walkingpixels.view.ResponsiveButton
+    <com.game.walkingpixels.controller.view.ResponsiveButton
         android:id="@+id/btn_drawing_attack_selector"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -52,7 +52,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintWidth_percent="0.1"/>
 
-    <com.game.walkingpixels.view.Simplebar
+    <com.game.walkingpixels.controller.view.Simplebar
         android:id="@+id/timebar_drawing_time_remaining"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -63,7 +63,7 @@
         app:layout_constraintWidth_percent="0.9"
         simplebar:simple_bar_progress="@drawable/simplebar_time_clip" />
 
-    <com.game.walkingpixels.view.Iconbar
+    <com.game.walkingpixels.controller.view.Iconbar
         android:id="@+id/healthbar_drawing_player_health"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -76,7 +76,7 @@
         app:layout_constraintVertical_bias="0.95"
         app:layout_constraintWidth_percent="0.8"  />
 
-    <com.game.walkingpixels.view.Iconbar
+    <com.game.walkingpixels.controller.view.Iconbar
         android:id="@+id/healthbar_drawing_enemy_health"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

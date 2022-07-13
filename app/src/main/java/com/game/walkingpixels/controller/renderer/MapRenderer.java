@@ -1,4 +1,4 @@
-package com.game.walkingpixels.controller;
+package com.game.walkingpixels.controller.renderer;
 
 import android.content.Context;
 
@@ -14,7 +14,7 @@ import static android.opengl.GLES20.GL_DEPTH_BUFFER_BIT;
 import static android.opengl.GLES20.glClear;
 import static android.opengl.GLES20.glClearColor;
 
-public class MapRenderer extends Renderer{
+public class MapRenderer extends Renderer {
 
     private boolean initialized = false;
 

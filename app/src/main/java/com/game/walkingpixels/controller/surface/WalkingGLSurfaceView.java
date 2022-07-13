@@ -1,8 +1,10 @@
-package com.game.walkingpixels.controller;
+package com.game.walkingpixels.controller.surface;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
+
+import com.game.walkingpixels.controller.renderer.WalkingRenderer;
 
 public class WalkingGLSurfaceView extends GLSurfaceView {
 

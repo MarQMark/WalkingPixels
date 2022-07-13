@@ -6,9 +6,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".controller.LevelUp">
+    tools:context=".controller.activity.LevelUp">
 
-    <com.game.walkingpixels.controller.BackgroundGLSurfaceView
+    <com.game.walkingpixels.controller.surface.BackgroundGLSurfaceView
         android:id="@+id/myGLSurfaceViewLevelUpBackground"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -50,7 +50,7 @@
         app:srcCompat="@drawable/map_middle"
         tools:ignore="ContentDescription" />
 
-    <com.game.walkingpixels.view.Simplebar
+    <com.game.walkingpixels.controller.view.Simplebar
         android:id="@+id/bar_level_up_level"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -87,7 +87,7 @@
         app:layout_constraintTop_toBottomOf="@+id/lbl_level_up_level" />
 
 
-    <com.game.walkingpixels.view.LevelUpStat
+    <com.game.walkingpixels.controller.view.LevelUpStat
         android:id="@+id/stat_level_up_stamina"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -100,7 +100,7 @@
         level_up_stat:stat="@string/lbl_level_up_stats_int" />
 
 
-    <com.game.walkingpixels.view.LevelUpStat
+    <com.game.walkingpixels.controller.view.LevelUpStat
         android:id="@+id/stat_level_up_health"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -112,7 +112,7 @@
         level_up_stat:name="@string/lbl_level_up_health"
         level_up_stat:stat="@string/lbl_level_up_stats_int" />
 
-    <com.game.walkingpixels.view.LevelUpStat
+    <com.game.walkingpixels.controller.view.LevelUpStat
         android:id="@+id/stat_level_up_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -124,7 +124,7 @@
         level_up_stat:name="@string/lbl_level_up_time"
         level_up_stat:stat="@string/lbl_level_up_stats_float" />
 
-    <com.game.walkingpixels.view.LevelUpStat
+    <com.game.walkingpixels.controller.view.LevelUpStat
         android:id="@+id/stat_level_up_strength"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -136,7 +136,7 @@
         level_up_stat:name="@string/lbl_level_up_strength"
         level_up_stat:stat="@string/lbl_level_up_stats_float" />
 
-    <com.game.walkingpixels.view.ResponsiveButton
+    <com.game.walkingpixels.controller.view.ResponsiveButton
         android:id="@+id/btn_level_up_level_up"
         android:layout_width="0dp"
         android:layout_height="30dp"
@@ -149,7 +149,7 @@
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <com.game.walkingpixels.view.ResponsiveButton
+    <com.game.walkingpixels.controller.view.ResponsiveButton
         android:id="@+id/btn_level_up_cancel"
         android:layout_width="0dp"
         android:layout_height="30dp"

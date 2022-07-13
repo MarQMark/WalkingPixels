@@ -15,35 +15,35 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.WalkingPixels">
         <activity
-            android:name=".controller.Help"
+            android:name=".controller.activity.Help"
             android:screenOrientation="portrait"
             android:launchMode="singleTop" />
         <activity
-            android:name=".controller.Settings"
+            android:name=".controller.activity.Settings"
             android:screenOrientation="portrait"
             android:launchMode="singleTop" />
         <activity
-            android:name=".controller.LevelUp"
+            android:name=".controller.activity.LevelUp"
             android:screenOrientation="portrait"
             android:launchMode="singleTop" />
         <activity
-            android:name=".controller.Stats"
+            android:name=".controller.activity.Stats"
             android:screenOrientation="portrait"
             android:launchMode="singleTop" />
         <activity
-            android:name=".controller.Map"
+            android:name=".controller.activity.Map"
             android:screenOrientation="portrait"
             android:launchMode="singleTop" />
         <activity
-            android:name=".controller.Drawing"
+            android:name=".controller.activity.Drawing"
             android:screenOrientation="portrait"
             android:launchMode="singleTop" />
         <activity
-            android:name=".controller.Walking"
+            android:name=".controller.activity.Walking"
             android:screenOrientation="portrait"
             android:launchMode="singleTop" />
         <activity
-            android:name=".controller.MainMenu"
+            android:name=".controller.activity.MainMenu"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

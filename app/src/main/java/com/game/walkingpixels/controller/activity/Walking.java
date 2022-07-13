@@ -1,4 +1,4 @@
-package com.game.walkingpixels.controller;
+package com.game.walkingpixels.controller.activity;
 
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -21,16 +21,17 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.game.walkingpixels.R;
+import com.game.walkingpixels.controller.surface.WalkingGLSurfaceView;
 import com.game.walkingpixels.model.Constants;
 import com.game.walkingpixels.model.Enemy;
 import com.game.walkingpixels.model.MainWorld;
 import com.game.walkingpixels.model.Player;
 import com.game.walkingpixels.model.Spell;
 import com.game.walkingpixels.util.vector.Vector2;
-import com.game.walkingpixels.view.DeathScreen;
-import com.game.walkingpixels.view.Iconbar;
-import com.game.walkingpixels.view.NewSpell;
-import com.game.walkingpixels.view.ResponsiveButton;
+import com.game.walkingpixels.controller.view.DeathScreen;
+import com.game.walkingpixels.controller.view.Iconbar;
+import com.game.walkingpixels.controller.view.NewSpell;
+import com.game.walkingpixels.controller.view.ResponsiveButton;
 
 import java.util.ArrayList;
 

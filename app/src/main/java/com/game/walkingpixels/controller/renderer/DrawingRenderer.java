@@ -1,4 +1,4 @@
-package com.game.walkingpixels.controller;
+package com.game.walkingpixels.controller.renderer;
 
 import android.content.Context;
 import android.renderscript.Matrix4f;

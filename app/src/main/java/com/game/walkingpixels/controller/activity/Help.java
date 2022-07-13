@@ -1,4 +1,4 @@
-package com.game.walkingpixels.controller;
+package com.game.walkingpixels.controller.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
@@ -8,7 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.game.walkingpixels.R;
-import com.game.walkingpixels.view.ResponsiveButton;
+import com.game.walkingpixels.controller.view.ResponsiveButton;
 
 public class Help extends AppCompatActivity {
 

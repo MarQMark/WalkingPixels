@@ -1,4 +1,4 @@
-package com.game.walkingpixels.view;
+package com.game.walkingpixels.controller.view;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;

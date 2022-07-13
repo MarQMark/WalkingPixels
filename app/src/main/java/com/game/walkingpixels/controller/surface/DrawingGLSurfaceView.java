@@ -1,4 +1,4 @@
-package com.game.walkingpixels.controller;
+package com.game.walkingpixels.controller.surface;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -6,6 +6,7 @@ import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
+import com.game.walkingpixels.controller.renderer.DrawingRenderer;
 import com.game.walkingpixels.model.DrawTimer;
 import com.game.walkingpixels.model.Enemy;
 import com.game.walkingpixels.util.TouchPosition;

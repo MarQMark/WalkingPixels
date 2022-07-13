@@ -1,6 +1,5 @@
 package com.game.walkingpixels.openGL;
 
-import com.game.walkingpixels.controller.Renderer;
 import com.game.walkingpixels.model.Camera;
 import com.game.walkingpixels.util.vector.Vector3;
 import com.game.walkingpixels.util.vector.Vector4;

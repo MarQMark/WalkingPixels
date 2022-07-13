@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.game.walkingpixels.controller.BackgroundGLSurfaceView
+    <com.game.walkingpixels.controller.surface.BackgroundGLSurfaceView
         android:id="@+id/myGLSurfaceViewMapBackground"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -47,7 +47,7 @@
         app:srcCompat="@drawable/map_middle"
         tools:ignore="ContentDescription"/>
 
-    <com.game.walkingpixels.controller.MapGLSurfaceView
+    <com.game.walkingpixels.controller.surface.MapGLSurfaceView
         android:id="@+id/myGLSurfaceViewMap"
         android:layout_width="0dp"
         android:layout_height="0dp"

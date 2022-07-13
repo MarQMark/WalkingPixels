@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".controller.Help">
+    tools:context=".controller.activity.Help">
 
-    <com.game.walkingpixels.controller.BackgroundGLSurfaceView
+    <com.game.walkingpixels.controller.surface.BackgroundGLSurfaceView
         android:id="@+id/myGLSurfaceViewHelpBackground"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -61,7 +61,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView5" />
 
-    <com.game.walkingpixels.view.ResponsiveButton
+    <com.game.walkingpixels.controller.view.ResponsiveButton
         android:id="@+id/btn_help_previous"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -75,7 +75,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/lbl_help_page_number" />
 
-    <com.game.walkingpixels.view.ResponsiveButton
+    <com.game.walkingpixels.controller.view.ResponsiveButton
         android:id="@+id/btn_help_next"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
