@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">WalkingPixels</string>
+    <string name="app_name">Walking Pixels</string>
     <string name="lbl_stats_level">"LEVEL %1$d"</string>
     <string name="lbl_stats_xp">"XP: %1$d / %2$d"</string>
     <string name="lbl_stats_spells">"SPELLS"</string>
