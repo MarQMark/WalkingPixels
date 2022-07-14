@@ -17,7 +17,7 @@ public class SpriteMeshBuilder extends MeshBuilder{
         registerGridTextureAtlas("blocks", new GridTextureAtlas(128, 64, 32));
         registerAnimationTextureAtlas("mob", new AnimationTextureAtlas());
         animationTextureAtlas("mob").addAnimation(64, 128, 4);
-        animationTextureAtlas("mob").addAnimation(64, 128, 4);
+        animationTextureAtlas("mob").addAnimation(64, 128, 5);
         animationTextureAtlas("mob").addAnimation(32, 39, 13);
         animationTextureAtlas("mob").addAnimation(32, 39, 13);
         animationTextureAtlas("mob").addAnimation(32, 39, 13);
