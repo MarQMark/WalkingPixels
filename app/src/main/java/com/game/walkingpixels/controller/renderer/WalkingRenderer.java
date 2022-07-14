@@ -43,6 +43,7 @@ public class WalkingRenderer extends Renderer {
     private Model3DManager model3DManager;
 
     private boolean shadow;
+    private boolean models;
 
     public WalkingRenderer(Context context) {
         super(context);
@@ -62,6 +63,7 @@ public class WalkingRenderer extends Renderer {
         //init shaders
         SharedPreferences sharedPref = context.getSharedPreferences("Settings", Context.MODE_PRIVATE);
         shadow = sharedPref.getBoolean("shadow_enabled", false);
+        models = sharedPref.getBoolean("3d_models", true);
         if(shadow)
             registerShader("main", new Shader(context, "Shaders/BasicShadow.shaders"));
         else
@@ -85,19 +87,24 @@ public class WalkingRenderer extends Renderer {
         //init world
         shader("main").bind();
         registerBatch("world", new Batch(shader("main").getID(), 2000, WorldVertex.SIZE, WorldVertex.getLayout()));
-        //batch("walk").addVertices("Sprites", spriteMeshBuilder.generateMesh(MainWorld.getWorld(), camera, false, !shadow));
         batch("world").addVertices("World", blockMeshBuilder.generateMesh(MainWorld.getWorld()));
         batch("world").addTexture(new Texture(context, "textures/block_atlas.png", 0));
-        batch("world").addTexture(new Texture(context, "textures/mob_texture_atlas.png", 1));
-        batch("world").addTexture(new Texture(context, "textures/tree.png", 2));
 
-        registerBatch("models", new Batch(shader("main").getID(), (long)2000, WorldVertex.SIZE, WorldVertex.getLayout()));
-        batch("models").addVertices("Player", model3DBuilder.generatePlayer(MainWorld.getWorld(), 0));
-        batch("models").addVertices("Trees", model3DBuilder.generateTrees(MainWorld.getWorld()));
-        batch("models").addVertices("Mobs", model3DBuilder.generateMobs(MainWorld.getWorld()));
-        batch("models").addTexture(model3DManager.getTexture("player"));
-        batch("models").addTexture(model3DManager.getTexture("tree"));
-        batch("models").addTexture(model3DManager.getTexture("eye"));
+        if(models){
+            registerBatch("models", new Batch(shader("main").getID(), (long)2000, WorldVertex.SIZE, WorldVertex.getLayout()));
+            batch("models").addVertices("Player", model3DBuilder.generatePlayer(MainWorld.getWorld(), 0));
+            batch("models").addVertices("Trees", model3DBuilder.generateTrees(MainWorld.getWorld()));
+            batch("models").addVertices("Mobs", model3DBuilder.generateMobs(MainWorld.getWorld()));
+            batch("models").addTexture(model3DManager.getTexture("player"));
+            batch("models").addTexture(model3DManager.getTexture("tree"));
+            batch("models").addTexture(model3DManager.getTexture("eye"));
+        }
+        else{
+            registerBatch("models", new Batch(shader("main").getID(), 200, WorldVertex.SIZE, WorldVertex.getLayout()));
+            batch("models").addVertices("Sprites", spriteMeshBuilder.generateMesh(MainWorld.getWorld(), camera, false, !shadow));
+            batch("models").addTexture(new Texture(context, "textures/mob_texture_atlas.png", 1));
+            batch("models").addTexture(new Texture(context, "textures/tree.png", 2));
+        }
 
         shader("main").setUniform1iv("u_Textures", 4, new int[] {0, 1, 2, 3}, 0);
     }
@@ -114,16 +121,20 @@ public class WalkingRenderer extends Renderer {
         background.update(dt / 1000, width, height);
         batch("background").updateVertices("Background", background.getVertices());
 
-        //update rotations
-        //batch("walk").updateVertices("Sprites", spriteMeshBuilder.generateMesh(MainWorld.getWorld(), camera, false, !shadow));
+        if(models){
+            batch("models").updateVertices("Player", model3DBuilder.generatePlayer(MainWorld.getWorld(), 0));
+            batch("models").updateVertices("Mobs", model3DBuilder.generateMobs(MainWorld.getWorld()));
+        }
+        else {
+            //update rotations
+            batch("models").updateVertices("Sprites", spriteMeshBuilder.generateMesh(MainWorld.getWorld(), camera, false, !shadow));
+        }
 
         //move world
-        batch("models").updateVertices("Player", model3DBuilder.generatePlayer(MainWorld.getWorld(), 0));
-        batch("models").updateVertices("Mobs", model3DBuilder.generateMobs(MainWorld.getWorld()));
-
         if(MainWorld.getWorld().hasMoved()){
             batch("world").updateVertices("World" , blockMeshBuilder.generateMesh(MainWorld.getWorld()));
-            batch("models").updateVertices("Trees", model3DBuilder.generateTrees(MainWorld.getWorld()));
+            if(models)
+                batch("models").updateVertices("Trees", model3DBuilder.generateTrees(MainWorld.getWorld()));
         }
     }
 

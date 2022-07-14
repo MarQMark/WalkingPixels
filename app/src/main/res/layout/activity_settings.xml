@@ -61,22 +61,39 @@
         app:layout_constraintBottom_toTopOf="@+id/btn_settings_reset"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3"
-        app:layout_constraintVertical_bias="0.19999999" />
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        app:layout_constraintVertical_bias="0.66" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/switch_settings_3d_models"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/switch_settings_3d_models"
+        android:textAlignment="center"
+        android:textColor="@color/scroll_foreground"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:theme="@style/ScrollSwitch"
+        app:layout_constraintBottom_toTopOf="@+id/btn_settings_reset"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        app:layout_constraintVertical_bias="0.40" />
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/switch_settings_shadow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:text="@string/switch_settings_shadow"
         android:textColor="@color/scroll_foreground"
         android:textSize="24sp"
         android:textStyle="bold"
         android:theme="@style/ScrollSwitch"
+        app:layout_constraintBottom_toTopOf="@+id/btn_settings_reset"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        app:layout_constraintVertical_bias="0.1" />
 
     <com.game.walkingpixels.controller.view.ResponsiveButton
         android:id="@+id/btn_settings_reset"
@@ -94,15 +111,14 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:text="@string/lbl_settings_settings"
         android:textColor="@color/scroll_foreground"
         android:textSize="50sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/btn_settings_reset"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView5"
-        app:layout_constraintVertical_bias="0.3" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView5" />
 
     <TextView
         android:id="@+id/textView3"
@@ -121,6 +137,19 @@
         android:id="@+id/textView4"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:text="@string/lbl_settings_3d_models"
+        android:textAlignment="center"
+        android:textColor="#D22D2C"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/switch_settings_3d_models"
+        app:layout_constraintWidth_percent="0.7" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:text="@string/lbl_settings_walking"
         android:textAlignment="center"
         android:textColor="#D22D2C"
@@ -128,33 +157,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/switch_settings_walking"
-        app:layout_constraintWidth_percent="0.7" />
-
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/lbl_settings_credits_header"
-        android:textColor="@color/scroll_foreground"
-        android:textSize="50sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView5" />
-
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/lbl_settings_credits_credits"
-        android:textAlignment="center"
-        android:textColor="@color/scroll_foreground"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView5"
         app:layout_constraintWidth_percent="0.7" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
