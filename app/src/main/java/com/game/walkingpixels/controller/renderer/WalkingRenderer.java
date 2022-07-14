@@ -97,7 +97,7 @@ public class WalkingRenderer extends Renderer {
             batch("models").addVertices("Mobs", model3DBuilder.generateMobs(MainWorld.getWorld()));
             batch("models").addTexture(model3DManager.getTexture("player"));
             batch("models").addTexture(model3DManager.getTexture("tree"));
-            batch("models").addTexture(model3DManager.getTexture("eye"));
+            batch("models").addTexture(model3DManager.getTexture("mobs"));
         }
         else{
             registerBatch("models", new Batch(shader("main").getID(), 200, WorldVertex.SIZE, WorldVertex.getLayout()));

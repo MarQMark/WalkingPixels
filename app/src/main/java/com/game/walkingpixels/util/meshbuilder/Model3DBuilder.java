@@ -106,6 +106,11 @@ public class Model3DBuilder extends MeshBuilder{
             case EYE:
                 model += "eye" + ((System.currentTimeMillis() / 100) % 10 + 1);
                 break;
+            case BLUE_SLIME:
+            case GREEN_SLIME:
+            case PURPLE_SLIME:
+                model += "slime" + ((System.currentTimeMillis() / 200) % 5 + 1);
+                break;
             default:
                 return;
         }

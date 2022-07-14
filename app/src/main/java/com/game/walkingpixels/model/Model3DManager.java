@@ -22,9 +22,11 @@ public class Model3DManager {
         for (int i = 1; i <= 5; i++)
             models.put("player" + i, new Model3D(context, "models/player/player" + i, 1));
 
-        textures.put("eye", new Texture(context, "models/eye/eye.png", 2));
+        textures.put("mobs", new Texture(context, "models/mob_texture_atlas.png", 2));
         for (int i = 1; i <= 10; i++)
             models.put("eye" + i, new Model3D(context, "models/eye/eye" + i, 2));
+        for (int i = 1; i <= 5; i++)
+            models.put("slime" + i, new Model3D(context, "models/slime/slime" + i, 2));
 
         textures.put("tree", new Texture(context, "models/tree.png", 3));
         models.put("tree", new Model3D(context, "models/tree", 3));
