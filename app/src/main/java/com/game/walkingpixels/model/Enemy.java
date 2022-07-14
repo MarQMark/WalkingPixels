@@ -20,6 +20,8 @@ public class Enemy implements Serializable {
     private static final double maxAttackDelay = 1;
     private double attackDelay = maxAttackDelay;
 
+    private final float rotation;
+
     public Enemy(int level){
         Random random = new Random();
 
@@ -39,6 +41,9 @@ public class Enemy implements Serializable {
 
         //stronger enemies -> lower level at same strength
         this.level = Math.max(1, level - id * (int)(SOFT_LEVEL_BORDER / NUMBER_OF_ENEMY_TYPES));
+
+        //give random rotation
+        rotation = random.nextInt(360);
     }
 
     private Block getType(int id){
@@ -105,4 +110,6 @@ public class Enemy implements Serializable {
     public int getLevel(){
         return level;
     }
+
+    public float getRotation() {return rotation;}
 }

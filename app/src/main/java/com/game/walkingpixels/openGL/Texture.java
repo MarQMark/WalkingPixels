@@ -79,6 +79,7 @@ public class Texture {
         return img;
     }
 
+    public int getDefaultSlot() {return defaultSlot;}
     public int getWidth() {
         return width;
     }

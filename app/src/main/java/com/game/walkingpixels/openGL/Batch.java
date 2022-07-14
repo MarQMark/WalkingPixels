@@ -30,6 +30,7 @@ public class Batch {
     private final IndexBuffer ib;
     private final ArrayList<Texture> textures = new ArrayList<>();
 
+    private final boolean quadOptimized;
     private int lastVertexPosition = 0;
 
     public Batch(int shaderID, int maxQuadCount, int vertexSize, VertexBufferLayout[] layouts){
@@ -51,6 +52,18 @@ public class Batch {
         }
 
         ib = new IndexBuffer(indices);
+        quadOptimized = true;
+    }
+
+    public Batch(int shaderID, long maxVertexCount, int vertexSize, VertexBufferLayout[] layouts){
+        vb = new VertexBuffer(shaderID, (int) maxVertexCount, vertexSize, layouts);
+
+        short[] indices = new short[(int) maxVertexCount];
+        for(int i = 0; i < maxVertexCount; i++)
+            indices[i] = (short) i;
+
+        ib = new IndexBuffer(indices);
+        quadOptimized = false;
     }
 
     public void addVertices(String name, IVertex[] vertices){
@@ -59,7 +72,10 @@ public class Batch {
         else
             parts.add(new BatchPart(name, parts.get(parts.size() - 1).offset + parts.get(parts.size() - 1).vertices.length, vertices));
 
-        lastVertexPosition += (vertices.length / 4) * 6;
+        if(quadOptimized)
+            lastVertexPosition += (vertices.length / 4) * 6;
+        else
+            lastVertexPosition += vertices.length;
 
         vb.fillPartBuffer(vertices, parts.get(parts.size() - 1).offset);
     }
@@ -85,7 +101,10 @@ public class Batch {
 
         if(vertices.length != oldSize){
 
-            lastVertexPosition += ((vertices.length - oldSize) / 4) * 6;
+            if(quadOptimized)
+                lastVertexPosition += ((vertices.length - oldSize) / 4) * 6;
+            else
+                lastVertexPosition += vertices.length - oldSize;
 
             for (int i = partNumber + 1; i < parts.size(); i++){
                 parts.get(i).offset = parts.get(i - 1).offset + parts.get(i - 1).vertices.length;
@@ -108,7 +127,11 @@ public class Batch {
 
         int oldSize = parts.get(partNumber).vertices.length;
 
-        lastVertexPosition -= ((oldSize) / 4) * 6;
+        if(quadOptimized)
+            lastVertexPosition -= ((oldSize) / 4) * 6;
+        else
+            lastVertexPosition -= oldSize;
+
         for (int i = partNumber + 1; i < parts.size(); i++){
             parts.get(i).offset = parts.get(i - 1).offset + parts.get(i - 1).vertices.length;
             vb.fillPartBuffer(parts.get(i).vertices, parts.get(i).offset);
