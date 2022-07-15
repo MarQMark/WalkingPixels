@@ -32,7 +32,15 @@ public class Model3D {
         }
     }
 
+    public WorldVertex[] getVertices(Vector3 offset){
+        return getVertices(offset, new Vector3());
+    }
+
     public WorldVertex[] getVertices(Vector3 offset, Vector3 rotation){
+        return getVertices(offset, rotation, new Vector3(1));
+    }
+
+    public WorldVertex[] getVertices(Vector3 offset, Vector3 rotation, Vector3 scale){
         WorldVertex[] vertices = new WorldVertex[listFaceIndices.size()];
         for (int i = 0; i < listFaceIndices.size(); i++) {
             String[] parts = listFaceIndices.get(i).split("/");
@@ -54,6 +62,7 @@ public class Model3D {
             //Rotation
             Matrix4f rotationMatrix = new Matrix4f();
             rotationMatrix.loadIdentity();
+            rotationMatrix.scale(scale.x, scale.y, scale.z);
             rotationMatrix.rotate(rotation.x, 1.0f, 0.0f, 0.0f);
             rotationMatrix.rotate(rotation.y, 0.0f, 1.0f, 0.0f);
             rotationMatrix.rotate(rotation.z, 0.0f, 0.0f, 1.0f);

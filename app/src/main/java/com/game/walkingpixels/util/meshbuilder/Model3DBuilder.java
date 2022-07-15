@@ -28,20 +28,25 @@ public class Model3DBuilder extends MeshBuilder{
             for(int y = 0; y < world.getBlockGridSize(); y ++) {
                 for (int z = 0; z < world.getWorldMaxHeight(); z++) {
                     if(world.getBlockGrid()[x][y][z] == Block.TREE)
-                        trees.addAll(Arrays.asList(modelManager.getModel("tree").getVertices(new Vector3(x - centerOffset, z, y - centerOffset), new Vector3())));
+                        trees.addAll(Arrays.asList(modelManager.getModel("tree").getVertices(new Vector3(x - centerOffset, z, y - centerOffset))));
                 }
             }
         }
 
-        WorldVertex[] finishedTrees = new WorldVertex[trees.size()];
-        for (int i = 0; i < trees.size(); i++)
-            finishedTrees[i] = trees.get(i);
+        WorldVertex[] finishedTrees;
+        if(trees.size() != 0){
+            finishedTrees = new WorldVertex[trees.size()];
+            for (int i = 0; i < trees.size(); i++)
+                finishedTrees[i] = trees.get(i);
+        }else{
+            finishedTrees = generateEmptyVertices();
+        }
 
         return finishedTrees;
     }
 
     public WorldVertex[] generatePlayer(World world, float rotation){
-        int animationNumber = getAnimation(400, modelManager.PLAYER_ANIMATIONS);
+        int animationNumber = getAnimation(400, modelManager.PLAYER_ANIMATIONS) + 1;
 
         for(int x = 0; x < world.getBlockGridSize(); x ++){
             for(int y = 0; y < world.getBlockGridSize(); y ++) {
@@ -49,13 +54,45 @@ public class Model3DBuilder extends MeshBuilder{
                     if(world.getBlockGrid()[x][y][z] == Block.PLAYER)
                         return modelManager.getModel("player" + animationNumber).getVertices(
                                 new Vector3(0, z, 0),
-                                new Vector3(0, rotation + (float)((System.currentTimeMillis() / 10.0) % 360), 0)
+                                new Vector3(0, rotation + (float)((System.currentTimeMillis() / 10.0) % 360), 0),
+                                new Vector3(0.75f)
                         );
                 }
             }
         }
 
-        return null;
+        return generateEmptyVertices();
+    }
+
+    public WorldVertex[] generateObelisks(World world){
+        ArrayList<WorldVertex> obelisks = new ArrayList<>();
+        int centerOffset = (int) (world.getBlockGridSize() / 2.0f);
+
+        for(int x = 0; x < world.getBlockGridSize(); x ++){
+            for(int y = 0; y < world.getBlockGridSize(); y ++) {
+                for (int z = 0; z < world.getWorldMaxHeight(); z++) {
+                    if(world.getBlockGrid()[x][y][z] == Block.BONFIRE)
+                        obelisks.addAll(Arrays.asList(
+                                modelManager.getModel("obelisk")
+                                .getVertices(
+                                        new Vector3(x - centerOffset, z, y - centerOffset),
+                                        new Vector3(0, (float)((System.currentTimeMillis() / 20.0) % 360), 0)
+                                )
+                        ));
+                }
+            }
+        }
+
+        WorldVertex[] finishedObelisks;
+        if(obelisks.size() != 0){
+            finishedObelisks = new WorldVertex[obelisks.size()];
+            for (int i = 0; i < obelisks.size(); i++)
+                finishedObelisks[i] = obelisks.get(i);
+        }else{
+            finishedObelisks = generateEmptyVertices();
+        }
+
+        return finishedObelisks;
     }
 
     public WorldVertex[] generateMobs(World world){
@@ -93,23 +130,41 @@ public class Model3DBuilder extends MeshBuilder{
             }
         }
 
-        WorldVertex[] finishedMobs = new WorldVertex[mobs.size()];
-        for (int i = 0; i < mobs.size(); i++){
-            finishedMobs[i] = mobs.get(i);
+        WorldVertex[] finishedMobs;
+        if(mobs.size() != 0){
+            finishedMobs = new WorldVertex[mobs.size()];
+            for (int i = 0; i < mobs.size(); i++)
+                finishedMobs[i] = mobs.get(i);
+        }else{
+            finishedMobs = generateEmptyVertices();
         }
+
         return finishedMobs;
     }
 
     private void getMobVertices(ArrayList<WorldVertex> mobs, Vector3 position, Block type, float rotation){
         String model = "";
         switch (type){
+            case BAT:
+                model += "bat" + getAnimation(100, modelManager.BAT_ANIMATIONS);
+                break;
+            case PLANT:
+                model += "flower" + getAnimation(100, modelManager.FLOWER_ANIMATIONS);
+                break;
             case EYE:
                 model += "eye" + getAnimation(100, modelManager.EYE_ANIMATIONS);
                 break;
             case BLUE_SLIME:
-            case GREEN_SLIME:
-            case PURPLE_SLIME:
                 model += "slime" + getAnimation(50, modelManager.SLIME_ANIMATIONS);
+                break;
+            case GREEN_SLIME:
+                model += "slimeGreen" + getAnimation(50, modelManager.SLIME_ANIMATIONS);
+                break;
+            case PURPLE_SLIME:
+                model += "slimePink" + getAnimation(50, modelManager.SLIME_ANIMATIONS);
+                break;
+            case DANGER_NOODLE:
+                model += "snake" + getAnimation(200, modelManager.SNAKE_ANIMATIONS);
                 break;
             case GOLEM:
                 model += "golem" + getAnimation(200, modelManager.GOLEM_ANIMATIONS);
@@ -122,6 +177,32 @@ public class Model3DBuilder extends MeshBuilder{
     }
 
     private int getAnimation(int speed, int animationsCount){
-        return (int) ((System.currentTimeMillis() / speed) % animationsCount + 1);
+        return (int) ((System.currentTimeMillis() / speed) % animationsCount);
+    }
+
+    private WorldVertex[] generateEmptyVertices(){
+        return new WorldVertex[]{
+                new WorldVertex(
+                        new float[]{0, 0, 0},
+                        new float[]{0, 0},
+                        new float[]{0, 0, 0},
+                        new float[]{0, 0, 0, 0},
+                        0
+                ),
+                new WorldVertex(
+                        new float[]{0, 0, 0},
+                        new float[]{0, 0},
+                        new float[]{0, 0, 0},
+                        new float[]{0, 0, 0, 0},
+                        0
+                ),
+                new WorldVertex(
+                        new float[]{0, 0, 0},
+                        new float[]{0, 0},
+                        new float[]{0, 0, 0},
+                        new float[]{0, 0, 0, 0},
+                        0
+                )
+        };
     }
 }

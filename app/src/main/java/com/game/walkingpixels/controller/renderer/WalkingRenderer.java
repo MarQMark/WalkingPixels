@@ -91,13 +91,14 @@ public class WalkingRenderer extends Renderer {
         batch("world").addTexture(new Texture(context, "textures/block_atlas.png", 0));
 
         if(models){
-            registerBatch("models", new Batch(shader("main").getID(), (long)2000, WorldVertex.SIZE, WorldVertex.getLayout()));
+            registerBatch("models", new Batch(shader("main").getID(), (long)5000, WorldVertex.SIZE, WorldVertex.getLayout()));
             batch("models").addVertices("Player", model3DBuilder.generatePlayer(MainWorld.getWorld(), 0));
             batch("models").addVertices("Trees", model3DBuilder.generateTrees(MainWorld.getWorld()));
             batch("models").addVertices("Mobs", model3DBuilder.generateMobs(MainWorld.getWorld()));
-            batch("models").addTexture(model3DManager.getTexture("player"));
-            batch("models").addTexture(model3DManager.getTexture("tree"));
-            batch("models").addTexture(model3DManager.getTexture("mobs"));
+            batch("models").addVertices("Obelisks", model3DBuilder.generateObelisks(MainWorld.getWorld()));
+            batch("models").addTexture(model3DManager.getTexture(context, "player"));
+            batch("models").addTexture(model3DManager.getTexture(context, "tree"));
+            batch("models").addTexture(model3DManager.getTexture(context, "mobs"));
         }
         else{
             registerBatch("models", new Batch(shader("main").getID(), 200, WorldVertex.SIZE, WorldVertex.getLayout()));
@@ -124,6 +125,7 @@ public class WalkingRenderer extends Renderer {
         if(models){
             batch("models").updateVertices("Player", model3DBuilder.generatePlayer(MainWorld.getWorld(), 0));
             batch("models").updateVertices("Mobs", model3DBuilder.generateMobs(MainWorld.getWorld()));
+            batch("models").updateVertices("Obelisks", model3DBuilder.generateObelisks(MainWorld.getWorld()));
         }
         else {
             //update rotations

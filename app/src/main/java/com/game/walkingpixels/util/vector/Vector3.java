@@ -15,6 +15,12 @@ public class Vector3 {
         this.z = v.z;
     }
 
+    public Vector3(float a){
+        this.x = a;
+        this.y = a;
+        this.z = a;
+    }
+
     public Vector3(float x, float y, float z){
         this.x = x;
         this.y = y;

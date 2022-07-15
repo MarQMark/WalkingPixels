@@ -105,9 +105,7 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
 
         //auto moving
         btnAutoMoving = findViewById(R.id.btn_walking_auto_walk);
-        btnAutoMoving.setOnClickListener(e -> {
-            setAutoMoving(!autoMoving);
-        });
+        btnAutoMoving.setOnClickListener(e -> setAutoMoving(!autoMoving));
         //auto moving loop
         Handler autoMovingHandler = new Handler();
         final Runnable autoMovingRunnable = new Runnable() {
@@ -320,6 +318,16 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
         else if (event.sensor.getType() == Sensor.TYPE_STEP_COUNTER) {
             SharedPreferences sharedPreferences = getSharedPreferences("Stamina", MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
+            System.out.println("####################");
+            System.out.println(event.values[0]);
+            System.out.println(event.values[0]);
+            System.out.println(event.values[0]);
+            System.out.println(event.values[0]);
+            System.out.println(event.values[0]);
+            System.out.println(event.values[0]);
+            System.out.println(event.values[0]);
+            System.out.println(event.values[0]);
+            System.out.println("####################");
             if(!staminaInitialized){
                 int lastStepsMeasured = sharedPreferences.getInt("last_steps_measured", (int)event.values[0]);
                 //counter reset due to phone restart
@@ -338,13 +346,5 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
-    }
-
-    @Override
-    public void onBackPressed() {
-        // Only way to actually destroy the activity, otherwise some data stays which creates problems at new launch. Android is weird!
-        System.exit(0);
-        finish();
-        super.onBackPressed();
     }
 }

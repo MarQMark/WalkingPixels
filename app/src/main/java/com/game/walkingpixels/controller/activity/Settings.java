@@ -43,27 +43,6 @@ public class Settings extends AppCompatActivity {
         switch3DModels.setOnCheckedChangeListener((buttonView, isChecked) -> {
             editor.putBoolean("3d_models", isChecked);
             editor.apply();
-            if (isChecked){
-                final AlertDialog alertDialog = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.ScrollAlertDialog))
-                        .setTitle("Turn on 3D Models")
-                        .setMessage("In order to turn on 3D Models the app has to restart. Do you wish to proceed?")
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> System.exit(0))
-                        .setNegativeButton(android.R.string.no, ((dialog, which) -> switch3DModels.setChecked(false))).show();
-                TextView lblMessage = alertDialog.findViewById(android.R.id.message);
-                Typeface face = ResourcesCompat.getFont(this, R.font.alagard);
-                if (lblMessage != null) {
-                    lblMessage.setTypeface(face);
-                }
-                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.scroll_foreground, getTheme()));
-                alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.scroll_foreground, getTheme()));
-                ImageView imageView = alertDialog.findViewById(android.R.id.icon);
-                if (imageView != null)
-                    imageView.setColorFilter(getResources().getColor(R.color.scroll_foreground, getTheme()), android.graphics.PorterDuff.Mode.SRC_IN);
-            }
-
-            editor.putBoolean("3d_models", isChecked);
-            editor.apply();
         });
 
         SwitchCompat switchWalking = findViewById(R.id.switch_settings_walking);
@@ -96,5 +75,14 @@ public class Settings extends AppCompatActivity {
             if (imageView != null)
                 imageView.setColorFilter(getResources().getColor(R.color.scroll_foreground, getTheme()), android.graphics.PorterDuff.Mode.SRC_IN);
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, MainMenu.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        super.onBackPressed();
     }
 }
