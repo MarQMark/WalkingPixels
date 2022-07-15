@@ -2,10 +2,26 @@
 #version 320 es
 
 in vec4 a_Position;
+in vec2 a_TexCoord;
+in vec3 a_Normal;
+in vec4 a_Color;
+in float a_TextureSlot;
+
+out VS_OUT{
+    vec2 v_TexCoord;
+    vec3 v_Normal;
+    vec4 v_Color;
+    float v_TextureSlot;
+} vs_out;
+
 
 void main()
 {
     gl_Position =  vec4(a_Position.x, a_Position.y, a_Position.z, 1.0);
+    vs_out.v_Normal = a_Normal;
+    vs_out.v_Color = a_Color;
+    vs_out.v_TexCoord = a_TexCoord;
+    vs_out.v_TextureSlot = a_TextureSlot;
 }
 
 
@@ -15,9 +31,21 @@ void main()
 layout (triangles) in;
 layout (triangle_strip, max_vertices=18) out;
 
+in VS_OUT{
+    vec2 v_TexCoord;
+    vec3 v_Normal;
+    vec4 v_Color;
+    float v_TextureSlot;
+} gs_in[];
+
+out vec2 v_TexCoord;
+out vec3 v_Normal;
+out vec4 v_Color;
+out float v_TextureSlot;
+
 uniform mat4 shadowMatrices[6];
 
-out vec4 FragPos;
+out vec4 v_FragPos;
 
 void main()
 {
@@ -28,8 +56,14 @@ void main()
         for(int i = 0; i < 3; i++)
         {
             // Make transformed vertex
-            FragPos = gl_in[i].gl_Position;
-            gl_Position = shadowMatrices[face] * FragPos;
+            v_FragPos = gl_in[i].gl_Position;
+
+            v_TexCoord = gs_in[i].v_TexCoord;
+            v_Normal = gs_in[i].v_Normal;
+            v_Color = gs_in[i].v_Color;
+            v_TextureSlot = gs_in[i].v_TextureSlot;
+
+            gl_Position = shadowMatrices[face] * v_FragPos;
             EmitVertex();
         }
         EndPrimitive();
@@ -43,11 +77,25 @@ void main()
 precision mediump float;
 
 in vec4 v_FragPos;
+in vec2 v_TexCoord;
+in vec3 v_Normal;
+in vec4 v_Color;
+in float v_TextureSlot;
 
+uniform sampler2D u_Textures[4];
 uniform vec3 u_LightPosition;
 uniform float u_FarPlane;
 
+out vec4 color;
+
 void main()
 {
-    gl_FragDepth  = length(v_FragPos.xyz - u_LightPosition) / u_FarPlane;
+    if(texture(u_Textures[int(v_TextureSlot)], v_TexCoord).a <= 0.1){
+        discard;
+    }
+
+    gl_FragDepth = length(v_FragPos.xyz - u_LightPosition) / u_FarPlane + 0.0001;
+
+    //This just exist so openGL doesn't remove the unused variables
+    color = v_Color * vec4(v_Normal, 1.0);
 }

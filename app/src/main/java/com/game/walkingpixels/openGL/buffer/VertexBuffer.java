@@ -50,6 +50,8 @@ public class VertexBuffer {
     }
 
     public void fillPartBuffer(IVertex[] vertices, int offset){
+        if(vertices == null) return;
+
         ByteBuffer vbb = ByteBuffer.allocateDirect(vertexSize * vertices.length);
         vbb.order(ByteOrder.nativeOrder());
         FloatBuffer fb = vbb.asFloatBuffer();

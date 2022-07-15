@@ -36,7 +36,7 @@ public class Enemy implements Serializable {
         xp = (int) (Constants.enemyBaseXp * Constants.enemyXpFunction(level));
 
         //get pseudo-random enemy type
-        int id = random.nextInt(LEVEL_SPAN) + (int)Math.min(NUMBER_OF_ENEMY_TYPES - LEVEL_SPAN, level * (NUMBER_OF_ENEMY_TYPES / SOFT_LEVEL_BORDER));
+        int id = random.nextInt((int) NUMBER_OF_ENEMY_TYPES); //random.nextInt(LEVEL_SPAN) + (int)Math.min(NUMBER_OF_ENEMY_TYPES - LEVEL_SPAN, level * (NUMBER_OF_ENEMY_TYPES / SOFT_LEVEL_BORDER));
         this.type = getType(id);
 
         //stronger enemies -> lower level at same strength

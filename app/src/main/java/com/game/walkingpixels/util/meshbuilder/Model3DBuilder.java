@@ -41,7 +41,7 @@ public class Model3DBuilder extends MeshBuilder{
     }
 
     public WorldVertex[] generatePlayer(World world, float rotation){
-        int animationNumber = (int) (System.currentTimeMillis() / 400 % 5) + 1;
+        int animationNumber = getAnimation(400, modelManager.PLAYER_ANIMATIONS);
 
         for(int x = 0; x < world.getBlockGridSize(); x ++){
             for(int y = 0; y < world.getBlockGridSize(); y ++) {
@@ -78,11 +78,11 @@ public class Model3DBuilder extends MeshBuilder{
                             }
                         }
 
-                        try {
-                            /*
+                        /*
                                 This causes java.lang.NullPointerException: Attempt to invoke virtual method 'com.game.walkingpixels.model.Block com.game.walkingpixels.model.Enemy.getType()' on a null object reference.
                                 I don't know why and I can't fix it. Too bad!
-                            */
+                        */
+                        try {
                             getMobVertices(mobs,
                                     new Vector3(mobX, height, mobY).sub(new Vector3(centerOffset, 0, centerOffset)),
                                     world.getEnemyGrid()[x][y].getType(),
@@ -104,17 +104,24 @@ public class Model3DBuilder extends MeshBuilder{
         String model = "";
         switch (type){
             case EYE:
-                model += "eye" + ((System.currentTimeMillis() / 100) % 10 + 1);
+                model += "eye" + getAnimation(100, modelManager.EYE_ANIMATIONS);
                 break;
             case BLUE_SLIME:
             case GREEN_SLIME:
             case PURPLE_SLIME:
-                model += "slime" + ((System.currentTimeMillis() / 200) % 5 + 1);
+                model += "slime" + getAnimation(50, modelManager.SLIME_ANIMATIONS);
+                break;
+            case GOLEM:
+                model += "golem" + getAnimation(200, modelManager.GOLEM_ANIMATIONS);
                 break;
             default:
                 return;
         }
 
         mobs.addAll(Arrays.asList(modelManager.getModel(model).getVertices(position, new Vector3(0, rotation, 0))));
+    }
+
+    private int getAnimation(int speed, int animationsCount){
+        return (int) ((System.currentTimeMillis() / speed) % animationsCount + 1);
     }
 }

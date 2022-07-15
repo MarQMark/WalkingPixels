@@ -48,9 +48,7 @@ public class Settings extends AppCompatActivity {
                         .setTitle("Turn on 3D Models")
                         .setMessage("In order to turn on 3D Models the app has to restart. Do you wish to proceed?")
                         .setIcon(android.R.drawable.ic_dialog_alert)
-                        .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> {
-                            System.exit(0);
-                        })
+                        .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> System.exit(0))
                         .setNegativeButton(android.R.string.no, ((dialog, which) -> switch3DModels.setChecked(false))).show();
                 TextView lblMessage = alertDialog.findViewById(android.R.id.message);
                 Typeface face = ResourcesCompat.getFont(this, R.font.alagard);

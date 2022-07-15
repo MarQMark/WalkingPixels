@@ -4,6 +4,7 @@ package com.game.walkingpixels.controller.activity;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.widget.SwitchCompat;
 
 import android.annotation.SuppressLint;
@@ -48,7 +49,7 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
     private ResponsiveButton btnTurnLeft;
     private ResponsiveButton btnTurnRight;
     private ResponsiveButton btnBonfire;
-    private SwitchCompat switchAutoMoving;
+    private ResponsiveButton btnAutoMoving;
     private TextView lblOutOfStamina;
 
     private boolean staminaInitialized = false;
@@ -103,16 +104,9 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
         btnMoveForward.setOnClickListener(e -> forward());
 
         //auto moving
-        switchAutoMoving = findViewById(R.id.switch_walking_auto_walking);
-        switchAutoMoving.setChecked(false);
-        switchAutoMoving.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            btnStats.setEnabled(!isChecked);
-            btnTurnLeft.setEnabled(!isChecked);
-            btnTurnRight.setEnabled(!isChecked);
-            btnMoveForward.setEnabled(!isChecked);
-            btnMap.setEnabled(!isChecked);
-            btnBonfire.setEnabled(!isChecked);
-            autoMoving = isChecked;
+        btnAutoMoving = findViewById(R.id.btn_walking_auto_walk);
+        btnAutoMoving.setOnClickListener(e -> {
+            setAutoMoving(!autoMoving);
         });
         //auto moving loop
         Handler autoMovingHandler = new Handler();
@@ -143,7 +137,7 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
                     btnStats.setEnabled(false);
                     btnMap.setEnabled(false);
                     btnBonfire.setEnabled(false);
-                    switchAutoMoving.setEnabled(false);
+                    btnAutoMoving.setEnabled(false);
 
                     if(rotationLeft[0] > 0){
                         sv.getRenderer().camera.rotationY++;
@@ -163,7 +157,7 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
                         btnStats.setEnabled(true);
                         btnMap.setEnabled(true);
                         btnBonfire.setEnabled(true);
-                        switchAutoMoving.setEnabled(true);
+                        btnAutoMoving.setEnabled(true);
                     }
                 }
 
@@ -171,7 +165,6 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
         };
         rotationHandler.postDelayed(rotationRunnable, 0);
     }
-
 
     private final ActivityResultLauncher<Intent> drawingActivityLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
         btnMoveForward.setEnabled(true);
@@ -248,8 +241,7 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
                 btnTurnRight.setEnabled(true);
                 btnMap.setEnabled(true);
                 btnBonfire.setEnabled(true);
-                switchAutoMoving.setChecked(false);
-                autoMoving = false;
+                setAutoMoving(false);
 
                 btnMoveForward.setEnabled(false);
                 Intent intent = new Intent(this, Drawing.class);
@@ -264,6 +256,21 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
             btnBonfire.setVisibility(View.INVISIBLE);
     }
 
+    private void setAutoMoving(boolean autoMoving){
+        this.autoMoving = autoMoving;
+
+        btnStats.setEnabled(!autoMoving);
+        btnTurnLeft.setEnabled(!autoMoving);
+        btnTurnRight.setEnabled(!autoMoving);
+        btnMoveForward.setEnabled(!autoMoving);
+        btnMap.setEnabled(!autoMoving);
+        btnBonfire.setEnabled(!autoMoving);
+
+        if(autoMoving)
+            btnAutoMoving.setForeground(AppCompatResources.getDrawable(this, R.drawable.controls_auto_walk_stop));
+        else
+            btnAutoMoving.setForeground(AppCompatResources.getDrawable(this, R.drawable.controls_auto_walk_play));
+    }
 
     private final float[] gravity = new float[3];
     private double prevY;
@@ -335,7 +342,9 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
 
     @Override
     public void onBackPressed() {
-        switchAutoMoving.setChecked(false);
+        // Only way to actually destroy the activity, otherwise some data stays which creates problems at new launch. Android is weird!
+        System.exit(0);
+        finish();
         super.onBackPressed();
     }
 }
