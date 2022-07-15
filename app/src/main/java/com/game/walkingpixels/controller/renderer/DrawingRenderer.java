@@ -1,6 +1,7 @@
 package com.game.walkingpixels.controller.renderer;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.renderscript.Matrix4f;
 
 import com.game.walkingpixels.model.Camera;
@@ -9,6 +10,7 @@ import com.game.walkingpixels.model.Block;
 import com.game.walkingpixels.model.DrawGrid;
 import com.game.walkingpixels.model.DrawTimer;
 import com.game.walkingpixels.model.Enemy;
+import com.game.walkingpixels.model.Model3DManager;
 import com.game.walkingpixels.model.Player;
 import com.game.walkingpixels.model.RenderedSpell;
 import com.game.walkingpixels.model.Spell;
@@ -21,6 +23,7 @@ import com.game.walkingpixels.openGL.vertices.PlaneVertex;
 import com.game.walkingpixels.openGL.vertices.DrawGridVertex;
 import com.game.walkingpixels.openGL.vertices.WorldVertex;
 import com.game.walkingpixels.util.meshbuilder.DrawGridMeshBuilder;
+import com.game.walkingpixels.util.meshbuilder.Model3DBuilder;
 import com.game.walkingpixels.util.meshbuilder.SpriteMeshBuilder;
 import com.game.walkingpixels.util.meshbuilder.BlockMeshBuilder;
 import com.game.walkingpixels.util.vector.Vector2;
@@ -54,6 +57,10 @@ public class DrawingRenderer extends Renderer {
     private final DrawGridMeshBuilder drawGridMeshBuilder = new DrawGridMeshBuilder();
     private final BlockMeshBuilder blockMeshBuilder = new BlockMeshBuilder();
     private final SpriteMeshBuilder spriteMeshBuilder = new SpriteMeshBuilder();
+    private Model3DBuilder model3DBuilder;
+
+    private boolean models;
+    private final Vector3 enemyPosition = new Vector3(-1, 1, 2);
 
     public DrawingRenderer(Context context, Enemy enemy, DrawTimer drawTimer) {
         super(context);
@@ -69,12 +76,17 @@ public class DrawingRenderer extends Renderer {
 
         player = new Player(context);
 
+        SharedPreferences sharedPref = context.getSharedPreferences("Settings", Context.MODE_PRIVATE);
+        models = sharedPref.getBoolean("3d_models", true);
+
+        model3DBuilder = new Model3DBuilder(context);
+        Model3DManager model3DManager = Model3DManager.getInstance(context);
+
         //init shader
         registerShader("draw", new Shader(context, "Shaders/DrawGrid.shaders"));
         registerShader("world", new Shader(context, "Shaders/Basic.shaders"));
         registerShader("background", new Shader(context, "Shaders/Background.shaders"));
         registerShader("spell", new Shader(context, "Shaders/Spell.shaders"));
-
 
         //init background
         background = new Background(new Texture(context, "textures/clouds.png", 0), 20);
@@ -84,12 +96,10 @@ public class DrawingRenderer extends Renderer {
         batch("background").addVertices("Background", background.getVertices());
         batch("background").addTexture(background.getTexture());
 
-
         //init spell
         registerBatch("spell", new Batch(shader("spell").getID(), 1, PlaneVertex.SIZE, PlaneVertex.getLayout()));
         shader("spell").bind();
         shader("spell").setUniform1iv("u_Textures", 4, new int[] {0, 1, 2, 3}, 0);
-
 
         //init draw grid
         drawGrid = new DrawGrid(64, 0.8f, new Vector2(0.1f, 0.1f));
@@ -97,15 +107,25 @@ public class DrawingRenderer extends Renderer {
         registerBatch("draw", new Batch(shader("draw").getID(), drawGrid.getSize() * drawGrid.getSize(), DrawGridVertex.SIZE, DrawGridVertex.getLayout()));
         batch("draw").addVertices("Grid", drawGridMeshBuilder.generateMesh(drawGrid));
 
-
         //init world
         world = new World(0);
         generateWorld(world);
         registerBatch("world", new Batch(shader("world").getID(), 3000, WorldVertex.SIZE, WorldVertex.getLayout()));
         batch("world").addVertices("ground", blockMeshBuilder.generateMesh(world));
-        batch("world").addVertices("mobs", spriteMeshBuilder.generateMesh(world, camera,true, true));
         batch("world").addTexture(new Texture(context, "textures/block_atlas.png", 0));
-        batch("world").addTexture(new Texture(context, "textures/mob_texture_atlas.png", 1));
+
+        if(models){
+            registerBatch("models", new Batch(shader("world").getID(), (long)2000, WorldVertex.SIZE, WorldVertex.getLayout()));
+            batch("models").addVertices("Player", model3DBuilder.generatePlayer(world, 0));
+            batch("models").addVertices("Mobs", model3DBuilder.generateMobVertices(enemyPosition, enemy.getType(), 0));
+            batch("models").addTexture(model3DManager.getTexture(context, "player"));
+            batch("models").addTexture(model3DManager.getTexture(context, "mobs"));
+        }
+        else {
+            registerBatch("models", new Batch(shader("world").getID(), 2, WorldVertex.SIZE, WorldVertex.getLayout()));
+            batch("models").addVertices("Sprites", spriteMeshBuilder.generateMesh(world, camera,true, true));
+            batch("world").addTexture(new Texture(context, "textures/mob_texture_atlas.png", 1));
+        }
 
         shader("world").bind();
         shader("world").setUniform1f("u_LightCount", 0);
@@ -151,6 +171,15 @@ public class DrawingRenderer extends Renderer {
                 batch("spell").updateVertices("spell", renderedSpell.getVertices(new Vector3(1.0f - 2.0f, 1.0f, 4.0f - 2.0f) , camera));
             }
         }
+
+        //update animations
+        if (models){
+            batch("models").updateVertices("Player", model3DBuilder.generatePlayer(world, 0));
+            batch("models").updateVertices("Mobs", model3DBuilder.generateMobVertices(enemyPosition, enemy.getType(), 0));
+        }
+        else {
+            batch("world").updateVertices("Sprites", spriteMeshBuilder.generateMesh(world, camera, true, true));
+        }
     }
 
     @Override
@@ -174,13 +203,14 @@ public class DrawingRenderer extends Renderer {
         batch("draw").bind();
         batch("draw").draw();
 
-
         //render World
         shader("world").bind();
-        batch("world").updateVertices("mobs", spriteMeshBuilder.generateMesh(world, camera, true, true));
         shader("world").setUniformMatrix4fv("mvpmatrix", camera.getMVPMatrix());
         batch("world").bind();
         batch("world").draw();
+        //render models
+        batch("models").bind();
+        batch("models").draw();
 
         //render spell
         if(renderedSpell != null && renderedSpell.isEnabled()) {
@@ -221,6 +251,7 @@ public class DrawingRenderer extends Renderer {
         world.getBlockGrid()[1][0][0] = Block.GRASS;
         world.getBlockGrid()[1][0][1] = Block.PLAYER;
         world.getEnemyGrid()[1 + world.getDespawnRadius()][4 + world.getDespawnRadius()] = enemy;
+        //world.getEnemyGrid()[(int) (enemyPosition.x + world.getDespawnRadius())][(int) (enemyPosition.z + world.getDespawnRadius())] = enemy;
 
         world.getBlockGrid()[1][1][0] = Block.GRASS;
         world.getBlockGrid()[1][2][0] = Block.GRASS;

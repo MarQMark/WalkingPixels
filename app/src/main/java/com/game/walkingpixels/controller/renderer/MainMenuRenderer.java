@@ -125,8 +125,8 @@ public class MainMenuRenderer extends Renderer {
 
         //update rotations
         if(models){
-            batch("models").updateVertices("Mobs", model3DBuilder.generateMobs(MainWorld.getWorld()));
-            batch("models").updateVertices("Obelisks", model3DBuilder.generateObelisks(MainWorld.getWorld()));
+            batch("models").updateVertices("Mobs", model3DBuilder.generateMobs(world));
+            batch("models").updateVertices("Obelisks", model3DBuilder.generateObelisks(world));
         }
         else {
             //update rotations

@@ -10,7 +10,6 @@ import com.game.walkingpixels.util.vector.Vector3;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Random;
 
 public class Model3DBuilder extends MeshBuilder{
 
@@ -47,14 +46,15 @@ public class Model3DBuilder extends MeshBuilder{
 
     public WorldVertex[] generatePlayer(World world, float rotation){
         int animationNumber = getAnimation(400, modelManager.PLAYER_ANIMATIONS) + 1;
+        int centerOffset = (int) (world.getBlockGridSize() / 2.0f);
 
         for(int x = 0; x < world.getBlockGridSize(); x ++){
             for(int y = 0; y < world.getBlockGridSize(); y ++) {
                 for (int z = 0; z < world.getWorldMaxHeight(); z++) {
                     if(world.getBlockGrid()[x][y][z] == Block.PLAYER)
                         return modelManager.getModel("player" + animationNumber).getVertices(
-                                new Vector3(0, z, 0),
-                                new Vector3(0, rotation + (float)((System.currentTimeMillis() / 10.0) % 360), 0),
+                                new Vector3(x - centerOffset, z, y - centerOffset),
+                                new Vector3(0, rotation, 0),
                                 new Vector3(0.75f)
                         );
                 }
@@ -120,10 +120,12 @@ public class Model3DBuilder extends MeshBuilder{
                                 I don't know why and I can't fix it. Too bad!
                         */
                         try {
-                            getMobVertices(mobs,
+                            mobs.addAll(Arrays.asList(
+                                    generateMobVertices(
                                     new Vector3(mobX, height, mobY).sub(new Vector3(centerOffset, 0, centerOffset)),
                                     world.getEnemyGrid()[x][y].getType(),
-                                    world.getEnemyGrid()[x][y].getRotation());
+                                    world.getEnemyGrid()[x][y].getRotation())
+                            ));
                         }catch (Exception ignored){}
                     }
                 }
@@ -142,7 +144,9 @@ public class Model3DBuilder extends MeshBuilder{
         return finishedMobs;
     }
 
-    private void getMobVertices(ArrayList<WorldVertex> mobs, Vector3 position, Block type, float rotation){
+    public WorldVertex[] generateMobVertices(Vector3 position, Block type, float rotation){
+        Vector3 scale = new Vector3(1);
+        rotation += 180;
         String model = "";
         switch (type){
             case BAT:
@@ -156,12 +160,15 @@ public class Model3DBuilder extends MeshBuilder{
                 break;
             case BLUE_SLIME:
                 model += "slime" + getAnimation(50, modelManager.SLIME_ANIMATIONS);
+                scale = new Vector3(0.75f);
                 break;
             case GREEN_SLIME:
                 model += "slimeGreen" + getAnimation(50, modelManager.SLIME_ANIMATIONS);
+                scale = new Vector3(0.75f);
                 break;
             case PURPLE_SLIME:
                 model += "slimePink" + getAnimation(50, modelManager.SLIME_ANIMATIONS);
+                scale = new Vector3(0.75f);
                 break;
             case DANGER_NOODLE:
                 model += "snake" + getAnimation(200, modelManager.SNAKE_ANIMATIONS);
@@ -170,10 +177,10 @@ public class Model3DBuilder extends MeshBuilder{
                 model += "golem" + getAnimation(200, modelManager.GOLEM_ANIMATIONS);
                 break;
             default:
-                return;
+                return generateEmptyVertices();
         }
 
-        mobs.addAll(Arrays.asList(modelManager.getModel(model).getVertices(position, new Vector3(0, rotation, 0))));
+        return modelManager.getModel(model).getVertices(position, new Vector3(0, rotation, 0), scale);
     }
 
     private int getAnimation(int speed, int animationsCount){
