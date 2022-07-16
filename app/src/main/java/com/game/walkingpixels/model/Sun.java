@@ -25,7 +25,9 @@ public class Sun {
             sunTime = 0;
 
         float sunRotation = sunTime % 360;
-        position.z = (float) (Math.cos(Math.toRadians(sunRotation)) * maxHeight);
+        double planePosition = Math.cos(Math.toRadians(sunRotation)) * maxHeight;
+        position.x = (float) planePosition / 2;
+        position.z = (float) planePosition;
         position.y = (float) (Math.sin(Math.toRadians(sunRotation)) * maxHeight);
         return position;
     }

@@ -17,7 +17,7 @@ public class Map extends AppCompatActivity {
         setContentView(R.layout.activity_map);
 
         TextView lblX = findViewById(R.id.lbl_map_x);
-        lblX.setText(getResources().getString(R.string.lbl_map_x, (int) MainWorld.getWorld().getPosition().x));
+        lblX.setText(getResources().getString(R.string.lbl_map_x, (int) MainWorld.getWorld().getPosition().x * -1));
         TextView lblY = findViewById(R.id.lbl_map_y);
         lblY.setText(getResources().getString(R.string.lbl_map_y, (int)MainWorld.getWorld().getPosition().y));
     }

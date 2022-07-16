@@ -17,6 +17,7 @@ import com.game.walkingpixels.model.Spell;
 import com.game.walkingpixels.model.Sun;
 import com.game.walkingpixels.model.World;
 import com.game.walkingpixels.openGL.Batch;
+import com.game.walkingpixels.openGL.LightManager;
 import com.game.walkingpixels.openGL.Shader;
 import com.game.walkingpixels.openGL.Texture;
 import com.game.walkingpixels.openGL.vertices.PlaneVertex;
@@ -60,6 +61,7 @@ public class DrawingRenderer extends Renderer {
     private Model3DBuilder model3DBuilder;
 
     private boolean models;
+    private boolean shadow;
     private final Vector3 enemyPosition = new Vector3(-1, 1, 2);
 
     public DrawingRenderer(Context context, Enemy enemy, DrawTimer drawTimer) {
@@ -78,15 +80,25 @@ public class DrawingRenderer extends Renderer {
 
         SharedPreferences sharedPref = context.getSharedPreferences("Settings", Context.MODE_PRIVATE);
         models = sharedPref.getBoolean("3d_models", true);
+        shadow = sharedPref.getBoolean("shadow_enabled", false);
 
         model3DBuilder = new Model3DBuilder(context);
         Model3DManager model3DManager = Model3DManager.getInstance(context);
 
         //init shader
         registerShader("draw", new Shader(context, "Shaders/DrawGrid.shaders"));
-        registerShader("world", new Shader(context, "Shaders/Basic.shaders"));
+        if(shadow)
+            registerShader("world", new Shader(context, "Shaders/BasicShadow.shaders"));
+        else
+            registerShader("world", new Shader(context, "Shaders/Basic.shaders"));
         registerShader("background", new Shader(context, "Shaders/Background.shaders"));
         registerShader("spell", new Shader(context, "Shaders/Spell.shaders"));
+
+        //init light
+        registerLightManager("world", new LightManager());
+        lightManager("world").initShader(new Shader(context, "Shaders/ShadowGeometry.shaders"));
+        lightManager("world").initWorldShader(shader("world"));
+        lightManager("world").createPointLight(sun.getPosition(), new Vector4(1f, 1f, 1f, 1.0f), 1000f, camera);
 
         //init background
         background = new Background(new Texture(context, "textures/clouds.png", 0), 20);
@@ -110,7 +122,7 @@ public class DrawingRenderer extends Renderer {
         //init world
         world = new World(0);
         generateWorld(world);
-        registerBatch("world", new Batch(shader("world").getID(), 3000, WorldVertex.SIZE, WorldVertex.getLayout()));
+        registerBatch("world", new Batch(shader("world").getID(), 300, WorldVertex.SIZE, WorldVertex.getLayout()));
         batch("world").addVertices("ground", blockMeshBuilder.generateMesh(world));
         batch("world").addTexture(new Texture(context, "textures/block_atlas.png", 0));
 
@@ -128,8 +140,6 @@ public class DrawingRenderer extends Renderer {
         }
 
         shader("world").bind();
-        shader("world").setUniform1f("u_LightCount", 0);
-        shader("world").setUniformMatrix4fv("mvpmatrix", camera.getMVPMatrix());
         shader("world").setUniform1iv("u_Textures", 4, new int[] {0, 1, 2, 3}, 0);
     }
 
@@ -138,6 +148,9 @@ public class DrawingRenderer extends Renderer {
         //update DrawGrid
         drawGrid.update(width, height);
         batch("draw").updateVertices("Grid", drawGridMeshBuilder.generateMesh(drawGrid));
+
+        //update sun
+        lightManager("world").setLightPosition(0, sun.getPosition());
 
         //update background
         background.update(dt / 1000, width, height);
@@ -184,6 +197,9 @@ public class DrawingRenderer extends Renderer {
 
     @Override
     public void render(double dt) {
+        //calculate sun shadow
+        lightManager("world").calculateShadow(new Batch[]{batch("world"), batch("models")}, width, height);
+
         //set background color according to the time
         Vector4 clearColor = sun.getColor();
         glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.w);
@@ -214,11 +230,13 @@ public class DrawingRenderer extends Renderer {
 
         //render spell
         if(renderedSpell != null && renderedSpell.isEnabled()) {
+            glDisable(GL_DEPTH_TEST);
             shader("spell").bind();
             shader("spell").setUniformMatrix4fv("mvpmatrix", camera.getMVPMatrix());
             shader("spell").setUniform1f("alpha", renderedSpell.getAlpha());
             batch("spell").bind();
             batch("spell").draw();
+            glEnable(GL_DEPTH_TEST);
         }
     }
 

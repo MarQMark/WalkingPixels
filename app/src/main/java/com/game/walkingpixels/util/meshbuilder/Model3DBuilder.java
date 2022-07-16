@@ -170,9 +170,11 @@ public class Model3DBuilder extends MeshBuilder{
             case PURPLE_SLIME:
                 model += "slimePink" + getAnimation(50, modelManager.SLIME_ANIMATIONS);
                 scale = new Vector3(0.75f);
+                rotation += 90;
                 break;
             case DANGER_NOODLE:
                 model += "snake" + getAnimation(200, modelManager.SNAKE_ANIMATIONS);
+                rotation += 90;
                 break;
             case GOLEM:
                 model += "golem" + getAnimation(200, modelManager.GOLEM_ANIMATIONS);

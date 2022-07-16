@@ -23,7 +23,7 @@ public class MapMeshBuilder extends MeshBuilder{
 
         for(int x = 0; x < countX; x++){
             for(int y = 0; y < countY; y++) {
-                int worldX = x + (int)world.getPosition().x - countX / 2 + world.getBlockGridSize() / 2;
+                int worldX = ((countX - 1) - x) + (int)world.getPosition().x - countX / 2 + world.getBlockGridSize() / 2;
                 int worldY = y + (int)world.getPosition().y - countY / 2 + world.getBlockGridSize() / 2;
                 int height = world.generateHeight(worldX, worldY);
 
@@ -91,18 +91,18 @@ public class MapMeshBuilder extends MeshBuilder{
 
     private int directionToSprite(Vector2 direction){
         if(direction.x == 1){
-            if(direction.y == 1) return 1;
-            else if(direction.y == 0) return 2;
-            else return 3;
+            if(direction.y == 1) return 7;
+            else if(direction.y == 0) return 6;
+            else return 5;
         }
         else if(direction.x == 0){
             if(direction.y == -1) return 4;
             else return 0;
         }
         else {
-            if(direction.y == 1) return 7;
-            else if(direction.y == 0) return 6;
-            else return 5;
+            if(direction.y == 1) return 1;
+            else if(direction.y == 0) return 2;
+            else return 3;
         }
     }
 }
