@@ -120,9 +120,9 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
         //rotate map
         int[] rotationLeft = new int[] {0};
         btnTurnLeft = findViewById(R.id.btn_walking_turn_left);
-        btnTurnLeft.setOnClickListener(e -> rotationLeft[0] += 45);
+        btnTurnLeft.setOnClickListener(e -> rotationLeft[0] -= 45);
         btnTurnRight = findViewById(R.id.btn_walking_turn_right);
-        btnTurnRight.setOnClickListener(e -> rotationLeft[0] += -45);
+        btnTurnRight.setOnClickListener(e -> rotationLeft[0] += 45);
 
         //Rotation loop Game loop
         Handler rotationHandler = new Handler();
