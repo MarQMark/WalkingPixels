@@ -135,7 +135,7 @@ public class DrawingRenderer extends Renderer {
         }
         else {
             registerBatch("models", new Batch(shader("world").getID(), 2, WorldVertex.SIZE, WorldVertex.getLayout()));
-            batch("models").addVertices("Sprites", spriteMeshBuilder.generateMesh(world, camera,true, true));
+            batch("models").addVertices("Sprites", spriteMeshBuilder.generateMesh(world, camera,true, !shadow));
             batch("world").addTexture(new Texture(context, "textures/mob_texture_atlas.png", 1));
         }
 
@@ -191,7 +191,7 @@ public class DrawingRenderer extends Renderer {
             batch("models").updateVertices("Mobs", model3DBuilder.generateMobVertices(enemyPosition, enemy.getType(), 0));
         }
         else {
-            batch("world").updateVertices("Sprites", spriteMeshBuilder.generateMesh(world, camera, true, true));
+            batch("models").updateVertices("Sprites", spriteMeshBuilder.generateMesh(world, camera, true, !shadow));
         }
     }
 
@@ -269,7 +269,6 @@ public class DrawingRenderer extends Renderer {
         world.getBlockGrid()[1][0][0] = Block.GRASS;
         world.getBlockGrid()[1][0][1] = Block.PLAYER;
         world.getEnemyGrid()[1 + world.getDespawnRadius()][4 + world.getDespawnRadius()] = enemy;
-        //world.getEnemyGrid()[(int) (enemyPosition.x + world.getDespawnRadius())][(int) (enemyPosition.z + world.getDespawnRadius())] = enemy;
 
         world.getBlockGrid()[1][1][0] = Block.GRASS;
         world.getBlockGrid()[1][2][0] = Block.GRASS;

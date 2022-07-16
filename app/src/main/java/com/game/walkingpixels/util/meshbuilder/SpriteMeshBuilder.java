@@ -16,7 +16,7 @@ public class SpriteMeshBuilder extends MeshBuilder{
     public SpriteMeshBuilder(){
         registerGridTextureAtlas("blocks", new GridTextureAtlas(128, 64, 32));
         registerAnimationTextureAtlas("mob", new AnimationTextureAtlas());
-        animationTextureAtlas("mob").addAnimation(64, 128, 4);
+        animationTextureAtlas("mob").addAnimation(46, 46, 2);
         animationTextureAtlas("mob").addAnimation(64, 128, 5);
         animationTextureAtlas("mob").addAnimation(32, 39, 13);
         animationTextureAtlas("mob").addAnimation(32, 39, 13);
@@ -134,8 +134,7 @@ public class SpriteMeshBuilder extends MeshBuilder{
         };
         switch (type){
             case PLAYER:
-                mobHeight = 2.0f;
-                textureCoordinates = animationTextureAtlas("mob").getTextureCoordinates(0, (int) (System.currentTimeMillis() / 300 % animationTextureAtlas("mob").getAnimationNumberOfFrames(0)));
+                textureCoordinates = animationTextureAtlas("mob").getTextureCoordinates(0, (int) (System.currentTimeMillis() / 400 % animationTextureAtlas("mob").getAnimationNumberOfFrames(0)));
                 break;
             case BLUE_SLIME:
                 textureCoordinates = animationTextureAtlas("mob").getTextureCoordinates(2, (int) (System.currentTimeMillis() / 100 % animationTextureAtlas("mob").getAnimationNumberOfFrames(2)));
