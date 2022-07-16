@@ -1,7 +1,5 @@
 package com.game.walkingpixels.model;
 
-import android.graphics.Color;
-
 public class Spell {
 
     public static final int maxID = 16;

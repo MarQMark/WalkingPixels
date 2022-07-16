@@ -5,7 +5,6 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
-import androidx.appcompat.widget.SwitchCompat;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -273,6 +272,11 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
             btnAutoMoving.setForeground(AppCompatResources.getDrawable(this, R.drawable.controls_auto_walk_play));
     }
 
+
+    /*
+        Step counter by Omar Essam - https://stackoverflow.com/questions/37136080/delay-in-android-step-counter
+     */
+
     private final float[] gravity = new float[3];
     private double prevY;
     private boolean ignore = true;
@@ -281,7 +285,7 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
     private float[] lowPassFilter( float[] input, float[] output ) {
         if ( output == null ) return input;
         for ( int i=0; i<input.length; i++ ) {
-            output[i] = output[i] + 1.0f * (input[i] - output[i]);
+            output[i] = output[i] + (input[i] - output[i]);
         }
         return output;
     }
@@ -295,12 +299,12 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
             gravity[2] = smoothed[2];
             if(ignore) {
                 countdown--;
-                ignore = (countdown >= 0) && ignore;
+                ignore = countdown >= 0;
             }
             else
                 countdown = 22;
 
-            if((Math.abs(prevY - gravity[1]) > 1.0) && !ignore){
+            if((Math.abs(prevY - gravity[1]) > 1.3) && !ignore){
 
                 SharedPreferences sharedPreferences = getSharedPreferences("Settings", MODE_PRIVATE);
                 if(sharedPreferences.getBoolean("real_time_walking", false)){

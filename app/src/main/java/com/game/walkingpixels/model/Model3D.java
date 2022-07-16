@@ -3,7 +3,6 @@ package com.game.walkingpixels.model;
 import android.content.Context;
 import android.renderscript.Matrix4f;
 
-import com.game.walkingpixels.openGL.Texture;
 import com.game.walkingpixels.openGL.vertices.WorldVertex;
 import com.game.walkingpixels.util.vector.MatrixAdapter;
 import com.game.walkingpixels.util.vector.Vector3;

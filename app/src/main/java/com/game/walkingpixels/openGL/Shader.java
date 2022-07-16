@@ -64,6 +64,7 @@ public class Shader {
 
     private int getUniformLocation(String uniform){
         if(uniformLocations.containsKey(uniform)){
+            //noinspection ConstantConditions
             return uniformLocations.get(uniform);
         }
 

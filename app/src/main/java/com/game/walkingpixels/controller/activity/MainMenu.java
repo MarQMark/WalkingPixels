@@ -6,7 +6,6 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.icu.util.VersionInfo;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -15,10 +14,6 @@ import com.game.walkingpixels.model.MainWorld;
 import com.game.walkingpixels.controller.view.ResponsiveButton;
 
 public class MainMenu extends AppCompatActivity {
-
-    /*
-        Font by Hewett Tsoi - https://www.dafont.com/alagard.font
-     */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

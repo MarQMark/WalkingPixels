@@ -6,6 +6,7 @@ import android.util.Pair;
 import com.game.walkingpixels.openGL.Texture;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 public class Model3DManager {
 
@@ -54,7 +55,7 @@ public class Model3DManager {
         return models.get(name);
     }
     public Texture getTexture(Context context, String name){
-        return new Texture(context, textures.get(name).first, textures.get(name).second);
+        return new Texture(context, Objects.requireNonNull(textures.get(name)).first, Objects.requireNonNull(textures.get(name)).second);
     }
 
     public static Model3DManager getInstance(Context context){

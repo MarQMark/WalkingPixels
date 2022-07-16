@@ -1,13 +1,10 @@
 package com.game.walkingpixels.util.meshbuilder;
 
-import android.icu.util.VersionInfo;
-
 import com.game.walkingpixels.model.Block;
 import com.game.walkingpixels.model.atlas.GridTextureAtlas;
 import com.game.walkingpixels.model.World;
 import com.game.walkingpixels.openGL.vertices.MapVertex;
 import com.game.walkingpixels.util.vector.Vector2;
-import com.game.walkingpixels.util.vector.Vector3;
 
 import java.util.ArrayList;
 
