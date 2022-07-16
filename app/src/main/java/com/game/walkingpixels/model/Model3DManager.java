@@ -13,7 +13,7 @@ public class Model3DManager {
 
     public final int PLAYER_ANIMATIONS = 26;
     public final int EYE_ANIMATIONS = 22;
-    public final int SLIME_ANIMATIONS = 20;
+    public final int SLIME_ANIMATIONS = 30;
     public final int GOLEM_ANIMATIONS = 16;
     public final int SNAKE_ANIMATIONS = 10;
     public final int FLOWER_ANIMATIONS = 13;

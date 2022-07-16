@@ -1,5 +1,7 @@
 package com.game.walkingpixels.model;
 
+import android.graphics.Color;
+
 public class Spell {
 
     public static final int maxID = 16;
@@ -10,6 +12,7 @@ public class Spell {
     private final String description;
     private final double castTime;
     private final double maxDamage;
+    private final String colorString;
     private int usages;
 
     public Spell(int id, int usages){
@@ -23,6 +26,7 @@ public class Spell {
                 description = "This is the most basic fire spell.";
                 castTime = 2.0;
                 maxDamage = 25;
+                colorString = "#b32009";
                 break;
 
             case 1:
@@ -31,6 +35,7 @@ public class Spell {
                 description = "A more advanced version of the spark spell. Even though this spell is still quite basic, it is not to be underestimated.";
                 castTime = 4.0;
                 maxDamage = 40;
+                colorString = "#b32009";
                 break;
 
             case 2:
@@ -39,6 +44,7 @@ public class Spell {
                 description = "An intermediate fire spell. Only skilled scholars have mastered it.";
                 castTime = 6.0;
                 maxDamage = 70;
+                colorString = "#b32009";
                 break;
 
             case 3:
@@ -47,6 +53,7 @@ public class Spell {
                 description = "The culmination of fire magic mastery. Only the grandest of wizards will hope to get to this level. Let there be hell!";
                 castTime = 8.0;
                 maxDamage = 120;
+                colorString = "#b32009";
                 break;
 
 
@@ -56,6 +63,7 @@ public class Spell {
                 description = "At most this will annoy your enemy.";
                 castTime = 1.0;
                 maxDamage = 20;
+                colorString = "#0862c9";
                 break;
 
             case 5:
@@ -64,6 +72,7 @@ public class Spell {
                 description = "Maybe if your enemy is wet, they will leave, but do not expect more out of this spell.";
                 castTime = 3.0;
                 maxDamage = 35;
+                colorString = "#0862c9";
                 break;
 
             case 6:
@@ -72,6 +81,7 @@ public class Spell {
                 description = "A fast stream of water, which is quite dangerous.";
                 castTime = 6.0;
                 maxDamage = 60;
+                colorString = "#0862c9";
                 break;
 
             case 7:
@@ -80,6 +90,7 @@ public class Spell {
                 description = "The peak of water magic. This will undoubted defeat you enemy.";
                 castTime = 9.0;
                 maxDamage = 110;
+                colorString = "#0862c9";
                 break;
 
 
@@ -88,7 +99,8 @@ public class Spell {
                 name = "Pebble";
                 description = "Maybe if you throw enough pebbles at your enemy they will perish. Like the saying goes: many a mickle makes a muckle!";
                 castTime = 5.0;
-                maxDamage = 10;
+                maxDamage = 25;
+                colorString = "#382216";
                 break;
 
             case 9:
@@ -96,7 +108,8 @@ public class Spell {
                 name = "Stone";
                 description = "With this, you can throw a stone at someone, you do not like. Maybe they end up with a scar and become the chosen one.";
                 castTime = 7.0;
-                maxDamage = 25;
+                maxDamage = 45;
+                colorString = "#382216";
                 break;
 
             case 10:
@@ -104,7 +117,8 @@ public class Spell {
                 name = "Rock";
                 description = "Intermediate earth spell. A solid choice.";
                 castTime = 9.0;
-                maxDamage = 45;
+                maxDamage = 80;
+                colorString = "#382216";
                 break;
 
             case 11:
@@ -112,7 +126,8 @@ public class Spell {
                 name = "Earthquake";
                 description = "Let the earth rumble with the might of your power.";
                 castTime = 11.0;
-                maxDamage = 85;
+                maxDamage = 120;
+                colorString = "#382216";
                 break;
 
 
@@ -122,6 +137,7 @@ public class Spell {
                 description = "If it is hot, this will be quite pleasant";
                 castTime = 1.5;
                 maxDamage = 30;
+                colorString = "#008051";
                 break;
 
             case 13:
@@ -130,6 +146,7 @@ public class Spell {
                 description = "An adept air spell. With this you might blow your enemies away.";
                 castTime = 2.5;
                 maxDamage = 50;
+                colorString = "#008051";
                 break;
 
             case 14:
@@ -138,6 +155,7 @@ public class Spell {
                 description = "Named after one of the four true dragons, Veldora the Storm Dragon.";
                 castTime = 5.0;
                 maxDamage = 80;
+                colorString = "#008051";
                 break;
 
             case 15:
@@ -146,6 +164,7 @@ public class Spell {
                 description = "Rain down on earth with the power of wind and lightning.";
                 castTime = 7.5;
                 maxDamage = 150;
+                colorString = "#008051";
                 break;
 
 
@@ -155,6 +174,7 @@ public class Spell {
                 description = "Unleash the Wrath of the Gods!";
                 castTime = 10.0;
                 maxDamage = 250;
+                colorString = "#ef3bff";
                 break;
 
             default:
@@ -163,6 +183,7 @@ public class Spell {
                 description = "This is no spell.";
                 castTime = 0.0;
                 maxDamage = 0;
+                colorString = "#000000";
                 break;
         }
     }
@@ -176,6 +197,7 @@ public class Spell {
     public String getDescription(){
         return description;
     }
+    public String getColorString() { return colorString; }
     public double getCastTime() {return castTime;}
     public double getMaxDamage() {return maxDamage;}
 

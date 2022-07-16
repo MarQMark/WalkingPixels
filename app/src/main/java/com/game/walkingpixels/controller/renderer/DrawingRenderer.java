@@ -187,7 +187,7 @@ public class DrawingRenderer extends Renderer {
 
         //update animations
         if (models){
-            batch("models").updateVertices("Player", model3DBuilder.generatePlayer(world, 0));
+            batch("models").updateVertices("Player", model3DBuilder.generatePlayer(world, 90));
             batch("models").updateVertices("Mobs", model3DBuilder.generateMobVertices(enemyPosition, enemy.getType(), 0));
         }
         else {

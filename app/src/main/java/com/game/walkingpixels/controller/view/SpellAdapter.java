@@ -1,6 +1,7 @@
 package com.game.walkingpixels.controller.view;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -10,10 +11,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.game.walkingpixels.R;
+import com.game.walkingpixels.model.Constants;
 import com.game.walkingpixels.model.Spell;
 
 import java.io.IOException;
@@ -40,14 +43,32 @@ public class SpellAdapter extends ArrayAdapter<Spell> {
         if(convertView == null) convertView = inflater.inflate(R.layout.spell_list_view, parent, false);
 
         TextView title = convertView.findViewById(R.id.lbl_spell_list_name);
+        title.setTextColor(Color.parseColor(spells.get(position).getColorString()));
         TextView description = convertView.findViewById(R.id.lbl_spell_list_description);
+        description.setTextColor(Color.parseColor(spells.get(position).getColorString()));
         ImageView image = convertView.findViewById(R.id.image_spell_list_image);
 
         title.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
         description.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize - 2);
 
         Spell spell = spells.get(position);
-        title.setText(spell.getName());
+        String titleText = spell.getName();
+        int maxSpellUses = Constants.tierSpellUsages[spell.getId() % 4];
+
+        int currentUses = spell.getUsages();
+        if (spell.getId()== 16) // mega dud
+        {
+            titleText += " - " + currentUses;
+        }
+        else
+        {
+            if (currentUses == -1)
+                currentUses = maxSpellUses;
+            titleText += " - " + currentUses;
+            titleText += "/" + maxSpellUses;
+        }
+
+        title.setText(titleText);
         description.setText(spell.getDescription());
 
         try {
