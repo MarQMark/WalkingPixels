@@ -118,11 +118,13 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
         autoMovingHandler.postDelayed(autoMovingRunnable, 0);
 
         //rotate map
+        SharedPreferences preferences = getSharedPreferences("Settings", MODE_PRIVATE);
+        int inverted = preferences.getBoolean("invert_controls",false) ? -1 : 1;
         int[] rotationLeft = new int[] {0};
         btnTurnLeft = findViewById(R.id.btn_walking_turn_left);
-        btnTurnLeft.setOnClickListener(e -> rotationLeft[0] -= 45);
+        btnTurnLeft.setOnClickListener(e -> rotationLeft[0] -= 45 * inverted);
         btnTurnRight = findViewById(R.id.btn_walking_turn_right);
-        btnTurnRight.setOnClickListener(e -> rotationLeft[0] += 45);
+        btnTurnRight.setOnClickListener(e -> rotationLeft[0] += 45 * inverted);
 
         //Rotation loop Game loop
         Handler rotationHandler = new Handler();

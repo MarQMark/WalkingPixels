@@ -21,6 +21,7 @@
     <string name="switch_settings_shadow">Shadow </string>
     <string name="switch_settings_3d_models">3D Models </string>
     <string name="switch_settings_walking">Real-Time Walking </string>
+    <string name="switch_settings_invert">Invert Controls</string>
     <string name="lbl_settings_settings">SETTINGS</string>
     <string name="lbl_settings_shadow">! Shadows may not work depending on your GPU and may decrease performance</string>
     <string name="lbl_settings_3d_models">! 3D Models may decrease performance</string>

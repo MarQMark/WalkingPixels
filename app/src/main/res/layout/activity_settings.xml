@@ -62,7 +62,23 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2"
-        app:layout_constraintVertical_bias="0.66" />
+        app:layout_constraintVertical_bias="0.60" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/switch_settings_invert"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/switch_settings_invert"
+        android:textAlignment="center"
+        android:textColor="@color/scroll_foreground"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:theme="@style/ScrollSwitch"
+        app:layout_constraintBottom_toTopOf="@+id/btn_settings_reset"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        app:layout_constraintVertical_bias="0.85" />
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/switch_settings_3d_models"
@@ -78,7 +94,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2"
-        app:layout_constraintVertical_bias="0.40" />
+        app:layout_constraintVertical_bias="0.35" />
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/switch_settings_shadow"
@@ -93,7 +109,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2"
-        app:layout_constraintVertical_bias="0.1" />
+        app:layout_constraintVertical_bias="0.05" />
 
     <com.game.walkingpixels.controller.view.ResponsiveButton
         android:id="@+id/btn_settings_reset"

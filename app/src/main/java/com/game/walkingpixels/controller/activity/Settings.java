@@ -75,6 +75,13 @@ public class Settings extends AppCompatActivity {
             if (imageView != null)
                 imageView.setColorFilter(getResources().getColor(R.color.scroll_foreground, getTheme()), android.graphics.PorterDuff.Mode.SRC_IN);
         });
+
+        SwitchCompat switchInvert = findViewById(R.id.switch_settings_invert);
+        switchInvert.setChecked(preferences.getBoolean("invert_controls",false));
+        switchInvert.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            editor.putBoolean("invert_controls", isChecked);
+            editor.apply();
+        });
     }
 
     @Override
