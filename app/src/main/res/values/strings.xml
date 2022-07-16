@@ -26,7 +26,13 @@
     <string name="lbl_settings_shadow">! Shadows may not work depending on your GPU and may decrease performance</string>
     <string name="lbl_settings_3d_models">! 3D Models may decrease performance</string>
     <string name="lbl_settings_walking">! Real-Time Walking may be somewhat inaccurate</string>
-    <string name="lbl_main_menu_credits">Font: Alagard - Hewett Tsoi</string>
+    <string name="lbl_credits_credits">Credits</string>
+    <string name="lbl_credits_font">Font:</string>
+    <string name="lbl_credits_font_credits">Alagard - Hewett Tsoi</string>
+    <string name="lbl_credits_developers">Developers:</string>
+    <string name="lbl_credits_developers_credits">Henrik Weidner\nMark Zelenka</string>
+    <string name="lbl_credits_art">Artists:</string>
+    <string name="lbl_credits_art_credits">Henrik Weidner\nMark Zelenka</string>
     <string name="lbl_walking_out_of_stamina">OUT OF STAMINA!</string>
     <string name="lbl_drawing_damage">%1$d</string>
     <string name="lbl_iconbar_progress">%1$d/%2$d</string>

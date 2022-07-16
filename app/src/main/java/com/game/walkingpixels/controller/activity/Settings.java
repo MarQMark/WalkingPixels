@@ -52,6 +52,12 @@ public class Settings extends AppCompatActivity {
             editor.apply();
         });
 
+        Button btnCredits = findViewById(R.id.btn_settings_credits);
+        btnCredits.setOnClickListener(e -> {
+            Intent intent = new Intent(this, Credits.class);
+            startActivity(intent);
+        });
+
         Button btnReset = findViewById(R.id.btn_settings_reset);
         btnReset.setOnClickListener(e -> {
             final AlertDialog alertDialog = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.ScrollAlertDialog))
