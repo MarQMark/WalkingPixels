@@ -11,10 +11,10 @@ public class Model3DManager {
 
     private static Model3DManager manager;
 
-    public final int PLAYER_ANIMATIONS = 5;
-    public final int EYE_ANIMATIONS = 20;
+    public final int PLAYER_ANIMATIONS = 26;
+    public final int EYE_ANIMATIONS = 22;
     public final int SLIME_ANIMATIONS = 20;
-    public final int GOLEM_ANIMATIONS = 15;
+    public final int GOLEM_ANIMATIONS = 16;
     public final int SNAKE_ANIMATIONS = 10;
     public final int FLOWER_ANIMATIONS = 13;
     public final int BAT_ANIMATIONS = 6;
@@ -24,7 +24,7 @@ public class Model3DManager {
 
     private Model3DManager(Context context){
         textures.put("player", new Pair<>("models/player/player.png", 1));
-        for (int i = 1; i <= PLAYER_ANIMATIONS; i++)
+        for (int i = 0; i <= PLAYER_ANIMATIONS; i++)
             models.put("player" + i, new Model3D(context, "models/player/player" + i, 1));
 
         textures.put("mobs", new Pair<>("models/mob_texture_atlas.png", 2));

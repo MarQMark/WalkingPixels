@@ -45,7 +45,7 @@ public class Model3DBuilder extends MeshBuilder{
     }
 
     public WorldVertex[] generatePlayer(World world, float rotation){
-        int animationNumber = getAnimation(400, modelManager.PLAYER_ANIMATIONS) + 1;
+        int animationNumber = getAnimation(150, modelManager.PLAYER_ANIMATIONS);
         int centerOffset = (int) (world.getBlockGridSize() / 2.0f);
 
         for(int x = 0; x < world.getBlockGridSize(); x ++){
