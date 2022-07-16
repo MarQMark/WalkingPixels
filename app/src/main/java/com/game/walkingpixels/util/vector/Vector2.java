@@ -7,6 +7,11 @@ public class Vector2 {
     public Vector2(){
     }
 
+    public Vector2(float a){
+        this.x = a;
+        this.y = a;
+    }
+
     public Vector2(Vector2 v){
         this.x = v.x;
         this.y = v.y;

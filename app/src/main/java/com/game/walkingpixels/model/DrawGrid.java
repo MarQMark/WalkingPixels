@@ -51,31 +51,36 @@ public class DrawGrid {
     }
 
     public void update(int width, int height){
-        if(isEnabled && TouchPosition.lastPosition.x != -1){
+        if(TouchPosition.getPositionsSize() > 0){
+            Vector2 touchPosition = TouchPosition.getPosition();
 
-            Vector2 touchPosition = TouchPosition.position;
+            if(isEnabled){
+                if (touchPosition.x >= width * offset.x && touchPosition.x <= width - width * offset.x){
+                    if(touchPosition.y >= height - width * (offset.y + scale) && touchPosition.y <= height - width * offset.y){
 
-            if (touchPosition.x >= width * offset.x && touchPosition.x <= width - width * offset.x){
-                if(touchPosition.y >= height - width * (offset.y + scale) && touchPosition.y <= height - width * offset.y){
+                        isDrawing = true;
 
-                    isDrawing = true;
+                        if(TouchPosition.lastPosition.x == -1)
+                            TouchPosition.lastPosition = new Vector2(touchPosition);
 
-                    int x0 = (int)((touchPosition.x - width * offset.x) / (width * scale) * size);
-                    int y0 = (int)((height - touchPosition.y - width * offset.y) / (width * scale) * size);
-                    int lastX = (int)((TouchPosition.lastPosition.x - width * offset.x) / (width * scale) * size);
-                    int lastY = (int)((height - TouchPosition.lastPosition.y - width * offset.y) / (width * scale) * size);
+                        int x0 = (int)((touchPosition.x - width * offset.x) / (width * scale) * size);
+                        int y0 = (int)((height - touchPosition.y - width * offset.y) / (width * scale) * size);
+                        int lastX = (int)((TouchPosition.lastPosition.x - width * offset.x) / (width * scale) * size);
+                        int lastY = (int)((height - TouchPosition.lastPosition.y - width * offset.y) / (width * scale) * size);
 
-                    for (Vector2 p: findLine(x0, y0, lastX, lastY)){
-                        for (int py = 0; py < size; py++) {
-                            for (int px = 0; px < size; px++) {
-                                if (insideCircle(new Vector2(p.x, p.y), new Vector2(px, py), BRUSH_SIZE)) {
-                                    grid[px][py] = 1;
+                        for (Vector2 p: findLine(x0, y0, lastX, lastY)){
+                            for (int py = 0; py < size; py++) {
+                                for (int px = 0; px < size; px++) {
+                                    if (insideCircle(new Vector2(p.x, p.y), new Vector2(px, py), BRUSH_SIZE)) {
+                                        grid[px][py] = 1;
+                                    }
                                 }
                             }
                         }
                     }
                 }
             }
+            TouchPosition.lastPosition = new Vector2(touchPosition);
         }
     }
 

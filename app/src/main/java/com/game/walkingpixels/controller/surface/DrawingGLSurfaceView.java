@@ -10,6 +10,7 @@ import com.game.walkingpixels.controller.renderer.DrawingRenderer;
 import com.game.walkingpixels.model.DrawTimer;
 import com.game.walkingpixels.model.Enemy;
 import com.game.walkingpixels.util.TouchPosition;
+import com.game.walkingpixels.util.vector.Vector2;
 
 public class DrawingGLSurfaceView extends GLSurfaceView {
 
@@ -34,27 +35,12 @@ public class DrawingGLSurfaceView extends GLSurfaceView {
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-
         if(event.getAction() == MotionEvent.ACTION_DOWN || event.getAction() == MotionEvent.ACTION_MOVE){
-
-            TouchPosition.lastPosition.x = TouchPosition.position.x;
-            TouchPosition.lastPosition.y = TouchPosition.position.y;
-
-            TouchPosition.position.x = event.getX();
-            TouchPosition.position.y = event.getY();
-
-            if(TouchPosition.lastPosition.x == -1){
-                TouchPosition.lastPosition.x = event.getX();
-                TouchPosition.lastPosition.y = event.getY();
-            }
+            TouchPosition.addPosition(new Vector2(event.getX(), event.getY()));
         }
         else if(event.getAction() == MotionEvent.ACTION_UP){
-            TouchPosition.lastPosition.x = -1;
-            TouchPosition.lastPosition.y = -1;
-            TouchPosition.position.x = -1;
-            TouchPosition.position.y = -1;
+            TouchPosition.addPosition(new Vector2(-1));
         }
-
         return true;
     }
 }
