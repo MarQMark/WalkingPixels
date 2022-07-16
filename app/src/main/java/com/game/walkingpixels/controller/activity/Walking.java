@@ -101,7 +101,7 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
 
         //move forward
         btnMoveForward = findViewById(R.id.btn_walking_forward);
-        btnMoveForward.setOnClickListener(e -> forward());
+        btnMoveForward.setOnClickListener(e -> forward(true));
 
         //auto moving
         btnAutoMoving = findViewById(R.id.btn_walking_auto_walk);
@@ -112,7 +112,7 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
             public void run() {
                 autoMovingHandler.postDelayed(this, 500);
                 if(autoMoving)
-                    forward();
+                    forward(true);
             }
         };
         autoMovingHandler.postDelayed(autoMovingRunnable, 0);
@@ -219,7 +219,7 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
         barStamina.setProgress(player.getStamina());
     });
 
-    private void forward(){
+    private void forward(boolean usesStamina){
         if(player.getStamina() > 0 && MainWorld.getWorld().forward())
         {
             SharedPreferences.Editor editor = getSharedPreferences("World", Context.MODE_PRIVATE).edit();
@@ -227,7 +227,8 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
             editor.putInt("positionY", (int) MainWorld.getWorld().getPosition().y);
             editor.apply();
 
-            player.setStamina(player.getStamina() - 1);
+            if(usesStamina)
+                player.setStamina(player.getStamina() - 1);
             barStamina.setProgress(player.getStamina());
             if(player.getStamina() <= 0){
                 player.setStamina(0);
@@ -304,7 +305,7 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
                 SharedPreferences sharedPreferences = getSharedPreferences("Settings", MODE_PRIVATE);
                 if(sharedPreferences.getBoolean("real_time_walking", false)){
                     if(btnMoveForward.isEnabled()){
-                        forward();
+                        forward(false);
                     }
                 }
                 else {
