@@ -161,6 +161,7 @@ public class Model3DBuilder extends MeshBuilder{
             case BLUE_SLIME:
                 model += "slime" + getAnimation(50, modelManager.SLIME_ANIMATIONS);
                 scale = new Vector3(0.75f);
+                rotation += 90;
                 break;
             case GREEN_SLIME:
                 model += "slimeGreen" + getAnimation(50, modelManager.SLIME_ANIMATIONS);

@@ -1,10 +1,13 @@
 package com.game.walkingpixels.util.meshbuilder;
 
+import android.icu.util.VersionInfo;
+
 import com.game.walkingpixels.model.Block;
 import com.game.walkingpixels.model.atlas.GridTextureAtlas;
 import com.game.walkingpixels.model.World;
 import com.game.walkingpixels.openGL.vertices.MapVertex;
 import com.game.walkingpixels.util.vector.Vector2;
+import com.game.walkingpixels.util.vector.Vector3;
 
 import java.util.ArrayList;
 
@@ -12,6 +15,7 @@ public class MapMeshBuilder extends MeshBuilder{
 
     public MapMeshBuilder(){
         registerGridTextureAtlas("map", new GridTextureAtlas(64, 32, 16));
+        registerGridTextureAtlas("compass", new GridTextureAtlas(196, 98, 49));
     }
 
     public MapVertex[] generateMesh(World world, int countX, int countY){
@@ -23,6 +27,8 @@ public class MapMeshBuilder extends MeshBuilder{
                 int worldY = y + (int)world.getPosition().y - countY / 2 + world.getBlockGridSize() / 2;
                 int height = world.generateHeight(worldX, worldY);
 
+                addVertices(mesh, height, x, y, countX, countY);
+
                 Block block = world.generateBlock(worldX, worldY, height + 1);
                 if(block == Block.TREE)
                     addVertices(mesh, 4, x, y, countX, countY);
@@ -30,8 +36,6 @@ public class MapMeshBuilder extends MeshBuilder{
                     addVertices(mesh, 5, x, y, countX, countY);
                 else if(x == countX / 2 && y == countY / 2)
                     addVertices(mesh, 6, x, y, countX, countY);
-
-                addVertices(mesh, height, x, y, countX, countY);
             }
         }
 
@@ -61,5 +65,44 @@ public class MapMeshBuilder extends MeshBuilder{
                 new float[]{ textureCoordinates[3].x , textureCoordinates[3].y },
                 0.0f));
 
+    }
+
+    public MapVertex[] generateCompass(Vector2 direction, float aspectRatio){
+        Vector2[] textureCoordinates = gridTextureAtlas("compass").getTextureCoordinates(directionToSprite(direction));
+        return new MapVertex[]{
+                new MapVertex(
+                        new float[]{ 0.26f, -1 },
+                        new float[]{ textureCoordinates[0].x , textureCoordinates[0].y },
+                        1.0f),
+                new MapVertex(
+                        new float[]{ 1f, -1 },
+                        new float[]{ textureCoordinates[1].x , textureCoordinates[1].y },
+                        1.0f),
+                new MapVertex(
+                        new float[]{ 0.26f, 1f - (0.76f * aspectRatio)},
+                        new float[]{ textureCoordinates[2].x , textureCoordinates[2].y },
+                        1.0f),
+                new MapVertex(
+                        new float[]{ 1f, 1f - (0.76f * aspectRatio)},
+                        new float[]{ textureCoordinates[3].x , textureCoordinates[3].y },
+                        1.0f)
+        };
+    }
+
+    private int directionToSprite(Vector2 direction){
+        if(direction.x == 1){
+            if(direction.y == 1) return 1;
+            else if(direction.y == 0) return 2;
+            else return 3;
+        }
+        else if(direction.x == 0){
+            if(direction.y == -1) return 4;
+            else return 0;
+        }
+        else {
+            if(direction.y == 1) return 7;
+            else if(direction.y == 0) return 6;
+            else return 5;
+        }
     }
 }

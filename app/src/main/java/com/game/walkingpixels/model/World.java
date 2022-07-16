@@ -329,6 +329,9 @@ public class World {
     public Vector2 getPosition() {
         return position;
     }
+    public Vector2 getDirection() {
+        return direction;
+    }
 
     public float getSeed(){
         return (float) noiseGenerator.getSeed();

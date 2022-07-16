@@ -11,8 +11,10 @@ import com.game.walkingpixels.util.meshbuilder.MapMeshBuilder;
 
 import static android.opengl.GLES20.GL_COLOR_BUFFER_BIT;
 import static android.opengl.GLES20.GL_DEPTH_BUFFER_BIT;
+import static android.opengl.GLES20.GL_DEPTH_TEST;
 import static android.opengl.GLES20.glClear;
 import static android.opengl.GLES20.glClearColor;
+import static android.opengl.GLES20.glDisable;
 
 public class MapRenderer extends Renderer {
 
@@ -26,10 +28,13 @@ public class MapRenderer extends Renderer {
 
     @Override
     public void init() {
+        glDisable(GL_DEPTH_TEST);
         registerShader("map", new Shader(context, "Shaders/Map.shaders"));
         registerBatch("map", new Batch(shader("map").getID(), 20000, MapVertex.SIZE, MapVertex.getLayout()));
-        batch("map").addVertices("Grid", mapMeshBuilder.generateMesh(MainWorld.getWorld(),32, 64));
+        batch("map").addVertices("Grid", mapMeshBuilder.generateMesh(MainWorld.getWorld(), 32, 64));
+        batch("map").addVertices("Compass", mapMeshBuilder.generateCompass(MainWorld.getWorld().getDirection(), 2f));
         batch("map").addTexture(new Texture(context, "textures/map_texture_atlas.png", 0));
+        batch("map").addTexture(new Texture(context, "textures/map_compass.png", 1));
 
         shader("map").bind();
         shader("map").setUniform1iv("u_Textures", 4, new int[] {0, 1, 2, 3}, 0);
@@ -39,6 +44,7 @@ public class MapRenderer extends Renderer {
     public void update(double dt) {
         if(!initialized){
             batch("map").updateVertices("Grid", mapMeshBuilder.generateMesh(MainWorld.getWorld(),33, (int) (33.0f * (height / width))));
+            batch("map").updateVertices("Compass", mapMeshBuilder.generateCompass(MainWorld.getWorld().getDirection(), (height / (float)width)));
             initialized = true;
         }
     }

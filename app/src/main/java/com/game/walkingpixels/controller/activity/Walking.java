@@ -318,16 +318,6 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
         else if (event.sensor.getType() == Sensor.TYPE_STEP_COUNTER) {
             SharedPreferences sharedPreferences = getSharedPreferences("Stamina", MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            System.out.println("####################");
-            System.out.println(event.values[0]);
-            System.out.println(event.values[0]);
-            System.out.println(event.values[0]);
-            System.out.println(event.values[0]);
-            System.out.println(event.values[0]);
-            System.out.println(event.values[0]);
-            System.out.println(event.values[0]);
-            System.out.println(event.values[0]);
-            System.out.println("####################");
             if(!staminaInitialized){
                 int lastStepsMeasured = sharedPreferences.getInt("last_steps_measured", (int)event.values[0]);
                 //counter reset due to phone restart

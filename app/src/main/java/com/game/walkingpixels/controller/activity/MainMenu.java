@@ -1,8 +1,13 @@
 package com.game.walkingpixels.controller.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.icu.util.VersionInfo;
+import android.os.Build;
 import android.os.Bundle;
 
 import com.game.walkingpixels.R;
@@ -21,6 +26,14 @@ public class MainMenu extends AppCompatActivity {
         setContentView(R.layout.activity_main_menu);
 
         MainWorld.init(MainMenu.this);
+
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            if(ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.ACTIVITY_RECOGNITION) == PackageManager.PERMISSION_DENIED){
+                //ask for permission
+                requestPermissions(new String[]{Manifest.permission.ACTIVITY_RECOGNITION}, 1);
+            }
+        }
 
         ResponsiveButton btnPlay = findViewById(R.id.btn_main_menu_play);
         btnPlay.setOnClickListener(e -> {
