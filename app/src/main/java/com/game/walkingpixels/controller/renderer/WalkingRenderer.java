@@ -40,7 +40,6 @@ public class WalkingRenderer extends Renderer {
     private final SpriteMeshBuilder spriteMeshBuilder = new SpriteMeshBuilder();
     private final BlockMeshBuilder blockMeshBuilder = new BlockMeshBuilder();
     private Model3DBuilder model3DBuilder;
-    private Model3DManager model3DManager;
 
     private boolean shadow;
     private boolean models;
@@ -58,7 +57,7 @@ public class WalkingRenderer extends Renderer {
         camera.rotationY = sharedPreferences.getFloat("rotation", 0);
 
         model3DBuilder = new Model3DBuilder(context);
-        model3DManager = Model3DManager.getInstance(context);
+        Model3DManager model3DManager = Model3DManager.getInstance(context);
 
         //init shaders
         SharedPreferences sharedPref = context.getSharedPreferences("Settings", Context.MODE_PRIVATE);
@@ -101,7 +100,7 @@ public class WalkingRenderer extends Renderer {
             batch("models").addTexture(model3DManager.getTexture(context, "mobs"));
         }
         else{
-            registerBatch("models", new Batch(shader("main").getID(), 200, WorldVertex.SIZE, WorldVertex.getLayout()));
+            registerBatch("models", new Batch(shader("main").getID(), 400, WorldVertex.SIZE, WorldVertex.getLayout()));
             batch("models").addVertices("Sprites", spriteMeshBuilder.generateMesh(MainWorld.getWorld(), camera, false, !shadow));
             batch("models").addTexture(new Texture(context, "textures/mob_texture_atlas.png", 1));
             batch("models").addTexture(new Texture(context, "textures/tree.png", 2));

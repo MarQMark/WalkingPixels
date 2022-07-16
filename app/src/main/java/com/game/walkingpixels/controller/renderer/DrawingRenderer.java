@@ -134,7 +134,7 @@ public class DrawingRenderer extends Renderer {
             batch("models").addTexture(model3DManager.getTexture(context, "mobs"));
         }
         else {
-            registerBatch("models", new Batch(shader("world").getID(), 2, WorldVertex.SIZE, WorldVertex.getLayout()));
+            registerBatch("models", new Batch(shader("world").getID(), 40, WorldVertex.SIZE, WorldVertex.getLayout()));
             batch("models").addVertices("Sprites", spriteMeshBuilder.generateMesh(world, camera,true, !shadow));
             batch("world").addTexture(new Texture(context, "textures/mob_texture_atlas.png", 1));
         }

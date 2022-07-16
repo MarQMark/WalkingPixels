@@ -67,8 +67,8 @@ public class SpriteMeshBuilder extends MeshBuilder{
                                 I don't know why and I can't fix it. Too bad!
                             */
                             getMobVertices(mobs,new Vector3(mobX, height, mobY).sub(new Vector3(world.getBlockGridSize() / 2.0f, 0, world.getBlockGridSize() / 2.0f)), world.getEnemyGrid()[x][y].getType(), camera, adjust);
-                            if(shadow)
-                                getShadowVertices(mobs, new Vector3(mobX, height, mobY).sub(new Vector3(world.getBlockGridSize() / 2.0f, 0, world.getBlockGridSize() / 2.0f)), world.heightToBlock(height - 1));
+                            //if(shadow)
+                                //getShadowVertices(mobs, new Vector3(mobX, height, mobY).sub(new Vector3(world.getBlockGridSize() / 2.0f, 0, world.getBlockGridSize() / 2.0f)), world.heightToBlock(height - 1));
                         }catch (Exception ignored){}
                     }
                 }
@@ -91,28 +91,28 @@ public class SpriteMeshBuilder extends MeshBuilder{
         Vector2[] texture = gridTextureAtlas("blocks").getTextureCoordinates(id);
 
         mobs.add(new WorldVertex(
-                new float[]{ position.x, position.y + 0.0001f, position.z},
+                new float[]{ position.x, position.y + 0.001f, position.z},
                 new float[]{ texture[0].x, texture[0].y },
                 new float[] {0, 1, 0},
                 new float[]{ 0.0f, 0.0f, 0.0f, 0.0f },
                 0));
 
         mobs.add(new WorldVertex(
-                new float[]{ position.x + 1, position.y + 0.0001f, position.z},
+                new float[]{ position.x + 1, position.y + 0.001f, position.z},
                 new float[]{ texture[1].x, texture[1].y },
                 new float[] {0, 1, 0},
                 new float[]{ 0.0f, 0.0f, 0.0f, 0.0f },
                 0));
 
         mobs.add(new WorldVertex(
-                new float[]{ position.x, position.y + 0.0001f, position.z + 1},
+                new float[]{ position.x, position.y + 0.001f, position.z + 1},
                 new float[]{ texture[2].x, texture[2].y },
                 new float[] {0, 1, 0},
                 new float[]{ 0.0f, 0.0f, 0.0f, 0.0f },
                 0));
 
         mobs.add(new WorldVertex(
-                new float[]{ position.x + 1, position.y + 0.0001f,  position.z + 1 },
+                new float[]{ position.x + 1, position.y + 0.001f,  position.z + 1 },
                 new float[]{ texture[3].x, texture[3].y },
                 new float[] {0, 1, 0},
                 new float[]{ 1.0f, 0.0f, 0.0f, 0.0f },
