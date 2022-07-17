@@ -25,7 +25,7 @@ public class Model3DManager {
 
     private Model3DManager(Context context){
         textures.put("player", new Pair<>("models/player/player.png", 1));
-        for (int i = 0; i <= PLAYER_ANIMATIONS; i++)
+        for (int i = 0; i < PLAYER_ANIMATIONS; i++)
             models.put("player" + i, new Model3D(context, "models/player/player" + i, 1));
 
         textures.put("mobs", new Pair<>("models/mob_texture_atlas.png", 2));

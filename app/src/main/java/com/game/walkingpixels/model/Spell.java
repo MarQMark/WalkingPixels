@@ -97,7 +97,7 @@ public class Spell {
                 name = "Pebble";
                 description = "Maybe if you throw enough pebbles at your enemy they will perish. Like the saying goes: many a mickle makes a muckle!";
                 castTime = 5.0;
-                maxDamage = 25;
+                maxDamage = 20;
                 colorString = "#382216";
                 break;
 
@@ -106,7 +106,7 @@ public class Spell {
                 name = "Stone";
                 description = "With this, you can throw a stone at someone, you do not like. Maybe they end up with a scar and become the chosen one.";
                 castTime = 7.0;
-                maxDamage = 45;
+                maxDamage = 40;
                 colorString = "#382216";
                 break;
 
@@ -115,7 +115,7 @@ public class Spell {
                 name = "Rock";
                 description = "Intermediate earth spell. A solid choice.";
                 castTime = 9.0;
-                maxDamage = 80;
+                maxDamage = 75;
                 colorString = "#382216";
                 break;
 
@@ -124,7 +124,7 @@ public class Spell {
                 name = "Earthquake";
                 description = "Let the earth rumble with the might of your power.";
                 castTime = 11.0;
-                maxDamage = 120;
+                maxDamage = 115;
                 colorString = "#382216";
                 break;
 

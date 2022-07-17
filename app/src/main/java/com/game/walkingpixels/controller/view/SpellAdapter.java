@@ -51,19 +51,17 @@ public class SpellAdapter extends ArrayAdapter<Spell> {
         description.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize - 2);
 
         Spell spell = spells.get(position);
-        String titleText = spell.getName();
-        int maxSpellUses = Constants.tierSpellUsages[spell.getId() % 4];
+        String titleText = spell.getName() + " - ";
 
         int currentUses = spell.getUsages();
-        if (spell.getId()== 16) // mega dud
-        {
-            titleText += " - " + currentUses;
+        if (spell.getId() == 16 || spell.getId() % 4 == 3){
+            titleText += currentUses;
         }
-        else
-        {
+        else{
+            int maxSpellUses = Constants.tierSpellUsages[spell.getId() % 4];
             if (currentUses == -1)
                 currentUses = maxSpellUses;
-            titleText += " - " + currentUses;
+            titleText += currentUses;
             titleText += "/" + maxSpellUses;
         }
 
