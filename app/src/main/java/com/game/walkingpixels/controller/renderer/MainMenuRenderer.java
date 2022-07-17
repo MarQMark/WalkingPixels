@@ -137,7 +137,8 @@ public class MainMenuRenderer extends Renderer {
     @Override
     public void render(double dt) {
         //calculate sun shadow
-        lightManager("main").calculateShadow(new Batch[]{batch("world"), batch("models")}, width, height);
+        if(shadow)
+            lightManager("main").calculateShadow(new Batch[]{batch("world"), batch("models")}, width, height);
 
         //set background color according to the time
         Vector4 clearColor = sun.getColor();

@@ -198,7 +198,8 @@ public class DrawingRenderer extends Renderer {
     @Override
     public void render(double dt) {
         //calculate sun shadow
-        lightManager("world").calculateShadow(new Batch[]{batch("world"), batch("models")}, width, height);
+        if(shadow)
+            lightManager("world").calculateShadow(new Batch[]{batch("world"), batch("models")}, width, height);
 
         //set background color according to the time
         Vector4 clearColor = sun.getColor();
