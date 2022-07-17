@@ -272,55 +272,10 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
             btnAutoMoving.setForeground(AppCompatResources.getDrawable(this, R.drawable.controls_auto_walk_play));
     }
 
-
-    /*
-        Step counter by Omar Essam - https://stackoverflow.com/questions/37136080/delay-in-android-step-counter
-     */
-
-    private final float[] gravity = new float[3];
-    private double prevY;
-    private boolean ignore = true;
-    private int countdown = 5;
-
-    private float[] lowPassFilter( float[] input, float[] output ) {
-        if ( output == null ) return input;
-        for ( int i=0; i<input.length; i++ ) {
-            output[i] = output[i] + (input[i] - output[i]);
-        }
-        return output;
-    }
-
     @Override
     public void onSensorChanged(SensorEvent event) {
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-            float[] smoothed = lowPassFilter(event.values, gravity);
-            gravity[0] = smoothed[0];
-            gravity[1] = smoothed[1];
-            gravity[2] = smoothed[2];
-            if(ignore) {
-                countdown--;
-                ignore = countdown >= 0;
-            }
-            else
-                countdown = 22;
-
-            if((Math.abs(prevY - gravity[1]) > 1.3) && !ignore){
-
-                SharedPreferences sharedPreferences = getSharedPreferences("Settings", MODE_PRIVATE);
-                if(sharedPreferences.getBoolean("real_time_walking", false)){
-                    if(btnMoveForward.isEnabled()){
-                        forward(false);
-                    }
-                }
-                else {
-                    player.setStamina(player.getStamina() + 1);
-                    lblOutOfStamina.setVisibility(View.INVISIBLE);
-                    barStamina.setProgress(player.getStamina());
-                }
-
-                ignore = true;
-            }
-            prevY = gravity[1];
+            stepCounter(event);
         }
         else if (event.sensor.getType() == Sensor.TYPE_STEP_COUNTER) {
             SharedPreferences sharedPreferences = getSharedPreferences("Stamina", MODE_PRIVATE);
@@ -343,5 +298,55 @@ public class Walking extends AppCompatActivity implements SensorEventListener {
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
+    }
+
+
+
+    /*
+        Step counter by Omar Essam - https://stackoverflow.com/questions/37136080/delay-in-android-step-counter
+    */
+
+    private final float[] gravity = new float[3];
+    private double prevY;
+    private boolean ignore = true;
+    private int countdown = 5;
+
+    private float[] lowPassFilter( float[] input, float[] output ) {
+        if ( output == null ) return input;
+        for ( int i=0; i<input.length; i++ ) {
+            output[i] = output[i] + (input[i] - output[i]);
+        }
+        return output;
+    }
+
+    private void stepCounter(SensorEvent event){
+        float[] smoothed = lowPassFilter(event.values, gravity);
+        gravity[0] = smoothed[0];
+        gravity[1] = smoothed[1];
+        gravity[2] = smoothed[2];
+        if(ignore) {
+            countdown--;
+            ignore = countdown >= 0;
+        }
+        else
+            countdown = 22;
+
+        if((Math.abs(prevY - gravity[1]) > 1.3) && !ignore){
+
+            SharedPreferences sharedPreferences = getSharedPreferences("Settings", MODE_PRIVATE);
+            if(sharedPreferences.getBoolean("real_time_walking", false)){
+                if(btnMoveForward.isEnabled()){
+                    forward(false);
+                }
+            }
+            else {
+                player.setStamina(player.getStamina() + 1);
+                lblOutOfStamina.setVisibility(View.INVISIBLE);
+                barStamina.setProgress(player.getStamina());
+            }
+
+            ignore = true;
+        }
+        prevY = gravity[1];
     }
 }
